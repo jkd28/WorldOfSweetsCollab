@@ -4,10 +4,19 @@ public class Deck {
     private Stack<Card> cardDeck;
 
     public Deck() {
-        initializeDeck();
+        cardDeck = initializeDeck();
     }
 
-    private void initializeDeck() {
+    public Card draw(){
+        if (cardDeck.empty()) {
+            // reinitialize the deck, equivalent to reshuffling all cards
+            cardDeck = initializeDeck();
+        }
+        return cardDeck.pop();
+    }
+
+    private Stack<Card> initializeDeck() {
+        Stack<Card> deckStack = new Stack<Card>();
         // Avoid magic numbers
         int numCardsPerColor = 12;
         String[] colors = {"RED", "YELLOW", "BLUE", "GREEN", "ORANGE"};
@@ -21,12 +30,12 @@ public class Deck {
                 } else {
                     newCard = new Card(2, colors[i]);
                 }
-                cardDeck.push(newCard);
+                deckStack.push(newCard);
             }
         }
 
         // To emulate a true deck of cards, shuffle
-        Collections.shuffle(cardDeck);
-        return;
+        Collections.shuffle(deckStack);
+        return deckStack;
     }
 }
