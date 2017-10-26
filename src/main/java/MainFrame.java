@@ -8,13 +8,12 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainFrame{
-
+    // Data for the entire Frame, which will hold all of our Panels
+    private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
-    private static final int MIN_PLAYERS = 2;
-    
-    private JFrame frame;
 
+    // Data for the game-board Panel
     private JPanel boardPanel;
     private JButton[] boardButtons;
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
@@ -22,25 +21,29 @@ public class MainFrame{
     private static final int BOARD_ROWS = 4;
     private static final int BOARD_HORIZONTAL_GAP = 30;
     private static final int BOARD_VERTICAL_GAP = 30;
-    //private MainPanel mainPanel;
-
-    //private ButtonPanel buttonPanel;
+    private static final GridLayout = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     
     public MainFrame(int numPlayers){
-
+    	// ------------------------ //
+		// Validate input arguments //
+		// ------------------------ //
     	if(numPlayers < WorldOfSweets.MIN_PLAYERS){
     		System.err.println("Number of players must be a positive integer >= " + WorldOfSweets.MIN_PLAYERS);
 			System.exit(1);
     	}
 
-    	// Create the Frame
+		// ---------------- //
+    	// Create the Frame //
+		// ---------------- //
     	frame = new JFrame("World of Sweets");
 		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
-		
-		// Add Board Panel
+
+    	// ----------------------------------------------- //
+		// Create game-board Panel and add it to the Frame //
+		// ----------------------------------------------- //
 		boardPanel = new JPanel();
-		boardPanel.setLayout(new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP));
+		boardPanel.setLayout(BOARD_LAYOUT);
 		frame.add(boardPanel, BorderLayout.NORTH);
 		
 		// Add Buttons to the Board Panel
@@ -55,6 +58,7 @@ public class MainFrame{
 
 
 		
+
 		frame.setVisible(true);	
     }
 
