@@ -3,7 +3,6 @@ import static org.junit.Assert.*;
 
 public class PlayerTest{
     Player p;
-    Player q;
 
     @Before
     public void setup(){
@@ -44,5 +43,12 @@ public class PlayerTest{
     public void testWins(){
         p.addWin();
         assertEquals(1, p.getWins());
+    }
+
+    @Test
+    public void testMove(){
+        p.Move(12, "RED");
+        assertEquals(12, p.getPosition());
+        assertEquals("RED", p.getposColor());
     }
 }
