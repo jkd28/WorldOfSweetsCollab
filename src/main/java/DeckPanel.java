@@ -37,18 +37,28 @@ public class DeckPanel extends JPanel{
 	    // Create and add each of the color panels
 	    // representing the single color cards.
 	    JPanel redPanel = createColorPanel(Color.red);
+	    JPanel redPanel2 =createDoubleColorPanel(Color.red);
 	    JPanel yellowPanel = createColorPanel(Color.yellow);
+	    JPanel yellowPanel2 = createDoubleColorPanel(Color.yellow);
 	    JPanel bluePanel = createColorPanel(Color.blue);
+	    JPanel bluePanel2 = createDoubleColorPanel(Color.blue);
 	    JPanel greenPanel = createColorPanel(Color.green);
+	    JPanel greenPanel2 = createDoubleColorPanel(Color.green);
 	    JPanel orangePanel = createColorPanel(Color.orange);
+	    JPanel orangePanel2 = createDoubleColorPanel(Color.orange);
 	    JPanel whitePanel = createColorPanel(Color.white);
 	    
       	    add(whitePanel, "WHITE");
 	    add(redPanel, "RED");
+	    add(redPanel2, "RED2");
 	    add(yellowPanel, "YELLOW");
+	    add(yellowPanel2, "YELLOW2");
 	    add(bluePanel, "BLUE");
+	    add(bluePanel2, "BLUE2");
 	    add(greenPanel, "GREEN");
+	    add(greenPanel2, "GREEN2");
 	    add(orangePanel, "ORANGE");
+	    add(orangePanel2, "ORANGE2");
 	}
     }
 
@@ -56,6 +66,17 @@ public class DeckPanel extends JPanel{
     private JPanel createColorPanel(Color color){
 	JPanel tempPanel = new JPanel();
 	tempPanel.setBackground(color);
+	return tempPanel;
+    }
+
+    // Helper method for creating the double color panels
+    private JPanel createDoubleColorPanel(Color color){
+	JPanel tempPanel = new JPanel(new GridLayout(2, 1, 0, 15));
+	JPanel tempPanel2 = createColorPanel(color);
+	JPanel tempPanel3 = createColorPanel(color);
+	tempPanel.add(tempPanel2);
+	tempPanel.add(tempPanel3);
+
 	return tempPanel;
     }
 
@@ -67,7 +88,12 @@ public class DeckPanel extends JPanel{
 	// Every time we click the button, it will display the
 	// color of the next card in the deck
 	public void actionPerformed(ActionEvent e){
-	    cPanel.cardLayout.show(cPanel, drawDeck.draw().getColor());
+	    Card drawnCard = drawDeck.draw();
+	    if (drawnCard.getValue() == 1){
+		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
+	    } else if (drawnCard.getValue() == 2){
+		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
+	    }
 	}
     }
 }
