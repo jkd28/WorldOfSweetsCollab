@@ -1,6 +1,7 @@
 /*
-*	@author William Laboon (GitHub: "laboon"). Primary author of this file, used originally in his "GameOfLife" repository.
-*	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository. 
+ *	@author William Laboon (GitHub: "laboon"). Primary author of this file, used originally in his "GameOfLife" repository.
+ *	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository. 
+ *      @author Brian Knotten (GitHub: "BK874"). Modified for use in the "BitsPlease" repository.
 */
 
 import java.awt.*;
@@ -21,7 +22,7 @@ public class MainFrame{
     private static final int BOARD_ROWS = 4;
     private static final int BOARD_HORIZONTAL_GAP = 30;
     private static final int BOARD_VERTICAL_GAP = 30;
-    private static final GridLayout = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
+    private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     
     public MainFrame(int numPlayers){
     	// ------------------------ //
@@ -56,7 +57,12 @@ public class MainFrame{
 		    boardPanel.add(boardButtons[i]);
 		}
 
+		// --------------------------------------------- //
+		// Create the deck Panel and add it to the Frame //
+		// --------------------------------------------- //
 
+		DeckPanel deckPanel = new DeckPanel();
+		frame.add(deckPanel, BorderLayout.WEST);
 		
 
 		frame.setVisible(true);	
