@@ -1,7 +1,7 @@
 /*
  *	@author William Laboon (GitHub: "laboon"). Primary author of this file, used originally in his "GameOfLife" repository.
  *	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository. 
- *      @author Brian Knotten (GitHub: "BK874"). Modified for use in the "BitsPlease" repository.
+ * @author Brian Knotten (GitHub: "BK874"). Modified for use in the "BitsPlease" repository.
 */
 
 import java.awt.*;
@@ -60,7 +60,6 @@ public class MainFrame{
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
-
 		DeckPanel deckPanel = new DeckPanel();
 		frame.add(deckPanel, BorderLayout.WEST);
 		
