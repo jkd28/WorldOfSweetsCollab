@@ -10,7 +10,7 @@ public class DeckPanel extends JPanel{
     
     Deck drawDeck = new Deck();
     CardPanel cPanel = new CardPanel();
-    JPanel drawPanel = new JPanel(new FlowLayout());
+    JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("Draw");
     
     public DeckPanel(){
@@ -20,7 +20,7 @@ public class DeckPanel extends JPanel{
 	// Add the draw button to the Draw Panel
 	drawButton.setFont(new Font("Courier", Font.PLAIN, 48));
 	drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
-	drawPanel.add(drawButton);
+	drawPanel.add(drawButton, BorderLayout.CENTER);
 
 	//Add both panels to the Frame
 	add(drawPanel);
