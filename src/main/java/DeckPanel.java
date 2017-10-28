@@ -12,6 +12,8 @@ public class DeckPanel extends JPanel{
     CardPanel cPanel = new CardPanel();
     JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("Draw");
+
+    String currentColor = "WHITE";
     
     public DeckPanel(){
 	// The two subpanels will be next to each other
@@ -80,6 +82,11 @@ public class DeckPanel extends JPanel{
 	return tempPanel;
     }
 
+    // Returns the color of the current card
+    public String getCurrentColor(){
+	return currentColor;
+    }
+
     
     private class DrawListener implements ActionListener{
 	public DrawListener (CardPanel cPanel){
@@ -91,10 +98,11 @@ public class DeckPanel extends JPanel{
 	    Card drawnCard = drawDeck.draw();
 	    if (drawnCard.getValue() == 1){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
+		currentColor = drawnCard.getColor();
 	    } else if (drawnCard.getValue() == 2){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
+		currentColor = drawnCard.getColor() + "2";
 	    }
 	}
     }
 }
-
