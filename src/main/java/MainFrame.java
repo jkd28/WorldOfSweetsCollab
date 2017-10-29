@@ -21,7 +21,7 @@ public class MainFrame{
     private static final int BOARD_ROWS = 4;
     private static final int BOARD_HORIZONTAL_GAP = 30;
     private static final int BOARD_VERTICAL_GAP = 30;
-    private static final GridLayout = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
+    private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     
     public MainFrame(int numPlayers){
     	// ------------------------ //

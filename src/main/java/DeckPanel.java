@@ -13,7 +13,7 @@ public class DeckPanel extends JPanel{
     JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("Draw");
 
-    String currentColor = "WHITE";
+    String currentColor;
     
     public DeckPanel(){
 	// The two subpanels will be next to each other
@@ -61,6 +61,8 @@ public class DeckPanel extends JPanel{
 	    add(greenPanel2, "GREEN2");
 	    add(orangePanel, "ORANGE");
 	    add(orangePanel2, "ORANGE2");
+
+	    currentColor = "WHITE";
 	}
     }
 
