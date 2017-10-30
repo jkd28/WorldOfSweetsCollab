@@ -52,4 +52,9 @@ public class BoardPanel extends JPanel{
 	add(spaces[1]);
 
     }
+
+    // Retrieve a specific board space
+    public JPanel getSpace(int index){
+	return spaces[index];
+    }
 }
