@@ -13,7 +13,8 @@ public class BoardPanelTest{
 
     @Before
     public void setup(){
-	testBoardPanel = new BoardPanel();
+    Player[] emptyPlayers = new Player[0];
+	testBoardPanel = new BoardPanel(emptyPlayers);
     }
 
     // The panel should initialize with a starting space first.
