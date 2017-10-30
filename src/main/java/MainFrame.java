@@ -46,11 +46,12 @@ public class MainFrame{
 		// ------------------ //
 		players = new Player[numPlayers];
 		for(int i = 0; i < players.length; i++){
-			Player newPlayer = new Player("Player "+i);
+			Player newPlayer = new Player("P"+i);
 			newPlayer.setPosition(0);
 
 			players[i] = newPlayer;
 		}
+
 
 
     	// ----------------------------------------------- //

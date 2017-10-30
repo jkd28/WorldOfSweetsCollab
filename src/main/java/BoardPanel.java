@@ -29,6 +29,7 @@ public class BoardPanel extends JPanel{
 		for(Player player : players){
 			labelText = labelText + player.getName() + ", ";
 		}
+		labelText = labelText.substring(0, labelText.length() - 2);
 		labelText = labelText + ")";
 		spaces[0].add(new JLabel(labelText));
 	}
