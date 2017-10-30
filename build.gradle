@@ -1,6 +1,6 @@
 apply plugin: 'java'
 apply plugin: 'application'
-mainClassName = "GradleTest"
+mainClassName = "WorldOfSweets"
 repositories {
     mavenCentral()
 }
@@ -8,3 +8,9 @@ repositories {
 dependencies {
     testCompile 'junit:junit:4.12'
 }
+
+test {
+    afterTest { desc, result ->
+            logger.quiet "Executing test ${desc.name} [${desc.className}] with result: ${result.resultType}"
+	      }	 
+}	
