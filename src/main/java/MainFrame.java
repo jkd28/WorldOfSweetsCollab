@@ -46,7 +46,23 @@ public class MainFrame{
 		// ------------------ //
 		players = new Player[numPlayers];
 		for(int i = 0; i < players.length; i++){
-			Player newPlayer = new Player("P"+i);
+
+			String playerName = "Player " + i;
+			while(true){
+				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
+				if(playerName == null || playerName.equals("")){
+					JOptionPane.showMessageDialog(null, 
+						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
+						"Invalid Player Name",
+						JOptionPane.WARNING_MESSAGE
+						);
+					continue;
+				}
+				break;
+			}
+				
+
+			Player newPlayer = new Player(playerName);
 			newPlayer.setPosition(0);
 
 			players[i] = newPlayer;
