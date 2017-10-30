@@ -1,6 +1,6 @@
 /*
  *	@author William Laboon (GitHub: "laboon"). Primary author of this file, used originally in his "GameOfLife" repository.
- *	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository. 
+ *	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository.
  * @author Brian Knotten (GitHub: "BK874"). Modified for use in the "BitsPlease" repository.
 */
 
@@ -9,10 +9,13 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainFrame{
+    private static int NUM_PLAYERS;
     // Data for the entire Frame, which will hold all of our Panels
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
+    public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
+
 
     // Data for the Board Panel
     private BoardPanel boardPanel;
@@ -21,9 +24,25 @@ public class MainFrame{
     private DeckPanel deckPanel;
 
     // Data for tracking Players
-    private Player[] players;
-    
+    private static Player[] players;
+
+    // Data for currentPlayer
+    private static PlayerPanel playerPanel;
+
+    // --------------------------------------- //
+    // Calling this will return the player who //
+    // is up next and advance currentPlayer    //
+    // --------------------------------------- //
+    public static int getnextPlayer(){
+        int cplay = currentPlayer;
+        currentPlayer = (currentPlayer + 1) % NUM_PLAYERS;
+
+        playerPanel.changePlayer(players[cplay]);
+        return cplay;
+    }
+
     public MainFrame(int numPlayers){
+        NUM_PLAYERS = numPlayers;
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
@@ -51,7 +70,7 @@ public class MainFrame{
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
 				if(playerName == null || playerName.equals("")){
-					JOptionPane.showMessageDialog(null, 
+					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
 						"Invalid Player Name",
 						JOptionPane.WARNING_MESSAGE
@@ -60,7 +79,7 @@ public class MainFrame{
 				}
 				break;
 			}
-				
+
 
 			Player newPlayer = new Player(playerName);
 			newPlayer.setPosition(0);
@@ -83,8 +102,13 @@ public class MainFrame{
 		deckPanel = new DeckPanel();
 		frame.add(deckPanel, BorderLayout.WEST);
 
+        // ----------------------------------------------- //
+		// Create the player Panel and add it to the Frame //
+		// ----------------------------------------------- //
+        playerPanel = new PlayerPanel(players[0]);
+        frame.add(playerPanel, BorderLayout.EAST);
 
 		// Make it all visible!
-		frame.setVisible(true);	
+		frame.setVisible(true);
     }
  }
