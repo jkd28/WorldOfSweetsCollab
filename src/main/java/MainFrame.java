@@ -41,6 +41,18 @@ public class MainFrame{
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
 
 
+		// ------------------ //
+		// Create the Players //
+		// ------------------ //
+		players = new Player[numPlayers];
+		for(int i = 0; i < players.length; i++){
+			Player newPlayer = new Player("Player "+i);
+			newPlayer.setPosition(0);
+
+			players[i] = newPlayer;
+		}
+
+
     	// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
@@ -53,18 +65,6 @@ public class MainFrame{
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
 		frame.add(deckPanel, BorderLayout.WEST);
-
-
-		// ------------------ //
-		// Create the Players //
-		// ------------------ //
-		players = new Player[numPlayers];
-		for(int i = 0; i < players.length; i++){
-			Player newPlayer = new Player("Player "+i);
-			newPlayer.setPosition(0);
-
-			players[i] = newPlayer;
-		}
 
 
 		// Make it all visible!
