@@ -18,13 +18,23 @@ public class BoardPanel extends JPanel{
     private static final int BOARD_VERTICAL_GAP = 10;
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     
-    public BoardPanel(){
+    public BoardPanel(Player[] players){
 	setLayout(BOARD_LAYOUT);
 
 	// Add the start and end (grandma's house) spaces
 	spaces = new JPanel[BOARD_COLUMNS * BOARD_ROWS];
 	spaces[0] = new JPanel();
-	spaces[0].add(start);
+	if(players.length > 0){
+		String labelText = start.getText() + " (";
+		for(Player player : players){
+			labelText = labelText + player.getName() + ", ";
+		}
+		labelText = labelText + ")";
+		spaces[0].add(new JLabel(labelText));
+	}
+	else{
+		spaces[0].add(start);
+	}
 	spaces[0].setBorder(BorderFactory.createLineBorder(Color.black));
 	spaces[1] = new JPanel();
 	spaces[1].add(grandma);
