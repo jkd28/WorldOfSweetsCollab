@@ -1,3 +1,6 @@
+/*
+ * @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
+ */
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -9,6 +12,10 @@ public class DeckPanelTest2{
 	testDeckPanel = new DeckPanel();
     }
 
+    // After the draw button is click 60 times there each color should
+    // have been displayed ten times as a single card and twice as a
+    // double card, with no other color having been displayed.
+    @Test
     public void testDeckPanelDraw(){
 	int redCounter,red2Counter, yellowCounter, yellow2Counter,
 	    blueCounter, blue2Counter, greenCounter,green2Counter,
@@ -19,7 +26,7 @@ public class DeckPanelTest2{
 	    orangeCounter = orange2Counter = wrongCounter = 0;
 
 	for (int i = 0; i < 60; i++){
-	    testDeckPanel.drawPanel.drawButton.doClick();
+	    testDeckPanel.drawButton.doClick();
 	    testColor = testDeckPanel.getCurrentColor();
 
 	    if (testColor.equals("RED")){
@@ -63,6 +70,4 @@ public class DeckPanelTest2{
 	assertEquals(2, orange2Counter);
 	assertEquals(60, total);
     }
-}
-		
-	    
+}	    

@@ -1,3 +1,6 @@
+/*
+ * @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
+ */
 import org.junit.*;
 import static org.junit.Assert.*;
 
@@ -14,14 +17,13 @@ public class DeckPanelTest{
     @Test
     public void testInitialDeckPanelColor(){
 	String testColor = testDeckPanel.getCurrentColor();
-	System.out.println("TEST TEST TEST");
 	assertEquals(testColor, "WHITE");
     }
     
     // Test that a correct color is displayed after clicking the draw button
     @Test
     public void testDeckPanelColor(){
-	testDeckPanel.drawPanel.drawButton.doClick();
+	testDeckPanel.drawButton.doClick();
 	String testColor = testDeckPanel.getCurrentColor();
 
 	assertTrue(testColor.equals("RED") || testColor.equals("RED2") ||
@@ -30,5 +32,4 @@ public class DeckPanelTest{
 		   testColor.equals("GREEN") || testColor.equals("GREEN2") ||
 		   testColor.equals("ORANGE") || testColor.equals("ORANGE2"));
     }
-}
-		   
+}		   
