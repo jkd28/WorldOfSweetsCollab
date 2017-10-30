@@ -11,7 +11,7 @@ public class DeckPanel extends JPanel{
     Deck drawDeck = new Deck();
     CardPanel cPanel = new CardPanel();
     JPanel drawPanel = new JPanel(new BorderLayout());
-    JButton drawButton = new JButton("Draw");
+    JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
     String currentColor;
     
