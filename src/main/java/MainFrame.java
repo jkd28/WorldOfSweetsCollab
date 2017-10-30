@@ -19,6 +19,9 @@ public class MainFrame{
 
     // Data for the Deck Panel
     private DeckPanel deckPanel;
+
+    // Data for tracking Players
+    private Player[] players;
     
     public MainFrame(int numPlayers){
     	// ------------------------ //
@@ -29,6 +32,7 @@ public class MainFrame{
 			System.exit(1);
     	}
 
+
 		// ---------------- //
     	// Create the Frame //
 		// ---------------- //
@@ -36,11 +40,13 @@ public class MainFrame{
 		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
 
+
     	// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel();
 		frame.add(boardPanel, BorderLayout.NORTH);
+
 
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
@@ -48,6 +54,20 @@ public class MainFrame{
 		deckPanel = new DeckPanel();
 		frame.add(deckPanel, BorderLayout.WEST);
 
+
+		// ------------------ //
+		// Create the Players //
+		// ------------------ //
+		players = new Player[numPlayers];
+		for(int i = 0; i < players.length; i++){
+			Player newPlayer = new Player("Player "+i);
+			newPlayer.setPosition(0);
+
+			players[i] = newPlayer;
+		}
+
+
+		// Make it all visible!
 		frame.setVisible(true);	
     }
  }
