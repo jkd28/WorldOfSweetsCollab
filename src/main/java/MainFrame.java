@@ -33,7 +33,7 @@ public class MainFrame{
     	// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
-		boardPanel = new boardPaenl();
+		boardPanel = new boardPanel();
 		frame.add(boardPanel, BorderLayout.NORTH);
 
 		// --------------------------------------------- //
