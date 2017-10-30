@@ -7,14 +7,14 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class DeckPanel extends JPanel{
-    
+
     Deck drawDeck = new Deck();
     CardPanel cPanel = new CardPanel();
     JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
     String currentColor;
-    
+
     public DeckPanel(){
 	// The two subpanels will be next to each other
 	setLayout(new GridLayout(1, 2));
@@ -49,7 +49,7 @@ public class DeckPanel extends JPanel{
 	    JPanel orangePanel = createColorPanel(Color.orange);
 	    JPanel orangePanel2 = createDoubleColorPanel(Color.orange);
 	    JPanel whitePanel = createColorPanel(Color.white);
-	    
+
       	    add(whitePanel, "WHITE");
 	    add(redPanel, "RED");
 	    add(redPanel2, "RED2");
@@ -89,11 +89,11 @@ public class DeckPanel extends JPanel{
 	return currentColor;
     }
 
-    
+
     private class DrawListener implements ActionListener{
 	public DrawListener (CardPanel cPanel){
 	}
-	
+
 	// Every time we click the button, it will display the
 	// color of the next card in the deck
 	public void actionPerformed(ActionEvent e){
@@ -105,6 +105,8 @@ public class DeckPanel extends JPanel{
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
 		currentColor = drawnCard.getColor() + "2";
 	    }
+
+        MainFrame.getnextPlayer();
 	}
     }
 }
