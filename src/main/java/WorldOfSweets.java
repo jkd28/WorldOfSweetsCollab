@@ -8,6 +8,19 @@ public class WorldOfSweets {
 												//		It should probably eventually get moved to whatever "GameplayDriver" sort of class
 												//		that gets made.
 
+	public static int numPlayers = 0;
+	public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
+
+	// --------------------------------------- //
+	// Calling this will return the player who //
+	// is up next and advance currentPlayer    //
+	// --------------------------------------- //
+	public static int getnextPlayer(){
+		int cplay = currentPlayer;
+		currentPlayer = (currentPlayer + 1) % numPlayers;
+		return cplay;
+	}
+
   	private static int getNumPlayersFromUser(){
     	int numPlayers = -1;
 
@@ -60,7 +73,7 @@ public class WorldOfSweets {
     	// ------------------------- //
     	// Get the number of Players //
     	// ------------------------- //
-    	int numPlayers = getNumPlayersFromUser();
+    	numPlayers = getNumPlayersFromUser();
 
     	// Validate that we got a proper response
     	if(numPlayers == -1){
