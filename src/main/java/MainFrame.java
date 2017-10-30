@@ -13,6 +13,12 @@ public class MainFrame{
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
+
+    // Data for the Board Panel
+    private BoardPanel boardPanel;
+
+    // Data for the Deck Panel
+    private DeckPanel deckPanel;
     
     public MainFrame(int numPlayers){
     	// ------------------------ //
@@ -33,13 +39,13 @@ public class MainFrame{
     	// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
-		boardPanel = new boardPanel();
+		boardPanel = new BoardPanel();
 		frame.add(boardPanel, BorderLayout.NORTH);
 
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
-		DeckPanel deckPanel = new DeckPanel();
+		deckPanel = new DeckPanel();
 		frame.add(deckPanel, BorderLayout.WEST);
 
 		frame.setVisible(true);	
