@@ -34,6 +34,12 @@ public class Deck {
             }
         }
 
+        int numberOfSkipCards = 5;
+        // Add Skip-Turn cards
+        for (int i = 0; i < numberOfSkipCards; i++){
+            deckStack.push(new Card(0, "SKIP"));
+        }
+
         // To emulate a true deck of cards, shuffle
         Collections.shuffle(deckStack);
         return deckStack;
