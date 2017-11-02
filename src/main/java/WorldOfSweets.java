@@ -1,5 +1,4 @@
 import javax.swing.JOptionPane;
-import javax.swing.JFormattedTextField;
 
 public class WorldOfSweets {
 

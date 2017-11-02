@@ -43,11 +43,16 @@ public class MainFrame{
 
     public MainFrame(int numPlayers){
         NUM_PLAYERS = numPlayers;
+    	
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
-    	if(numPlayers < WorldOfSweets.MIN_PLAYERS){
-    		System.err.println("Number of players must be a positive integer >= " + WorldOfSweets.MIN_PLAYERS);
+    	if(NUM_PLAYERS < WorldOfSweets.MIN_PLAYERS || NUM_PLAYERS > WorldOfSweets.MAX_PLAYERS){
+    		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
+    		JOptionPane.showMessageDialog(null, 
+				message,
+				"Invalid Number of Players",
+				JOptionPane.ERROR_MESSAGE);
 			System.exit(1);
     	}
 
@@ -63,10 +68,10 @@ public class MainFrame{
 		// ------------------ //
 		// Create the Players //
 		// ------------------ //
-		players = new Player[numPlayers];
+		players = new Player[NUM_PLAYERS];
 		for(int i = 0; i < players.length; i++){
 
-			String playerName = "Player " + i;
+			String playerName = "Player "+i;
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
 				if(playerName == null || playerName.equals("")){
