@@ -15,6 +15,10 @@ public class Deck {
         return cardDeck.pop();
     }
 
+    public int size(){
+        return cardDeck.size();
+    }
+
     private Stack<Card> initializeDeck() {
         Stack<Card> deckStack = new Stack<Card>();
         // Avoid magic numbers
