@@ -51,4 +51,26 @@ public class CardTest {
             // Test passes if we get the error thrown
         }
     }
+
+    // Test that when a skip card is intialized, it does not throw an error
+    @Test
+    public void testSkipCardCreation(){
+        try {
+            Card test = new Card(0, "SKIP");
+        } catch (IllegalArgumentException e) {
+            fail("Illegal Argument Exception was thrown.");
+        }
+    }
+
+    // Test that when a skip-card is initialized with an improper value,
+    // it does indeed throw an error
+    @Test
+    public void testInvalidSkipCardCreation(){
+        try {
+            Card test = new Card(2, "SKIP");
+            Card test2 = new Card(0, "Should Fail");
+        } catch (IllegalArgumentException e) {
+            // Reaching here means the test was successful 
+        }
+    }
 }

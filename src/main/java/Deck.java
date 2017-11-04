@@ -15,6 +15,10 @@ public class Deck {
         return cardDeck.pop();
     }
 
+    public int size(){
+        return cardDeck.size();
+    }
+
     private Stack<Card> initializeDeck() {
         Stack<Card> deckStack = new Stack<Card>();
         // Avoid magic numbers
@@ -32,6 +36,12 @@ public class Deck {
                 }
                 deckStack.push(newCard);
             }
+        }
+
+        int numberOfSkipCards = 5;
+        // Add Skip-Turn cards
+        for (int i = 0; i < numberOfSkipCards; i++){
+            deckStack.push(new Card(0, "SKIP"));
         }
 
         // To emulate a true deck of cards, shuffle
