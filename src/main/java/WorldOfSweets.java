@@ -1,12 +1,12 @@
 import javax.swing.JOptionPane;
-import javax.swing.JFormattedTextField;
 
 public class WorldOfSweets {
 
 	// Basic game information
-	public static final int MIN_PLAYERS = 2; 	// This is "public" because our "MainFrame" class also uses this for input validation
-												//		It should probably eventually get moved to whatever "GameplayDriver" sort of class
+	public static final int MIN_PLAYERS = 2; 	// These are "public" because our "MainFrame" class also uses this for input validation
+												//		It may eventually get moved to whatever "GameplayDriver" sort of class
 												//		that gets made.
+	public static final int MAX_PLAYERS = 4;
 
 	public static int numPlayers = 0;
 	public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
@@ -47,6 +47,13 @@ public class WorldOfSweets {
 	    			JOptionPane.showMessageDialog(null, 
 	    				"You have to have at least " + MIN_PLAYERS + " players for 'World of Sweets'!",
 	    				"Too Few Players",
+	    				JOptionPane.ERROR_MESSAGE);
+	    			continue;
+	    		}
+	    		else if(numPlayers > MAX_PLAYERS){
+	    			JOptionPane.showMessageDialog(null, 
+	    				"You have to have a maximum of " + MAX_PLAYERS + " players for 'World of Sweets'!",
+	    				"Too Many Players",
 	    				JOptionPane.ERROR_MESSAGE);
 	    			continue;
 	    		}
