@@ -106,12 +106,15 @@ public class DeckPanel extends JPanel{
 	// color of the next card in the deck
 	public void actionPerformed(ActionEvent e){
 	    Card drawnCard = drawDeck.draw();
-	    if (drawnCard.getValue() == 1 || drawnCard.getValue() == 0){
+	    if (drawnCard.getValue() == 1){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
 		currentColor = drawnCard.getColor();
 	    } else if (drawnCard.getValue() == 2){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
 		currentColor = drawnCard.getColor() + "2";
+	    } else {
+		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
+		currentColor = drawnCard.getColor();
 	    }
 
         MainFrame.getnextPlayer();
