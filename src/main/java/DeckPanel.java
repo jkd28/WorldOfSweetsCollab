@@ -20,7 +20,7 @@ public class DeckPanel extends JPanel{
 	setLayout(new GridLayout(1, 2));
 
 	// Add the draw button to the Draw Panel
-	drawButton.setFont(new Font("Courier", Font.PLAIN, 48));
+	drawButton.setFont(new Font("Courier", Font.PLAIN, 24));
 	drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
 	drawPanel.add(drawButton, BorderLayout.CENTER);
 
@@ -50,6 +50,13 @@ public class DeckPanel extends JPanel{
 	    JPanel orangePanel2 = createDoubleColorPanel(Color.orange);
 	    JPanel whitePanel = createColorPanel(Color.white);
 
+	    JPanel skipPanel = new JPanel(new GridBagLayout());
+	    JLabel skipLabel = new JLabel("Skip!");
+	    skipLabel.setFont(new Font("Courier", Font.PLAIN, 48));
+	    skipLabel.setForeground(Color.WHITE);
+	    skipPanel.setBackground(Color.BLACK);
+	    skipPanel.add(skipLabel);
+
       	    add(whitePanel, "WHITE");
 	    add(redPanel, "RED");
 	    add(redPanel2, "RED2");
@@ -61,6 +68,7 @@ public class DeckPanel extends JPanel{
 	    add(greenPanel2, "GREEN2");
 	    add(orangePanel, "ORANGE");
 	    add(orangePanel2, "ORANGE2");
+	    add(skipPanel, "SKIP");
 
 	    currentColor = "WHITE";
 	}
@@ -98,7 +106,7 @@ public class DeckPanel extends JPanel{
 	// color of the next card in the deck
 	public void actionPerformed(ActionEvent e){
 	    Card drawnCard = drawDeck.draw();
-	    if (drawnCard.getValue() == 1){
+	    if (drawnCard.getValue() == 1 || drawnCard.getValue() == 0){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
 		currentColor = drawnCard.getColor();
 	    } else if (drawnCard.getValue() == 2){
