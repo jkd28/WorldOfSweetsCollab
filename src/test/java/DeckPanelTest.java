@@ -37,7 +37,7 @@ public class DeckPanelTest{
 		       testColor.equals("ORANGE") || testColor.equals("ORANGE2") ||
 		       testColor.equals("SKIP"));
 	}
-    
+
     // After the draw button is click 60 times there each color should
     // have been displayed ten times as a single card and twice as a
     // double card, with no other color having been displayed.
@@ -45,45 +45,51 @@ public class DeckPanelTest{
 	public void testDeckPanelDraw(){
 	    int redCounter,red2Counter, yellowCounter, yellow2Counter,
 		blueCounter, blue2Counter, greenCounter,green2Counter,
-		orangeCounter, orange2Counter, skipCounter, wrongCounter, total;
+		orangeCounter, orange2Counter, skipCounter, middleCounter,
+        wrongCounter, total;
 	    String testColor;
 	    redCounter = red2Counter = yellowCounter = yellow2Counter =
 		    blueCounter = blue2Counter = greenCounter = green2Counter =
-		orangeCounter = orange2Counter = skipCounter = wrongCounter = 0;
+		    orangeCounter = orange2Counter = skipCounter = middleCounter =
+            wrongCounter = 0;
 
-	    for (int i = 0; i < 65; i++){
-		testDeckPanel.drawButton.doClick();
-		testColor = testDeckPanel.getCurrentColor();
+        int numCardsInDeck = 68;
 
-		if (testColor.equals("RED")){
-		    redCounter++;
-		}else if (testColor.equals("RED2")){
-		    red2Counter++;
-		}else if (testColor.equals("YELLOW")){
-		    yellowCounter++;
-		}else if (testColor.equals("YELLOW2")){
-		    yellow2Counter++;
-		}else if (testColor.equals("BLUE")){
-		    blueCounter++;
-		}else if (testColor.equals("BLUE2")){
-		    blue2Counter++;
-		}else if (testColor.equals("GREEN")){
-		    greenCounter++;
-		}else if (testColor.equals("GREEN2")){
-		    green2Counter++;
-		}else if (testColor.equals("ORANGE")){
-		    orangeCounter++;
-		}else if (testColor.equals("ORANGE2")){
-		    orange2Counter++;
-		} else if (testColor.equals("SKIP")){
-		    skipCounter++;
-		}else{
-		    wrongCounter++;
-		}
+	    for (int i = 0; i < numCardsInDeck; i++){
+    		testDeckPanel.drawButton.doClick();
+    		testColor = testDeckPanel.getCurrentColor();
+
+    		if (testColor.equals("RED")){
+    		    redCounter++;
+    		}else if (testColor.equals("RED2")){
+    		    red2Counter++;
+    		}else if (testColor.equals("YELLOW")){
+    		    yellowCounter++;
+    		}else if (testColor.equals("YELLOW2")){
+    		    yellow2Counter++;
+    		}else if (testColor.equals("BLUE")){
+    		    blueCounter++;
+    		}else if (testColor.equals("BLUE2")){
+    		    blue2Counter++;
+    		}else if (testColor.equals("GREEN")){
+    		    greenCounter++;
+    		}else if (testColor.equals("GREEN2")){
+    		    green2Counter++;
+    		}else if (testColor.equals("ORANGE")){
+    		    orangeCounter++;
+    		}else if (testColor.equals("ORANGE2")){
+    		    orange2Counter++;
+    		}else if (testColor.equals("SKIP")){
+    		    skipCounter++;
+            }else if (testColor.equals("MIDDLE")){
+                middleCounter++;
+    		}else{
+    		    wrongCounter++;
+    		}
 	    }
 	    total = redCounter + red2Counter + yellowCounter + yellow2Counter +
 		    blueCounter + blue2Counter + greenCounter + green2Counter +
-		orangeCounter + orange2Counter + skipCounter + wrongCounter;
+		orangeCounter + orange2Counter + skipCounter + middleCounter + wrongCounter;
 
 	    assertEquals(0, wrongCounter);
 	    assertEquals(10, redCounter);
@@ -97,6 +103,7 @@ public class DeckPanelTest{
 	    assertEquals(2, green2Counter);
 	    assertEquals(2, orange2Counter);
 	    assertEquals(5, skipCounter);
-	    assertEquals(65, total);
+        assertEquals(3, middleCounter);
+	    assertEquals(numCardsInDeck, total);
 	}
-}    
+}

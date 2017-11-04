@@ -46,4 +46,20 @@ public class DeckTest {
 
         assertEquals(5, skipCount);
     }
+
+    // Test that exactly 3 Go-To-Middle cards are present in a new deck
+    @Test
+    public void testNumMiddleCards(){
+        int middlCount = 0;
+        int deckSize = testDeck.size();
+
+        for (int i = 0; i < deckSize; i++){
+            Card drawn = testDeck.draw();
+            if (drawn.getValue() == 3) {
+                middlCount++;
+            }
+        }
+
+        assertEquals(3, middlCount);
+    }
 }
