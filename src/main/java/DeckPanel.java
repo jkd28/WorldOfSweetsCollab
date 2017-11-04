@@ -116,8 +116,11 @@ public class DeckPanel extends JPanel{
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
 		currentColor = drawnCard.getColor();
 	    }
-
-        MainFrame.getnextPlayer();
+	    try{
+		MainFrame.getnextPlayer();
+	    }catch (Exception a){
+		System.err.println("No players!");
+	    }
 	}
     }
 }
