@@ -20,7 +20,7 @@ public class DeckPanel extends JPanel{
 	setLayout(new GridLayout(1, 2));
 
 	// Add the draw button to the Draw Panel
-	drawButton.setFont(new Font("Courier", Font.PLAIN, 24));
+	drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
 	drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
 	drawPanel.add(drawButton, BorderLayout.CENTER);
 
@@ -50,14 +50,10 @@ public class DeckPanel extends JPanel{
 	    JPanel orangePanel2 = createDoubleColorPanel(Color.orange);
 	    JPanel whitePanel = createColorPanel(Color.white);
 
-	    JPanel skipPanel = new JPanel(new GridBagLayout());
-	    JLabel skipLabel = new JLabel("Skip!");
-	    skipLabel.setFont(new Font("Courier", Font.PLAIN, 48));
-	    skipLabel.setForeground(Color.WHITE);
-	    skipPanel.setBackground(Color.BLACK);
-	    skipPanel.add(skipLabel);
+	    JPanel skipPanel = createSpecialPanel("Skip!");
+	    JPanel middlePanel = createSpecialPanel("<html>Go to<br>Middle</html>");
 
-      	    add(whitePanel, "WHITE");
+	    add(whitePanel, "WHITE");
 	    add(redPanel, "RED");
 	    add(redPanel2, "RED2");
 	    add(yellowPanel, "YELLOW");
@@ -69,6 +65,7 @@ public class DeckPanel extends JPanel{
 	    add(orangePanel, "ORANGE");
 	    add(orangePanel2, "ORANGE2");
 	    add(skipPanel, "SKIP");
+	    add(middlePanel, "MIDDLE");
 
 	    currentColor = "WHITE";
 	}
@@ -92,6 +89,18 @@ public class DeckPanel extends JPanel{
 	return tempPanel;
     }
 
+    // Helper method for creating the special card panels
+    private JPanel createSpecialPanel(String text){
+	JPanel tempPanel = new JPanel(new GridBagLayout());
+	JLabel tempLabel = new JLabel(text);
+	tempLabel.setFont(new Font("Calibri", Font.PLAIN, 48));
+	tempLabel.setForeground(Color.WHITE);
+	tempPanel.setBackground(Color.BLACK);
+	tempPanel.add(tempLabel);
+
+	return tempPanel;
+    }
+
     // Returns the color of the current card
     public String getCurrentColor(){
 	return currentColor;
@@ -106,15 +115,13 @@ public class DeckPanel extends JPanel{
 	// color of the next card in the deck
 	public void actionPerformed(ActionEvent e){
 	    Card drawnCard = drawDeck.draw();
-	    if (drawnCard.getValue() == 1){
+	    if (drawnCard.getValue() == 1 || drawnCard.getValue() == 0 ||
+		drawnCard.getValue() == 3){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
 		currentColor = drawnCard.getColor();
 	    } else if (drawnCard.getValue() == 2){
 		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
 		currentColor = drawnCard.getColor() + "2";
-	    } else {
-		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
-		currentColor = drawnCard.getColor();
 	    }
 	    try{
 		MainFrame.getnextPlayer();
