@@ -54,4 +54,25 @@ public class PlayerPanel extends JPanel{
 	}
         nextDisplayText.setText(NEXT_PRE_TEXT + players[nextPlayer].getName());
     }
+
+    public String getCurrPlayerText(){
+	return currDisplayText.getText();
+    }
+
+    public String getNextPlayerText(){
+	return nextDisplayText.getText();
+    }
+
+    public String[] getOrderText(){
+	Component[] components = orderPanel.getComponents();
+	String[] orderText = new String[components.length];
+
+	orderText[0] = ordDisplayText.getText();
+	for (int i = 1; i < components.length; i++){
+	    JLabel tempLabel = (JLabel)orderPanel.getComponent(i);
+	    orderText[i] = tempLabel.getText();
+	}
+
+	return orderText;
+    }
 }
