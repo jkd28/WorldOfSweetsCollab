@@ -36,8 +36,8 @@ public class MainFrame{
     public static int getnextPlayer(){
         int cplay = currentPlayer;
         currentPlayer = (currentPlayer + 1) % NUM_PLAYERS;
-
-        playerPanel.changePlayer(players[currentPlayer]);
+	
+        playerPanel.changePlayer(players, currentPlayer);
         return cplay;
     }
 
@@ -110,7 +110,7 @@ public class MainFrame{
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
-        playerPanel = new PlayerPanel(players[0]);
+        playerPanel = new PlayerPanel(players);
         frame.add(playerPanel, BorderLayout.CENTER);
 
 		// Make it all visible!
