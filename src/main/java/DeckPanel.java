@@ -71,6 +71,7 @@ public class DeckPanel extends JPanel{
 	    add(skipPanel, "SKIP");
 
 	    currentColor = "WHITE";
+	    setBorder(BorderFactory.createLineBorder(Color.black));
 	}
     }
 
