@@ -47,8 +47,11 @@ public class PlayerPanel extends JPanel{
 
     // Change the current and next players
     public void changePlayer(Player[] players, int nextPlayer){
-	
-	currDisplayText.setText(CURR_PRE_TEXT + players[nextPlayer-1].getName());
+	if (nextPlayer == 0){
+	    currDisplayText.setText(CURR_PRE_TEXT + players[3].getName());
+	}else{
+	    currDisplayText.setText(CURR_PRE_TEXT + players[nextPlayer-1].getName());
+	}
         nextDisplayText.setText(NEXT_PRE_TEXT + players[nextPlayer].getName());
     }
 }
