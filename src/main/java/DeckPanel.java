@@ -68,6 +68,7 @@ public class DeckPanel extends JPanel{
 	    add(middlePanel, "MIDDLE");
 
 	    currentColor = "WHITE";
+	    setBorder(BorderFactory.createLineBorder(Color.black));
 	}
     }
 
