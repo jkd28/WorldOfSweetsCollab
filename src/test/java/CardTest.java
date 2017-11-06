@@ -57,8 +57,9 @@ public class CardTest {
     public void testSkipCardCreation(){
         try {
             Card test = new Card(0, "SKIP");
+            Card test2 = new Card(0, "skip");
         } catch (IllegalArgumentException e) {
-            fail("Illegal Argument Exception was thrown.");
+            fail("Illegal Argument Exception was thrown on creation of a Skip card.");
         }
     }
 
@@ -67,10 +68,32 @@ public class CardTest {
     @Test
     public void testInvalidSkipCardCreation(){
         try {
-            Card test = new Card(2, "SKIP");
-            Card test2 = new Card(0, "Should Fail");
+            Card test = new Card(0, "should fail");
         } catch (IllegalArgumentException e) {
-            // Reaching here means the test was successful 
+            // Reaching here means the test was successful
+        }
+    }
+
+    // Test that when a go-to-middle card is initialized with the proper
+    // values, no error is thrown
+    @Test
+    public void testMiddleCardCreation(){
+        try {
+            Card test = new Card(3, "MIDDLE");
+            Card test2 = new Card(3, "middle");
+        } catch (IllegalArgumentException e) {
+            fail("Illegal Argument Exception was thrown on creation of a Go-To-Middle Card");
+        }
+    }
+
+    // Test that when a middle card with invalid parameters is created,
+    // an IllegalArgumentException is indeed thrown
+    @Test
+    public void testInvalidMiddleCardCreation(){
+        try {
+            Card test1 = new Card(3, "Failure");
+        } catch (IllegalArgumentException e) {
+            // Test should pass if error was thrown
         }
     }
 }

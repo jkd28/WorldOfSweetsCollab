@@ -39,6 +39,13 @@ public class Card{
             } else {
                 return false;
             }
+        }else if (value == 3){
+            // for value 3, the color must be "MIDDLE"
+            if (color.equals("MIDDLE")) {
+                return true;
+            } else {
+                return false;
+            }
         } else {
             return false;
         }
