@@ -13,7 +13,9 @@ public class DeckPanel extends JPanel{
     JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
-    Color currentColor;
+    public static final Color DEFAULT_COLOR = Color.WHITE;
+    Color currentColor = null;
+    Card currentCard = null;
 
     public DeckPanel(){
 		// The two subpanels will be next to each other
@@ -38,7 +40,7 @@ public class DeckPanel extends JPanel{
 		    setLayout(cardLayout);
 
 		    // Set initial blank card
-		    currentColor = Color.WHITE;
+		    currentColor = DEFAULT_COLOR;
 		    panel = new JPanel();
 		    panel.setBackground(currentColor);
 		    this.add(panel);
@@ -92,6 +94,10 @@ public class DeckPanel extends JPanel{
 		return currentColor;
     }
 
+    public Card getCurrentCard(){
+    	return currentCard;
+    }
+
 
     private class DrawListener implements ActionListener{
 		public DrawListener (CardPanel cPanel){
@@ -102,6 +108,7 @@ public class DeckPanel extends JPanel{
 		public void actionPerformed(ActionEvent e){
 			// Draw a card and pull its data
 			Card drawnCard = drawDeck.draw();
+				currentCard = drawnCard;
 		    int cardValue = drawnCard.getValue();
 		    Color cardColor = drawnCard.getColor();
 
