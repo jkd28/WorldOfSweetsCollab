@@ -89,17 +89,6 @@ public class BoardSpace extends JPanel{
 	// ------------------- //
 	// Getters and Setters //
 	// ------------------- //
-	// "label"
-	// public JLabel getLabel(){
-	// 	return label;
-	// }
-	// public void setLabel(JLabel label){
-	// 	this.label = label;
-	// }
-	// public void setLabel(String label){
-	// 	this.setLabel(new JLabel(label));
-	// }
-
 	// "players"
 	public void addPlayer(Player player){
 		players.add(player);
