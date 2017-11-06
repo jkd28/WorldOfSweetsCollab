@@ -14,7 +14,7 @@ public class DeckPanel extends JPanel{
     JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
     public static final Color DEFAULT_COLOR = Color.WHITE;
-    Color currentColor = null;
+    Color currentColor = DEFAULT_COLOR;
     Card currentCard = null;
 
     public DeckPanel(){
@@ -96,6 +96,10 @@ public class DeckPanel extends JPanel{
 
     public Card getCurrentCard(){
     	return currentCard;
+    }
+
+    public JButton getDrawButton(){
+    	return drawButton;
     }
 
 

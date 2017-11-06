@@ -44,13 +44,24 @@ public class CardTest {
     @Test
     public void testIllegalColor(){
         int validValue = 1;
-        String invalidColor = Color.WHITE;
+        Color invalidColor = Color.WHITE;
         try {
             testCard = new Card(validValue, invalidColor);
             fail();
         } catch (IllegalArgumentException e) {
             // Test passes if we get the error thrown
         }
+    }
+
+    @Test
+    public void testIsValidColor(){
+        Color[] validColors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
+        for(Color color : validColors){
+            assertTrue(Card.isValidColor(color));
+        }
+
+        assertFalse(Card.isValidColor(Color.CYAN));
+        assertFalse(Card.isValidColor(Color.LIGHT_GRAY));
     }
 
     // Test that when a skip card is intialized, it does not throw an error

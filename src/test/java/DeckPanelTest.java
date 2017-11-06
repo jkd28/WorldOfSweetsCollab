@@ -3,6 +3,7 @@
  */
 import org.junit.*;
 import static org.junit.Assert.*;
+import java.awt.Color;
 
 public class DeckPanelTest{
     DeckPanel testDeckPanel;
@@ -17,7 +18,7 @@ public class DeckPanelTest{
     @Test
     public void testInitialDeckPanelColor(){
 		Color testColor = testDeckPanel.getCurrentColor();
-		assertEquals(testColor, DeckPanel.DEFAUL_COLOR);
+		assertEquals(testColor, DeckPanel.DEFAULT_COLOR);
     }
 
     // Test that a correct color is displayed after clicking the draw button
@@ -27,7 +28,7 @@ public class DeckPanelTest{
 
 		Color testColor = testDeckPanel.getCurrentColor();
 
-		assertTrue(Card.isValidColor(testColor));
+		assertEquals(true, Card.isValidColor(testColor));
     }
 
     // After the draw button is click 60 times there each color should
@@ -41,6 +42,7 @@ public class DeckPanelTest{
 		    wrongCounter, total;
 		Color testColor;
 		Card testCard;
+		int testValue;
 		redCounter = red2Counter = yellowCounter = yellow2Counter =
 		    blueCounter = blue2Counter = greenCounter = green2Counter =
 		    orangeCounter = orange2Counter = skipCounter = middleCounter =
