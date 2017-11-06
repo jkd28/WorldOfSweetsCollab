@@ -107,19 +107,20 @@ public class DeckPanel extends JPanel{
 	public void actionPerformed(ActionEvent e){
 	    Card drawnCard = drawDeck.draw();
 	    if (drawnCard.getValue() == 1){
-		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
-		currentColor = drawnCard.getColor();
+			cPanel.cardLayout.show(cPanel, drawnCard.getColor());
+			currentColor = drawnCard.getColor();
 	    } else if (drawnCard.getValue() == 2){
-		cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
-		currentColor = drawnCard.getColor() + "2";
+			cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
+			currentColor = drawnCard.getColor() + "2";
 	    } else {
-		cPanel.cardLayout.show(cPanel, drawnCard.getColor());
-		currentColor = drawnCard.getColor();
+			cPanel.cardLayout.show(cPanel, drawnCard.getColor());
+			currentColor = drawnCard.getColor();
 	    }
 	    try{
-		MainFrame.getnextPlayer();
+			MainFrame.getnextPlayer();
 	    }catch (Exception a){
-		System.err.println("No players!");
+			System.err.println("No players!");
+			System.exit(1);
 	    }
 	}
     }
