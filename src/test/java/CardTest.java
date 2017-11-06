@@ -1,5 +1,6 @@
 import org.junit.*;
 import static org.junit.Assert.*;
+import java.awt.Color;
 
 public class CardTest {
     Card testCard;
@@ -9,8 +10,8 @@ public class CardTest {
     // string value for the color
     @Test
     public void testGetColor(){
-        testCard = new Card(1, "RED");
-        assertEquals("RED", testCard.getColor());
+        testCard = new Card(1, Color.RED);
+        assertEquals(Color.RED, testCard.getColor());
     }
 
     // Test that the card properly returns an int value
@@ -18,8 +19,8 @@ public class CardTest {
     // with a valid value (1 or 2)
     @Test
     public void testGetValue(){
-        testCard = new Card(1, "BLUE");
-        Card testCard2 = new Card(2, "YELLOW");
+        testCard = new Card(1, Color.BLUE);
+        Card testCard2 = new Card(2, Color.YELLOW);
 
         assertEquals(1, testCard.getValue());
         assertEquals(2, testCard2.getValue());
@@ -31,7 +32,7 @@ public class CardTest {
     @Test
     public void testInvalidValue(){
         int invalidValue = 132434;
-        String validColor = "red";
+        Color validColor = Color.RED;
         try {
             testCard = new Card(invalidValue, validColor);
             fail();
@@ -43,7 +44,7 @@ public class CardTest {
     @Test
     public void testIllegalColor(){
         int validValue = 1;
-        String invalidColor = "this should throw an error";
+        String invalidColor = Color.WHITE;
         try {
             testCard = new Card(validValue, invalidColor);
             fail();
@@ -56,8 +57,8 @@ public class CardTest {
     @Test
     public void testSkipCardCreation(){
         try {
-            Card test = new Card(0, "SKIP");
-            Card test2 = new Card(0, "skip");
+            Card test = new Card(0, Color.RED);
+            Card test2 = new Card(0, Color.BLUE);
         } catch (IllegalArgumentException e) {
             fail("Illegal Argument Exception was thrown on creation of a Skip card.");
         }
@@ -68,7 +69,7 @@ public class CardTest {
     @Test
     public void testInvalidSkipCardCreation(){
         try {
-            Card test = new Card(0, "should fail");
+            Card test = new Card(0, Color.WHITE);
         } catch (IllegalArgumentException e) {
             // Reaching here means the test was successful
         }
@@ -79,8 +80,8 @@ public class CardTest {
     @Test
     public void testMiddleCardCreation(){
         try {
-            Card test = new Card(3, "MIDDLE");
-            Card test2 = new Card(3, "middle");
+            Card test = new Card(3, Color.RED);
+            Card test2 = new Card(3, Color.BLUE);
         } catch (IllegalArgumentException e) {
             fail("Illegal Argument Exception was thrown on creation of a Go-To-Middle Card");
         }
@@ -91,7 +92,7 @@ public class CardTest {
     @Test
     public void testInvalidMiddleCardCreation(){
         try {
-            Card test1 = new Card(3, "Failure");
+            Card test1 = new Card(3, Color.WHITE);
         } catch (IllegalArgumentException e) {
             // Test should pass if error was thrown
         }
