@@ -13,8 +13,8 @@ public class BoardPanel extends JPanel{
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
-    private static final int BOARD_COLUMNS = 5;
-    private static final int BOARD_ROWS = 5;
+    private static final int BOARD_COLUMNS = 8;
+    private static final int BOARD_ROWS = 8;
     private static final int BOARD_HORIZONTAL_GAP = 20;
     private static final int BOARD_VERTICAL_GAP = 10;
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
