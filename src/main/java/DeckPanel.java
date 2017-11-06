@@ -117,7 +117,7 @@ public class DeckPanel extends JPanel{
 			currentColor = drawnCard.getColor();
 	    }
 	    try{
-			MainFrame.getnextPlayer();
+			MainFrame.getNextPlayer();
 	    }catch (Exception a){
 			System.err.println("No players!");
 			System.exit(1);

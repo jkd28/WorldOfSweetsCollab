@@ -33,12 +33,15 @@ public class MainFrame{
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
     // --------------------------------------- //
-    public static int getnextPlayer(){
+    public static int getNextPlayer(){
         int cplay = currentPlayer;
         currentPlayer = (currentPlayer + 1) % NUM_PLAYERS;
 
         playerPanel.changePlayer(players[cplay]);
         return cplay;
+    }
+    public static int getCurrentPlayer(){
+    	return currentPlayer;
     }
 
     public MainFrame(int numPlayers){
