@@ -25,7 +25,7 @@ public class BoardPanel extends JPanel{
 		// Create the Spaces //
 		// ----------------- //
 		spaces = new BoardSpace[BOARD_COLUMNS * BOARD_ROWS];
-		
+
 		// Create the "Start" space
 		spaces[0] = new BoardSpace(Color.WHITE, start, players);
 

@@ -23,19 +23,19 @@ public class BoardSpace extends JPanel{
 		
 		// "label"
 		if(newLabel != null){
-			label = newLabel;
-			add(label);
+			label = new JLabel("<html>" + newLabel.getText() + "</html>");
+			add(label); 		// Actually add the JLabel to this BoardSpace (which is just an extension of JPanel)
 		}
 		else{
-			label = new JLabel("Test");
+			label = new JLabel("<html></html>");
 		}
 
 		// "originalText"
 		if(newLabel != null){
-			originalText = label.getText();
+			originalText = newLabel.getText();
 		}
 		else{
-			originalText = new String("tesT");
+			originalText = new String("");
 		}
 
 		// "players"
@@ -49,7 +49,7 @@ public class BoardSpace extends JPanel{
 			players = new ArrayList<Player>(0);
 		}
 
-		updateText();
+		updateText(); // Updates the JLabel text of this BoardSpace to include any Players on this space
 	}
 	public BoardSpace(Color backgroundColor, JLabel label){
 		this(backgroundColor, label, null);
@@ -66,10 +66,17 @@ public class BoardSpace extends JPanel{
 	// Misc. Methods //
 	// ------------- //
 	private void updateText(){
-		String labelText = new String(originalText);
-		for(Player player : players){
-			labelText = labelText + player.getName() + ", ";
+		String labelText = new String("<html>" + originalText);
+		if(!players.isEmpty()){
+			labelText = labelText + "<br>[";
+			for(Player player : players){
+				labelText = labelText + player.getName() + ", ";
+			}
+			labelText = labelText.substring(0, labelText.length() - 2);
+			labelText = labelText + "]";
 		}
+		labelText = labelText + "</html>";
+
 		label.setText(labelText);
 	}
 
