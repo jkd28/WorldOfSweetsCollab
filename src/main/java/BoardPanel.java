@@ -8,7 +8,7 @@ import javax.swing.*;
 public class BoardPanel extends JPanel{
     
     // Data for the BoardPanel
-    private JPanel[] spaces;
+    private BoardSpace[] spaces;
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
@@ -19,53 +19,42 @@ public class BoardPanel extends JPanel{
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     
     public BoardPanel(Player[] players){
-	setLayout(BOARD_LAYOUT);
+		setLayout(BOARD_LAYOUT);
 
-	// Add the start and end (grandma's house) spaces
-	spaces = new JPanel[BOARD_COLUMNS * BOARD_ROWS];
-	spaces[0] = new JPanel();
-	if(players.length > 0){
-		String labelText = start.getText() + " (";
-		for(Player player : players){
-			labelText = labelText + player.getName() + ", ";
+		// ----------------- //
+		// Create the Spaces //
+		// ----------------- //
+		spaces = new BoardSpace[BOARD_COLUMNS * BOARD_ROWS];
+		
+		// Create the "Start" space
+		spaces[0] = new BoardSpace(Color.WHITE, start, players);
+
+		// Create all of the colored spaces
+		for(int i = 1; i < spaces.length - 1; i++){
+		    Color backgroundColor = Color.WHITE;
+		    switch(i % 5){
+		    	case 0: backgroundColor = Color.RED; 	break;
+		    	case 1: backgroundColor = Color.YELLOW; break;
+		    	case 2: backgroundColor = Color.BLUE; 	break;
+		    	case 3: backgroundColor = Color.GREEN; 	break;
+		    	case 4: backgroundColor = Color.ORANGE; break;
+		    }
+		    spaces[i] = new BoardSpace(backgroundColor);
 		}
-		labelText = labelText.substring(0, labelText.length() - 2);
-		labelText = labelText + ")";
-		spaces[0].add(new JLabel(labelText));
-	}
-	else{
-		spaces[0].add(start);
-	}
-	spaces[0].setBorder(BorderFactory.createLineBorder(Color.black));
-	spaces[1] = new JPanel();
-	spaces[1].add(grandma);
-	spaces[1].setBorder(BorderFactory.createLineBorder(Color.black));
-	add(spaces[0]);
 
-	// Add all of the colored spaces to the board
-	for(int i = 2; i < spaces.length; i++){
-	    spaces[i] = new JPanel();
-	    if (i % 5 == 2){
-		spaces[i].setBackground(Color.RED);
-	    }else if (i % 5 == 3){
-		spaces[i].setBackground(Color.YELLOW);
-	    }else if (i % 5 == 4){
-		spaces[i].setBackground(Color.BLUE);
-	    }else if (i % 5 == 0){
-		spaces[i].setBackground(Color.GREEN);
-	    }else if (i % 5 == 1){
-		spaces[i].setBackground(Color.ORANGE);
-	    }
-	    spaces[i].setBorder(BorderFactory.createLineBorder(Color.black));
-	   	    
-	    add(spaces[i]);
-	}
-	add(spaces[1]);
-
+		// Create the end space ("Grandma's House")
+		spaces[spaces.length - 1] = new BoardSpace(Color.WHITE, grandma);
+		
+		// --------------------------- //
+		// Add the Spaces to the board //
+		// --------------------------- //
+		for(BoardSpace space : spaces){
+			add(space);
+		}
     }
 
     // Retrieve a specific board space
     public JPanel getSpace(int index){
-	return spaces[index];
+		return (JPanel)spaces[index];
     }
 }
