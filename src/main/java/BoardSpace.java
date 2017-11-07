@@ -21,20 +21,15 @@ public class BoardSpace extends JPanel{
 		this.setBackground(newBackgroundColor);
 		this.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
 		
-		// "label"
+		// "label" and "originalText"
 		if(newLabel != null){
-			label = new JLabel("<html>" + newLabel.getText() + "</html>");
+			label = newLabel;
 			add(label); 		// Actually add the JLabel to this BoardSpace (which is just an extension of JPanel)
-		}
-		else{
-			label = new JLabel("<html></html>");
-		}
 
-		// "originalText"
-		if(newLabel != null){
 			originalText = newLabel.getText();
 		}
 		else{
+			label = new JLabel("");
 			originalText = new String("");
 		}
 
@@ -98,6 +93,11 @@ public class BoardSpace extends JPanel{
 		boolean result = players.remove(player);
 		updateText();
 		return result;
+	}
+
+	// "label"
+	public JLabel getLabel(){
+		return label;
 	}
 
 

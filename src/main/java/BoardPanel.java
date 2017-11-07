@@ -11,12 +11,15 @@ public class BoardPanel extends JPanel{
     private BoardSpace[] spaces;
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
+    private JLabel midLabel = new JLabel("MID");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
-    private static final int BOARD_COLUMNS = 10;
-    private static final int BOARD_ROWS = 7;
+    private static final int BOARD_COLUMNS = 8;
+    private static final int BOARD_ROWS = 8;
     private static final int BOARD_HORIZONTAL_GAP = 20;
     private static final int BOARD_VERTICAL_GAP = 10;
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
+    private static final int NUM_SPACES = BOARD_COLUMNS * BOARD_ROWS;
+    private static final int MID_SPACE = (NUM_SPACES / 2); // The middle space. When even # spaces, the one closer to the final space
     
     public BoardPanel(Player[] players){
 		setLayout(BOARD_LAYOUT);
@@ -24,7 +27,7 @@ public class BoardPanel extends JPanel{
 		// ----------------- //
 		// Create the Spaces //
 		// ----------------- //
-		spaces = new BoardSpace[BOARD_COLUMNS * BOARD_ROWS];
+		spaces = new BoardSpace[NUM_SPACES];
 
 		// Create the "Start" space
 		spaces[0] = new BoardSpace(Color.WHITE, start, players);
@@ -39,7 +42,14 @@ public class BoardPanel extends JPanel{
 		    	case 3: backgroundColor = Color.GREEN; 	break;
 		    	case 4: backgroundColor = Color.ORANGE; break;
 		    }
-		    spaces[i] = new BoardSpace(backgroundColor);
+
+		    JLabel newLabel = null;
+		    if(i == MID_SPACE){
+		    	newLabel = midLabel;
+		    	newLabel.setForeground(Color.WHITE);
+		    }
+		    
+		    spaces[i] = new BoardSpace(backgroundColor, newLabel);
 		}
 
 		// Create the end space ("Grandma's House")
@@ -54,7 +64,12 @@ public class BoardPanel extends JPanel{
     }
 
     // Retrieve a specific board space
-    public JPanel getSpace(int index){
-		return (JPanel)spaces[index];
+    public BoardSpace getSpace(int index){
+		return spaces[index];
+    }
+
+    // Retrieve the number of spaces 
+    public int getNumSpaces(){
+	return spaces.length;
     }
 }

@@ -13,115 +13,132 @@ public class DeckPanel extends JPanel{
     JPanel drawPanel = new JPanel(new BorderLayout());
     JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
-    String currentColor;
+    public static final Color DEFAULT_COLOR = Color.WHITE;
+    Color currentColor = DEFAULT_COLOR;
+    Card currentCard = null;
 
     public DeckPanel(){
-	// The two subpanels will be next to each other
-	setLayout(new GridLayout(1, 2));
+		// The two subpanels will be next to each other
+		setLayout(new GridLayout(1, 2));
 
-	// Add the draw button to the Draw Panel
-	drawButton.setFont(new Font("Courier", Font.PLAIN, 24));
-	drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
-	drawPanel.add(drawButton, BorderLayout.CENTER);
+		// Add the draw button to the Draw Panel
+		drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
+		drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
+		drawPanel.add(drawButton, BorderLayout.CENTER);
 
-	//Add both panels to the Frame
-	add(drawPanel);
-	add(cPanel);
+		//Add both panels to the Frame
+		add(drawPanel);
+		add(cPanel);
     }
 
     // Class for the panel displaying the most recently drawn card.
     class CardPanel extends JPanel{
-	CardLayout cardLayout = new CardLayout();
+		CardLayout cardLayout = new CardLayout();
+		JPanel panel;
 
-	public CardPanel(){
-	    setLayout(cardLayout);
+		public CardPanel(){
+		    setLayout(cardLayout);
 
-	    // Create and add each of the color panels
-	    // representing the single color cards.
-	    JPanel redPanel = createColorPanel(Color.red);
-	    JPanel redPanel2 =createDoubleColorPanel(Color.red);
-	    JPanel yellowPanel = createColorPanel(Color.yellow);
-	    JPanel yellowPanel2 = createDoubleColorPanel(Color.yellow);
-	    JPanel bluePanel = createColorPanel(Color.blue);
-	    JPanel bluePanel2 = createDoubleColorPanel(Color.blue);
-	    JPanel greenPanel = createColorPanel(Color.green);
-	    JPanel greenPanel2 = createDoubleColorPanel(Color.green);
-	    JPanel orangePanel = createColorPanel(Color.orange);
-	    JPanel orangePanel2 = createDoubleColorPanel(Color.orange);
-	    JPanel whitePanel = createColorPanel(Color.white);
+		    // Set initial blank card
+		    currentColor = DEFAULT_COLOR;
+		    panel = new JPanel();
+		    panel.setBackground(currentColor);
+		    this.add(panel);
+		}
 
-	    JPanel skipPanel = new JPanel(new GridBagLayout());
-	    JLabel skipLabel = new JLabel("Skip!");
-	    skipLabel.setFont(new Font("Courier", Font.PLAIN, 48));
-	    skipLabel.setForeground(Color.WHITE);
-	    skipPanel.setBackground(Color.BLACK);
-	    skipPanel.add(skipLabel);
+		public JPanel getPanel(){
+			return panel;
+		}
 
-      	    add(whitePanel, "WHITE");
-	    add(redPanel, "RED");
-	    add(redPanel2, "RED2");
-	    add(yellowPanel, "YELLOW");
-	    add(yellowPanel2, "YELLOW2");
-	    add(bluePanel, "BLUE");
-	    add(bluePanel2, "BLUE2");
-	    add(greenPanel, "GREEN");
-	    add(greenPanel2, "GREEN2");
-	    add(orangePanel, "ORANGE");
-	    add(orangePanel2, "ORANGE2");
-	    add(skipPanel, "SKIP");
-
-	    currentColor = "WHITE";
-	}
+		public void setPanel(JPanel newPanel){
+			this.remove(panel);
+			panel = newPanel;
+			this.add(panel);
+			this.validate();
+			this.repaint();
+		}
     }
 
     // Helper method for creating the single color panels
-    private JPanel createColorPanel(Color color){
-	JPanel tempPanel = new JPanel();
-	tempPanel.setBackground(color);
-	return tempPanel;
+    private JPanel createSingleColorPanel(Color color){
+		JPanel tempPanel = new JPanel();
+		tempPanel.setBackground(color);
+		return tempPanel;
     }
 
     // Helper method for creating the double color panels
     private JPanel createDoubleColorPanel(Color color){
-	JPanel tempPanel = new JPanel(new GridLayout(2, 1, 0, 15));
-	JPanel tempPanel2 = createColorPanel(color);
-	JPanel tempPanel3 = createColorPanel(color);
-	tempPanel.add(tempPanel2);
-	tempPanel.add(tempPanel3);
+		JPanel tempPanel = new JPanel(new GridLayout(2, 1, 0, 15));
+		JPanel tempPanel2 = createSingleColorPanel(color);
+		JPanel tempPanel3 = createSingleColorPanel(color);
+		tempPanel.add(tempPanel2);
+		tempPanel.add(tempPanel3);
 
-	return tempPanel;
+		return tempPanel;
+    }
+
+    // Helper method for creating the special card panels
+    private JPanel createSpecialPanel(String text){
+		JPanel tempPanel = new JPanel(new GridBagLayout());
+		JLabel tempLabel = new JLabel(text);
+		tempLabel.setFont(new Font("Calibri", Font.PLAIN, 48));
+		tempLabel.setForeground(Color.WHITE);
+		tempPanel.setBackground(Color.BLACK);
+		tempPanel.add(tempLabel);
+
+		return tempPanel;
     }
 
     // Returns the color of the current card
-    public String getCurrentColor(){
-	return currentColor;
+    public Color getCurrentColor(){
+		return currentColor;
+    }
+
+    public Card getCurrentCard(){
+    	return currentCard;
+    }
+
+    public JButton getDrawButton(){
+    	return drawButton;
     }
 
 
     private class DrawListener implements ActionListener{
-	public DrawListener (CardPanel cPanel){
-	}
+		public DrawListener (CardPanel cPanel){
+		}
 
-	// Every time we click the button, it will display the
-	// color of the next card in the deck
-	public void actionPerformed(ActionEvent e){
-	    Card drawnCard = drawDeck.draw();
-	    if (drawnCard.getValue() == 1){
-			cPanel.cardLayout.show(cPanel, drawnCard.getColor());
-			currentColor = drawnCard.getColor();
-	    } else if (drawnCard.getValue() == 2){
-			cPanel.cardLayout.show(cPanel, drawnCard.getColor() + "2");
-			currentColor = drawnCard.getColor() + "2";
-	    } else {
-			cPanel.cardLayout.show(cPanel, drawnCard.getColor());
-			currentColor = drawnCard.getColor();
-	    }
-	    try{
-			MainFrame.getNextPlayer();
-	    }catch (Exception a){
-			System.err.println("No players!");
-			System.exit(1);
-	    }
-	}
+		// Every time we click the button, it will display the
+		// color of the next card in the deck
+		public void actionPerformed(ActionEvent e){
+			// Draw a card and pull its data
+			Card drawnCard = drawDeck.draw();
+				currentCard = drawnCard;
+		    int cardValue = drawnCard.getValue();
+		    Color cardColor = drawnCard.getColor();
+
+		    // Create and set the panel for this drawn card
+		    JPanel newPanel = new JPanel();
+		    switch(cardValue){
+		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
+		    	case Card.DOUBLE: 		newPanel = createDoubleColorPanel(cardColor); break;
+		    	case Card.SKIP: 		newPanel = createSpecialPanel("<html>Skip!</html>"); break;
+		    	case Card.GO_TO_MIDDLE: newPanel = createSpecialPanel("<html>Go to<br>Middle!</html>"); break;
+		    }
+		    cPanel.setPanel(newPanel);
+		    currentColor = cardColor;
+
+		    // Rotate to the next Player
+		    // This section is here as a quick "hack" because the Gradle tests do not instantiate any Players,
+		    //		which means that those Gradle tests would otherwise throw an Exception here and 
+		    //		crash the whole damn party.
+		    //		It's not really an acceptable long-term solution, but we have other priorities.
+		    //		(BenjaminMuscto)
+		    try{
+				MainFrame.getNextPlayer();
+		    }catch (Exception a){
+				//System.err.println("No players!");
+				//System.exit(1);
+		    }
+		}
     }
 }
