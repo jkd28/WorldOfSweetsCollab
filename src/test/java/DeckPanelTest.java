@@ -48,7 +48,7 @@ public class DeckPanelTest{
 		    orangeCounter = orange2Counter = skipCounter = middleCounter =
 		    wrongCounter = 0;
 
-		int numCardsInDeck = testDeckPanel.drawDeck.size();
+		int numCardsInDeck = testDeckPanel.getDrawDeck().size();
 
 		for (int i = 0; i < numCardsInDeck; i++){
 		    testDeckPanel.getDrawButton().doClick();
@@ -114,18 +114,18 @@ public class DeckPanelTest{
 		    wrongCounter;
 
 		assertEquals(0, wrongCounter);
-		assertEquals(10, redCounter);
-		assertEquals(10, yellowCounter);
-		assertEquals(10, blueCounter);
-		assertEquals(10, greenCounter);
-		assertEquals(10, orangeCounter);
-		assertEquals(2, red2Counter);
-		assertEquals(2, yellow2Counter);
-		assertEquals(2, blue2Counter);
-		assertEquals(2, green2Counter);
-		assertEquals(2, orange2Counter);
-		assertEquals(5, skipCounter);
-		assertEquals(3, middleCounter);
+		assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, redCounter);
+		assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, yellowCounter);
+		assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, blueCounter);
+		assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, greenCounter);
+		assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, orangeCounter);
+		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, red2Counter);
+		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, yellow2Counter);
+		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, blue2Counter);
+		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, green2Counter);
+		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, orange2Counter);
+		assertEquals(Deck.NUM_GO_TO_MIDDLE_CARDS, middleCounter);
+		assertEquals(Deck.NUM_SKIP_CARDS, skipCounter);
 		assertEquals(numCardsInDeck, total);
     }
 }

@@ -9,13 +9,10 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainFrame{
-    private static int NUM_PLAYERS;
     // Data for the entire Frame, which will hold all of our Panels
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
-    public static int currentPlayerIndex = 0;		// The player first to go will always be player 0, regardless of the number of players
-
 
     // Data for the Board Panel
     private BoardPanel boardPanel;
@@ -25,8 +22,10 @@ public class MainFrame{
 
     // Data for tracking Players
     private static Player[] players;
+    private static int NUM_PLAYERS = 0;
 
     // Data for currentPlayer
+    public static int currentPlayerIndex = 0; // The player first to go will always be player 0, regardless of the number of players
     private static PlayerPanel playerPanel;
 
     // --------------------------------------- //
@@ -45,6 +44,10 @@ public class MainFrame{
     public static Player getCurrentPlayer(){
     	return players[currentPlayerIndex];
     }
+
+    public static int getNumPlayers(){
+    	return NUM_PLAYERS;
+    } 
 
     public MainFrame(int numPlayers){
         NUM_PLAYERS = numPlayers;

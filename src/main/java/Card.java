@@ -9,7 +9,7 @@ public class Card{
     public static final int DOUBLE = 2;
     public static final int GO_TO_MIDDLE = 3;
 
-    private static final Color[] VALID_COLORS = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
+    public static final Color[] VALID_COLORS = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
 
     public Card(int v, Color c){
         value = v;

@@ -74,6 +74,10 @@ public class DeckPanel extends JPanel{
     	return drawButton;
     }
 
+    public Deck getDrawDeck(){
+    	return drawDeck;
+    }
+
 
     // Class for the panel displaying the most recently drawn card.
     class CardPanel extends JPanel{
@@ -130,7 +134,9 @@ public class DeckPanel extends JPanel{
 
 
 		    // Update the current Player with the drawn card
-		    Player currentPlayer = MainFrame.getCurrentPlayer();
+		    if(MainFrame.getNumPlayers() > 0){
+			    Player currentPlayer = MainFrame.getCurrentPlayer();
+		    }
 
 		    // Check if the current Player has won the game
 		    

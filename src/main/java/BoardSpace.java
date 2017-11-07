@@ -95,6 +95,11 @@ public class BoardSpace extends JPanel{
 		return result;
 	}
 
+	// "label"
+	public JLabel getLabel(){
+		return label;
+	}
+
 
 	// --------------- //
 	// Boolean Methods //

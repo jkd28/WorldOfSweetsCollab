@@ -39,27 +39,27 @@ public class DeckTest {
 
         for (int i = 0; i < deckSize; i++){
             Card drawn = testDeck.draw();
-            if (drawn.getValue() == 0) {
+            if (drawn.getValue() == Card.SKIP) {
                 skipCount++;
             }
         }
 
-        assertEquals(5, skipCount);
+        assertEquals(Deck.NUM_SKIP_CARDS, skipCount);
     }
 
     // Test that exactly 3 Go-To-Middle cards are present in a new deck
     @Test
     public void testNumMiddleCards(){
-        int middlCount = 0;
+        int middleCount = 0;
         int deckSize = testDeck.size();
 
         for (int i = 0; i < deckSize; i++){
             Card drawn = testDeck.draw();
-            if (drawn.getValue() == 3) {
-                middlCount++;
+            if (drawn.getValue() == Card.GO_TO_MIDDLE) {
+                middleCount++;
             }
         }
 
-        assertEquals(3, middlCount);
+        assertEquals(Deck.NUM_GO_TO_MIDDLE_CARDS, middleCount);
     }
 }
