@@ -93,9 +93,6 @@ public class MainFrame{
 
 			Player newPlayer = new Player(playerName);
 
-			// Change this to setPosition(boardspace of start)
-			// newPlayer.setPosition(boardPanel.getSpace(0));
-
 			players[i] = newPlayer;
 		}
 
