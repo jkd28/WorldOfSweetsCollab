@@ -17,55 +17,30 @@ public class WorldOfSweets {
     	// --------------------------------------- //
     	// Get the number of players from the user //
     	// --------------------------------------- //
-    	while(true){
 			// Ask the user for the number of players
-			String result = JOptionPane.showInputDialog(null, 
-				"Welcome to 'World of Sweets'!\nHow many players will be in this game? (minimum "+MIN_PLAYERS+" players)", 
-				"Welcome!",
-				JOptionPane.QUESTION_MESSAGE);
-	    	
+		Object[] options = {2,3,4};
+
+		numPlayers = JOptionPane.showOptionDialog(null,
+			"Welcome to 'World of Sweets'!\nHow many players will be in this game?",
+			"Welcome!",
+			JOptionPane.YES_NO_CANCEL_OPTION,
+			JOptionPane.QUESTION_MESSAGE,
+			null,
+			options,
+			options[0]);
+		if (numPlayers != JOptionPane.CLOSED_OPTION){
+			numPlayers = numPlayers + 2; //first button returns 0, second 1, third 2;
+		}
+
 	    	// If the user hits "Cancel" or the Exit button, quit the program
-	    	if(result == null){
-	    		JOptionPane.showMessageDialog(null, "Goodbye!");
-	    		System.exit(0);
-	    	}
-
-	    	// Try parsing the user input into a number, and make sure it's >= MIN_PLAYERS
-	    	try{
-	    		numPlayers = Integer.parseInt(result);
-	    		if(numPlayers < MIN_PLAYERS){
-	    			JOptionPane.showMessageDialog(null, 
-	    				"You have to have at least " + MIN_PLAYERS + " players for 'World of Sweets'!",
-	    				"Too Few Players",
-	    				JOptionPane.ERROR_MESSAGE);
-	    			continue;
-	    		}
-	    		else if(numPlayers > MAX_PLAYERS){
-	    			JOptionPane.showMessageDialog(null, 
-	    				"You have to have a maximum of " + MAX_PLAYERS + " players for 'World of Sweets'!",
-	    				"Too Many Players",
-	    				JOptionPane.ERROR_MESSAGE);
-	    			continue;
-	    		}
-	    		break;
-	    	}
-	    	catch(NumberFormatException e){
-	    		JOptionPane.showMessageDialog(null, 
-	    			"I'm sorry, but \"" + result + "\" is not a valid number.", 
-	    			"Invalid Input", 
-	    			JOptionPane.ERROR_MESSAGE);
-	    	}
-	    	catch(Exception e){
-	    		JOptionPane.showMessageDialog(null, 
-	    			"An unknown error has occurred, please try again.", 
-	    			"Unknown Error", 
-	    			JOptionPane.ERROR_MESSAGE);
-	    	}
-    	}
-
+		System.out.println(numPlayers);
+		if (numPlayers == JOptionPane.CLOSED_OPTION){
+			JOptionPane.showMessageDialog(null, "Goodbye!");
+			System.exit(0);
+		}
 	    return numPlayers;
     }
-    
+
     public static void main(String[] args) {
     	// ------------------------- //
     	// Get the number of Players //
@@ -81,7 +56,7 @@ public class WorldOfSweets {
     		System.err.println("You cannot play 'World of Sweets' with less than "+MIN_PLAYERS+" players; exiting program.");
     		System.exit(1);
     	}
-    	
+
 
 	    System.out.println("Starting a new game of 'World of Sweets' with " + numPlayers + " players...");
 
