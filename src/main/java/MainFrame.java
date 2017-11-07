@@ -14,7 +14,7 @@ public class MainFrame{
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
-    public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
+    public static int currentPlayerIndex = 0;		// The player first to go will always be player 0, regardless of the number of players
 
 
     // Data for the Board Panel
@@ -33,15 +33,17 @@ public class MainFrame{
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
     // --------------------------------------- //
-    public static int getNextPlayer(){
-        int cplay = currentPlayer;
-        currentPlayer = (currentPlayer + 1) % NUM_PLAYERS;
+    public static Player getNextPlayer(){
+    	Player currentPlayer = players[currentPlayerIndex];
 
-        playerPanel.changePlayer(players[cplay]);
-        return cplay;
-    }
-    public static int getCurrentPlayer(){
+    	playerPanel.changePlayer(currentPlayer);
+
+    	currentPlayerIndex = (currentPlayerIndex + 1) % NUM_PLAYERS;
+
     	return currentPlayer;
+    }
+    public static Player getCurrentPlayer(){
+    	return players[currentPlayerIndex];
     }
 
     public MainFrame(int numPlayers){
