@@ -70,6 +70,6 @@ public class BoardPanel extends JPanel{
 
     // Retrieve the number of spaces 
     public int getNumSpaces(){
-	return spaces.length;
+		return spaces.length;
     }
 }

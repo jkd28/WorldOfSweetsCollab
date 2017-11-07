@@ -8,14 +8,14 @@ import javax.swing.*;
 
 public class DeckPanel extends JPanel{
 
-    Deck drawDeck = new Deck();
-    CardPanel cPanel = new CardPanel();
-    JPanel drawPanel = new JPanel(new BorderLayout());
-    JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
+    private Deck drawDeck = new Deck();
+    private CardPanel cPanel = new CardPanel();
+    private JPanel drawPanel = new JPanel(new BorderLayout());
+    private JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 
     public static final Color DEFAULT_COLOR = Color.WHITE;
-    Color currentColor = DEFAULT_COLOR;
-    Card currentCard = null;
+    private Color currentColor = DEFAULT_COLOR;
+    private Card currentCard = null;
 
     public DeckPanel(){
 		// The two subpanels will be next to each other
@@ -29,34 +29,6 @@ public class DeckPanel extends JPanel{
 		//Add both panels to the Frame
 		add(drawPanel);
 		add(cPanel);
-    }
-
-    // Class for the panel displaying the most recently drawn card.
-    class CardPanel extends JPanel{
-		CardLayout cardLayout = new CardLayout();
-		JPanel panel;
-
-		public CardPanel(){
-		    setLayout(cardLayout);
-
-		    // Set initial blank card
-		    currentColor = DEFAULT_COLOR;
-		    panel = new JPanel();
-		    panel.setBackground(currentColor);
-		    this.add(panel);
-		}
-
-		public JPanel getPanel(){
-			return panel;
-		}
-
-		public void setPanel(JPanel newPanel){
-			this.remove(panel);
-			panel = newPanel;
-			this.add(panel);
-			this.validate();
-			this.repaint();
-		}
     }
 
     // Helper method for creating the single color panels
@@ -103,6 +75,35 @@ public class DeckPanel extends JPanel{
     }
 
 
+    // Class for the panel displaying the most recently drawn card.
+    class CardPanel extends JPanel{
+		CardLayout cardLayout = new CardLayout();
+		JPanel panel;
+
+		public CardPanel(){
+		    setLayout(cardLayout);
+
+		    // Set initial blank card
+		    currentColor = DEFAULT_COLOR;
+		    panel = new JPanel();
+		    panel.setBackground(currentColor);
+		    this.add(panel);
+		}
+
+		public JPanel getPanel(){
+			return panel;
+		}
+
+		public void setPanel(JPanel newPanel){
+			this.remove(panel);
+			panel = newPanel;
+			this.add(panel);
+			this.validate();
+			this.repaint();
+		}
+    }
+
+
     private class DrawListener implements ActionListener{
 		public DrawListener (CardPanel cPanel){
 		}
@@ -126,6 +127,14 @@ public class DeckPanel extends JPanel{
 		    }
 		    cPanel.setPanel(newPanel);
 		    currentColor = cardColor;
+
+
+		    // Update the current Player with the drawn card
+		    Player currentPlayer = MainFrame.getCurrentPlayer();
+
+		    // Check if the current Player has won the game
+		    
+
 
 		    // Rotate to the next Player
 		    // This section is here as a quick "hack" because the Gradle tests do not instantiate any Players,

@@ -24,7 +24,7 @@ public class DeckPanelTest{
     // Test that a correct color is displayed after clicking the draw button
     @Test
     public void testDeckPanelColor(){
-		testDeckPanel.drawButton.doClick();
+		testDeckPanel.getDrawButton().doClick();
 
 		Color testColor = testDeckPanel.getCurrentColor();
 
@@ -51,7 +51,7 @@ public class DeckPanelTest{
 		int numCardsInDeck = testDeckPanel.drawDeck.size();
 
 		for (int i = 0; i < numCardsInDeck; i++){
-		    testDeckPanel.drawButton.doClick();
+		    testDeckPanel.getDrawButton().doClick();
 		    testCard = testDeckPanel.getCurrentCard();
 		    testColor = testDeckPanel.getCurrentColor();
 		    testValue = testCard.getValue();
