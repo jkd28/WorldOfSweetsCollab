@@ -17,8 +17,9 @@ public class PlayerTest{
 
     @Test
     public void testPosition(){
-        p.setPosition(1);
-        assertEquals(1, p.getPosition());
+        BoardSpace space = new BoardSpace();
+        p.setPosition(space);
+        assertEquals(space, p.getPosition());
     }
 
     @Test
@@ -33,11 +34,11 @@ public class PlayerTest{
         assertEquals(3, p.getToken());
     }
 
-    @Test
-    public void testposColor(){
-        p.setposColor("Orange");
-        assertEquals("Orange", p.getposColor());
-    }
+    // @Test
+    // public void testposColor(){
+    //     p.setposColor("Orange");
+    //     assertEquals("Orange", p.getposColor());
+    // }
 
     @Test
     public void testWins(){
@@ -47,8 +48,10 @@ public class PlayerTest{
 
     @Test
     public void testMove(){
-        p.Move(12, "RED");
-        assertEquals(12, p.getPosition());
-        assertEquals("RED", p.getposColor());
+        BoardSpace space = new BoardSpace();
+        
+        p.Move(space);
+        assertEquals(space, p.getPosition());
+        // assertEquals("RED", p.getposColor());
     }
 }
