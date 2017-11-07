@@ -1,7 +1,7 @@
 public class Player{
     private String name;
     private BoardSpace position = null; //all players start at "0th" position according to write up
-    private int token;//what should this be? int doesn't feel right
+    private int token;                  //what should this be? int doesn't feel right
     private int wins = 0;
 
     public Player(String n, int t){
@@ -18,9 +18,12 @@ public class Player{
         return true;
     }
 
+    //Use an instance of a boardspace object as position    
     public BoardSpace getPosition(){
         return position;
     }
+
+    //Use an instance of a boardspace object as position
     public boolean setPosition(BoardSpace bs){
         position = bs;
         return true;
