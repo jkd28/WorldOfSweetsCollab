@@ -73,11 +73,6 @@ public class MainFrame{
 		// ------------------ //
 		players = new Player[NUM_PLAYERS];
 
-		// ----------------------------------------------- //
-		// Create game-board Panel and add it to the Frame //
-		// ----------------------------------------------- //
-		boardPanel = new BoardPanel(players);
-		frame.add(boardPanel, BorderLayout.NORTH);
 
 		for(int i = 0; i < players.length; i++){
 
@@ -99,9 +94,20 @@ public class MainFrame{
 			Player newPlayer = new Player(playerName);
 
 			// Change this to setPosition(boardspace of start)
-			newPlayer.setPosition(boardPanel.getSpace(0));
+			// newPlayer.setPosition(boardPanel.getSpace(0));
 
 			players[i] = newPlayer;
+		}
+
+		// ----------------------------------------------- //
+		// Create game-board Panel and add it to the Frame //
+		// ----------------------------------------------- //
+		boardPanel = new BoardPanel(players);
+		frame.add(boardPanel, BorderLayout.NORTH);
+
+		//Set all players to starting boardspace
+		for(Player player : players){
+			player.setPosition(boardPanel.getSpace(0));
 		}
 
 
