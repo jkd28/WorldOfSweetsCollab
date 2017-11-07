@@ -105,12 +105,10 @@ public class MainFrame{
 		boardPanel = new BoardPanel(players);
 		frame.add(boardPanel, BorderLayout.NORTH);
 
-		//Set all players to starting boardspace
+		//Set all players to starting boardspace (index 0)
 		for(Player player : players){
 			player.setPosition(boardPanel.getSpace(0));
 		}
-
-
 
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
