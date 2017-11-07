@@ -1,10 +1,19 @@
+import java.awt.Color;
+
 public class Card{
     private int value;  // Can be 0 (skip), 1 (single), 2 (double)
-    private String color; // Can be Red, Blue
+    private Color color; // Can be Red, Blue
 
-    public Card(int v, String c){
+    public static final int SKIP = 0;
+    public static final int SINGLE = 1;
+    public static final int DOUBLE = 2;
+    public static final int GO_TO_MIDDLE = 3;
+
+    private static final Color[] VALID_COLORS = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
+
+    public Card(int v, Color c){
         value = v;
-        color = c.toUpperCase();
+        color = c;
         if (!validateValueColorPair()) {
             throw new IllegalArgumentException("Invalid value/color pairing");
         }
@@ -15,37 +24,35 @@ public class Card{
         return value;
     }
 
-    public String getColor(){
+    public Color getColor(){
         return color;
+    }
+
+    public static boolean isValidColor(Color color){
+        for(Color validColor : VALID_COLORS){
+            if (color.equals(validColor)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // Ensure that the supplied value/color pairing is valid for the game rules
     private boolean validateValueColorPair(){
-        String[] validColors = {"RED", "YELLOW", "BLUE", "GREEN", "ORANGE"};
-
-        if (value == 1 || value == 2){
-            for(String valid : validColors){
-                if (color.equals(valid)) {
+        if (value == Card.SINGLE || value == Card.DOUBLE){
+            for(Color validColor : VALID_COLORS){
+                if (color.equals(validColor)) {
                     return true;
                 }
             }
             // if no valid color matches the supplied color, it is invalid
             return false;
 
-        } else if (value == 0) {
-            // for value 0, the color must be "SKIP"
-            if (color.equals("SKIP")) {
-                return true;
-            } else {
-                return false;
-            }
-        }else if (value == 3){
-            // for value 3, the color must be "MIDDLE"
-            if (color.equals("MIDDLE")) {
-                return true;
-            } else {
-                return false;
-            }
+        } else if (value == Card.SKIP) {
+            return true;
+        }else if (value == Card.GO_TO_MIDDLE){
+            return true;
         } else {
             return false;
         }

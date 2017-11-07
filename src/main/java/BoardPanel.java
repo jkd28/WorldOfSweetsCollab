@@ -42,7 +42,7 @@ public class BoardPanel extends JPanel{
 	}
 
 	// Add the start space
-	spaces[0].setBorder(BorderFactory.createLineBorder(Color.black));
+	spaces[0].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	add(spaces[0]);
 
 	// Add all of the colored spaces tpo the board
@@ -66,7 +66,7 @@ public class BoardPanel extends JPanel{
 	    }else if (i % 5 == 1){
 		spaces[i].setBackground(Color.ORANGE);
 	    }
-	    spaces[i].setBorder(BorderFactory.createLineBorder(Color.black));
+	    spaces[i].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	   	    
 	    add(spaces[i]);
 	}
@@ -74,7 +74,7 @@ public class BoardPanel extends JPanel{
 	// Add the end (grandma's house) space
 	spaces[NUM_SPACES-1] = new JPanel();
 	spaces[NUM_SPACES-1].add(grandma);
-	spaces[NUM_SPACES-1].setBorder(BorderFactory.createLineBorder(Color.black));
+	spaces[NUM_SPACES-1].setBorder(BorderFactory.createLineBorder(Color.BLACK));
 	add(spaces[NUM_SPACES-1]);
     }
 
