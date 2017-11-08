@@ -25,7 +25,7 @@ public class DeckPanel extends JPanel{
 		drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
 		drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
 		drawPanel.add(drawButton, BorderLayout.CENTER);
-
+		
 		//Add both panels to the Frame
 		add(drawPanel);
 		add(cPanel);
