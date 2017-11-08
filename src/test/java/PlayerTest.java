@@ -6,49 +6,24 @@ public class PlayerTest{
 
     @Before
     public void setup(){
-        p = new Player("test", 38);
+        p = new Player("test");
     }
 
     @Test
     public void testInitialize(){
         assertEquals("test", p.getName());
-        assertEquals(38, p.getToken());
     }
 
     @Test
     public void testPosition(){
-        p.setPosition(1);
-        assertEquals(1, p.getPosition());
+        BoardSpace space = new BoardSpace();
+        p.setPosition(space);
+        assertEquals(space, p.getPosition());
     }
 
     @Test
     public void testName(){
         p.setName("Kevin");
         assertEquals("Kevin", p.getName());
-    }
-
-    @Test
-    public void testToken(){
-        p.setToken(3);
-        assertEquals(3, p.getToken());
-    }
-
-    @Test
-    public void testposColor(){
-        p.setposColor("Orange");
-        assertEquals("Orange", p.getposColor());
-    }
-
-    @Test
-    public void testWins(){
-        p.addWin();
-        assertEquals(1, p.getWins());
-    }
-
-    @Test
-    public void testMove(){
-        p.Move(12, "RED");
-        assertEquals(12, p.getPosition());
-        assertEquals("RED", p.getposColor());
     }
 }

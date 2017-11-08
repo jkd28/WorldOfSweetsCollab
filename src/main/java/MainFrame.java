@@ -51,8 +51,7 @@ public class MainFrame{
 
     public static void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
-	    int currentSpaceIndex = player.getPosition();
-	    BoardSpace currentSpace = boardPanel.getSpace(currentSpaceIndex);
+	    BoardSpace currentSpace = player.getPosition();
 
 	    // If this spot is "Grandma's House", we do not move anywhere
 	    if(currentSpace.isGrandmasHouse()){
@@ -75,7 +74,7 @@ public class MainFrame{
     }
 
     public static boolean playerHasWon(Player player){
-    	BoardSpace currentPlayerSpace = boardPanel.getSpace(player.getPosition());
+    	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
@@ -107,6 +106,8 @@ public class MainFrame{
 		// Create the Players //
 		// ------------------ //
 		players = new Player[NUM_PLAYERS];
+
+
 		for(int i = 0; i < players.length; i++){
 
 			String playerName = "Player "+i;
@@ -125,19 +126,20 @@ public class MainFrame{
 
 
 			Player newPlayer = new Player(playerName);
-			newPlayer.setPosition(0);
 
 			players[i] = newPlayer;
 		}
 
-
-
-    	// ----------------------------------------------- //
+		// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
 		frame.add(boardPanel, BorderLayout.NORTH);
 
+		//Set all players to starting boardspace (index 0)
+		for(Player player : players){
+			player.setPosition(boardPanel.getSpace(0));
+		}
 
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
