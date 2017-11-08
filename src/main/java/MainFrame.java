@@ -15,7 +15,7 @@ public class MainFrame{
     private static final int FRAME_WIDTH = 800;
 
     // Data for the Board Panel
-    private BoardPanel boardPanel;
+    private static BoardPanel boardPanel;
 
     // Data for the Deck Panel
     private DeckPanel deckPanel;
@@ -48,6 +48,36 @@ public class MainFrame{
     public static int getNumPlayers(){
     	return NUM_PLAYERS;
     } 
+
+    public static void updatePlayerPosition(Player player, Card card){
+    	// Get the BoardSpace that this Player currently inhabits
+	    int currentSpaceIndex = player.getPosition();
+	    BoardSpace currentSpace = boardPanel.getSpace(currentSpaceIndex);
+
+	    // If this spot is "Grandma's House", we do not move anywhere
+	    if(currentSpace.isGrandmasHouse()){
+	    	return;
+	    }
+
+	    // If this card is a "Skip" card, we do nothing
+	    if(card.getValue() == Card.SKIP){
+	    	return;
+	    }
+
+	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
+	    if(card.getValue() == Card.GO_TO_MIDDLE){
+	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    }
+
+	    // With a normal Single or Double colored card,
+	    //	send the Player to their next spot.
+	    boardPanel.sendPlayerToNextSpace(player, card);
+    }
+
+    public static boolean playerHasWon(Player player){
+    	BoardSpace currentPlayerSpace = boardPanel.getSpace(player.getPosition());
+    	return currentPlayerSpace.isGrandmasHouse();
+    }
 
     public MainFrame(int numPlayers){
         NUM_PLAYERS = numPlayers;

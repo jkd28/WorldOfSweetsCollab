@@ -12,6 +12,9 @@ public class BoardSpace extends JPanel{
 	private Collection<Player> players;
 	private String originalText;
 	private static final Color BORDER_COLOR = Color.BLACK;
+	private boolean isGrandmasHouse = false;
+	private boolean isStartSpace = false;
+	private Color spaceColor = DeckPanel.DEFAULT_COLOR;
 
 
 	// ------------ //
@@ -20,6 +23,9 @@ public class BoardSpace extends JPanel{
 	public BoardSpace(Color newBackgroundColor, JLabel newLabel, Player[] newPlayers){
 		this.setBackground(newBackgroundColor);
 		this.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+
+		// "spaceColor"
+		spaceColor = newBackgroundColor;
 		
 		// "label" and "originalText"
 		if(newLabel != null){
@@ -86,7 +92,15 @@ public class BoardSpace extends JPanel{
 	// ------------------- //
 	// "players"
 	public void addPlayer(Player player){
+		// Check to make sure this Player isn't already here
+		if(players.contains(player)){
+			return;
+		}
+
+		// Now that we're sure the Player isn't already here,
+		//	add them to the collection
 		players.add(player);
+
 		updateText();
 	}
 	public boolean removePlayer(Player player){
@@ -100,6 +114,22 @@ public class BoardSpace extends JPanel{
 		return label;
 	}
 
+	// "spaceColor"
+	public Color getSpaceColor(){
+		return spaceColor;
+	}
+
+	// "isGrandmasHouse"
+	public void setAsGrandmasHouse(boolean isGrandmasHouse){
+		this.isGrandmasHouse = isGrandmasHouse;
+	}
+
+	// "isStartSpace"
+	public void setAsStartSpace(boolean isStartSpace){
+		this.isStartSpace = isStartSpace;
+	}
+
+
 
 	// --------------- //
 	// Boolean Methods //
@@ -109,5 +139,11 @@ public class BoardSpace extends JPanel{
 	}
 	public boolean isEmpty(){
 		return players.isEmpty();
+	}
+	public boolean isGrandmasHouse(){
+		return isGrandmasHouse;
+	}
+	public boolean isStartSpace(){
+		return isStartSpace;
 	}
 }

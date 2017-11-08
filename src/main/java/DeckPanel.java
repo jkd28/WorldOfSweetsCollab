@@ -135,11 +135,18 @@ public class DeckPanel extends JPanel{
 
 		    // Update the current Player with the drawn card
 		    if(MainFrame.getNumPlayers() > 0){
+		    	// Get the Player who just drew a Card
 			    Player currentPlayer = MainFrame.getCurrentPlayer();
+
+			    // Move to Player to their next BoardSpace
+			    MainFrame.updatePlayerPosition(currentPlayer, currentCard);
+
+		    	// Check if the current Player has won the game
+		    	if(MainFrame.playerHasWon(currentPlayer)){
+		    		JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+		    	}
 		    }
 
-		    // Check if the current Player has won the game
-		    
 
 
 		    // Rotate to the next Player
