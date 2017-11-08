@@ -4,11 +4,13 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.util.ArrayList;
 
 public class BoardPanel extends JPanel{
     
     // Data for the BoardPanel
-    private BoardSpace[] spaces;
+	private ArrayList<BoardSpace> spaces = new ArrayList<BoardSpace>(); 
+    // private BoardSpace[] spaces;
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
@@ -27,14 +29,15 @@ public class BoardPanel extends JPanel{
 		// ----------------- //
 		// Create the Spaces //
 		// ----------------- //
-		spaces = new BoardSpace[NUM_SPACES];
+		// spaces = new BoardSpace[NUM_SPACES];
 
 		// Create the "Start" space
-		spaces[0] = new BoardSpace(Color.WHITE, start, players);
-		spaces[0].setAsStartSpace(true);
+		BoardSpace newStart = new BoardSpace(Color.WHITE, start, players);
+		newStart.setAsStartSpace(true);
+		spaces.add(newStart);
 
 		// Create all of the colored spaces
-		for(int i = 1; i < spaces.length - 1; i++){
+		for(int i = 1; i < NUM_SPACES; i++){
 		    Color backgroundColor = Color.WHITE;
 		    switch(i % 5){
 		    	case 0: backgroundColor = Color.RED; 	break;
@@ -66,13 +69,16 @@ public class BoardPanel extends JPanel{
 		    	textColor = Color.BLACK;
 		    }
 		    newLabel.setForeground(textColor);
-		    
-		    spaces[i] = new BoardSpace(backgroundColor, newLabel);
+		    BoardSpace newSpace = new BoardSpace(backgroundColor, newLabel);
+		    spaces.add(newSpace);
 		}
 
 		// Create the end space ("Grandma's House")
-		spaces[spaces.length - 1] = new BoardSpace(Color.WHITE, grandma);
-		spaces[spaces.length - 1].setAsGrandmasHouse(true);
+		BoardSpace newGrandma = new BoardSpace(Color.WHITE, grandma);
+		newGrandma.setAsGrandmasHouse(true);
+		
+		spaces.add(newGrandma);
+		// spaces.get(spaces.size() - 1).setAsGrandmasHouse(true);
 		
 		// --------------------------- //
 		// Add the Spaces to the board //
@@ -84,24 +90,24 @@ public class BoardPanel extends JPanel{
 
     // Retrieve a specific board space
     public BoardSpace getSpace(int index){
-		return spaces[index];
+		return spaces.get(index);
     }
 
     // Retrieve the number of spaces 
     public int getNumSpaces(){
-		return spaces.length;
+		return spaces.size();
     }
 
 
 
     public BoardSpace sendPlayerToMiddleSpace(Player player){
-    	BoardSpace previousSpace = this.getSpace(player.getPosition());
+    	BoardSpace previousSpace = player.getPosition();
     	previousSpace.removePlayer(player);
 
     	BoardSpace middleSpace = this.getSpace(BoardPanel.MID_SPACE);
     	middleSpace.addPlayer(player);
 
-    	player.setPosition(BoardPanel.MID_SPACE);
+    	player.setPosition(middleSpace);
 
     	return middleSpace;
     }
@@ -110,7 +116,7 @@ public class BoardPanel extends JPanel{
     	// If the Card passed-in is a "Skip" card,
     	//	do nothing.
     	if(card.getValue() == Card.SKIP){
-    		return this.getSpace(player.getPosition());
+    		return player.getPosition();
     	}
 
     	// If the Card passed-in is a "Go to Middle", 
@@ -121,7 +127,7 @@ public class BoardPanel extends JPanel{
 
     	// If the Player is already at "Grandma's House", 
     	//	do nothing.
-    	BoardSpace currentPlayerSpace = this.getSpace(player.getPosition());
+    	BoardSpace currentPlayerSpace = player.getPosition();
     	if(currentPlayerSpace.isGrandmasHouse()){
     		return currentPlayerSpace;
     	}
@@ -129,30 +135,30 @@ public class BoardPanel extends JPanel{
     	// Find the next space that the Player can go to, 
     	//	based on the Color and value of the Card passed-in 
     	//	(aka the one that they drew from the deck)
-    	int oldPlayerIndex = player.getPosition();
-    	int newSpaceIndex = -1;
-    	int grandmasHouseIndex = spaces.length - 1;
+    	BoardSpace oldPlayerSpace = player.getPosition();
+    	BoardSpace newSpace = null;
+    	BoardSpace grandmasHouseSpace = this.getSpace(spaces.size() - 1);
     	Color cardColor = card.getColor();
     	boolean alreadyFoundFirstSpaceForCardColor = false;	// Used for dealing with "DOUBLE" color cards
     	
-    	for(int i = player.getPosition() + 1; i < NUM_SPACES - 2; i++){ // We check the spaces that are after the Player's current space, but before Grandma's House
+    	for(int i = spaces.indexOf(player.getPosition()) + 1; i < NUM_SPACES - 2; i++){ // We check the spaces that are after the Player's current space, but before Grandma's House
     		BoardSpace space = this.getSpace(i);
     		Color spaceColor = space.getSpaceColor();
 
     		// If the next space we're looking at is "Grandma's House",
     		//	the Player MUST take that space.
     		if(space.isGrandmasHouse()){
-    			newSpaceIndex = i;
+    			newSpace = this.getSpace(i);
     			break;
     		}
 
     		if(spaceColor.equals(cardColor)){
     			if(card.getValue() == Card.SINGLE){
-    				newSpaceIndex = i;
+    				newSpace = this.getSpace(i);
     				break;
     			}
     			else if(card.getValue() == Card.DOUBLE && alreadyFoundFirstSpaceForCardColor){
-    				newSpaceIndex = i;
+    				newSpace = this.getSpace(i);
     				break;
     			}
     			else{
@@ -163,19 +169,19 @@ public class BoardPanel extends JPanel{
 
     	// If we've gotten this far without finding a new BoardSpace, 
     	//	it means the next available space for the Player MUST be the end ("Grandma's House").
-    	if(newSpaceIndex == -1){
-    		newSpaceIndex = grandmasHouseIndex;
+    	if(newSpace == null){
+    		newSpace = grandmasHouseSpace;
     	}
 
     	// Set the Player's position to the new space's index
-    	player.setPosition(newSpaceIndex);
+    	player.setPosition(newSpace);
 
     	// Remove the Player from their old BoardSpace
-    	BoardSpace previousSpace = this.getSpace(oldPlayerIndex);
-    	previousSpace.removePlayer(player);
+    	// BoardSpace previousSpace = oldPlayerIndex);
+    	oldPlayerSpace.removePlayer(player);
 
     	// Add the Player to their new BoardSpace
-    	BoardSpace newSpace = this.getSpace(player.getPosition());
+    	// BoardSpace newSpace = player.getPosition();
     	newSpace.addPlayer(player);
 
     	return newSpace;

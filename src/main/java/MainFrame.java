@@ -51,8 +51,7 @@ public class MainFrame{
 
     public static void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
-	    int currentSpaceIndex = player.getPosition();
-	    BoardSpace currentSpace = boardPanel.getSpace(currentSpaceIndex);
+	    BoardSpace currentSpace = player.getPosition();
 
 	    // If this spot is "Grandma's House", we do not move anywhere
 	    if(currentSpace.isGrandmasHouse()){
@@ -75,7 +74,7 @@ public class MainFrame{
     }
 
     public static boolean playerHasWon(Player player){
-    	BoardSpace currentPlayerSpace = boardPanel.getSpace(player.getPosition());
+    	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
