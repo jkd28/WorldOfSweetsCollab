@@ -40,11 +40,11 @@ public class BoardPanel extends JPanel{
 		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
 		    switch(i % 5){
-		    	case 0: backgroundColor = Color.RED; 	break;
-		    	case 1: backgroundColor = Color.YELLOW; break;
-		    	case 2: backgroundColor = Color.BLUE; 	break;
-		    	case 3: backgroundColor = Color.GREEN; 	break;
-		    	case 4: backgroundColor = Color.ORANGE; break;
+		    	case 0: backgroundColor = Color.ORANGE; break;
+		    	case 1: backgroundColor = Color.RED; 	break;
+		    	case 2: backgroundColor = Color.YELLOW; break;
+		    	case 3: backgroundColor = Color.BLUE; 	break;
+		    	case 4: backgroundColor = Color.GREEN; 	break;
 		    }
 
 		    // Check if this space is the middle space
