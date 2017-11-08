@@ -35,9 +35,9 @@ public class MainFrame{
     public static Player getNextPlayer(){
     	Player currentPlayer = players[currentPlayerIndex];
 
-    	playerPanel.changePlayer(currentPlayer);
-
     	currentPlayerIndex = (currentPlayerIndex + 1) % NUM_PLAYERS;
+    	Player nextPlayer = players[currentPlayerIndex];
+    	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
     	return currentPlayer;
     }

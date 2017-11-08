@@ -29,7 +29,7 @@ public class PlayerPanelTest{
 	
 	testPlayOrder[0] = "Player Order: \n";
 	for (int i = 1; i <= testPlayers.length; i++){
-	    testPlayOrder[i] = i + " " + testPlayers[i-1].getName();
+	    testPlayOrder[i] = i + ") " + testPlayers[i-1].getName();
 	}
 
 	assertEquals(testCurrPlayerMessage, testPlayerPanel.getCurrPlayerText());

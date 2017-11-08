@@ -30,7 +30,7 @@ public class PlayerPanel extends JPanel{
 
 	// Add each player's name to the turn order
 	for (int i = 0; i < players.length; i++){
-	    JLabel tempLabel = new JLabel((i+1) + " " + players[i].getName());
+	    JLabel tempLabel = new JLabel((i+1) + ") " + players[i].getName());
 	    c.gridy = i+1; // Place each JLabel in the next row successively 
 	    orderPanel.add(tempLabel, c);
 	}
@@ -46,13 +46,9 @@ public class PlayerPanel extends JPanel{
     }
 
     // Change the current and next players
-    public void changePlayer(Player[] players, int nextPlayer){
-	if (nextPlayer == 0){
-	    currDisplayText.setText(CURR_PRE_TEXT + players[players.length-1].getName());
-	}else{
-	    currDisplayText.setText(CURR_PRE_TEXT + players[nextPlayer-1].getName());
-	}
-        nextDisplayText.setText(NEXT_PRE_TEXT + players[nextPlayer].getName());
+    public void changePlayer(Player currentPlayer, Player nextPlayer){
+		currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName());
+	    nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName());
     }
 
     public String getCurrPlayerText(){
