@@ -31,6 +31,7 @@ public class BoardPanel extends JPanel{
 
 		// Create the "Start" space
 		spaces[0] = new BoardSpace(Color.WHITE, start, players);
+		spaces[0].setAsStartSpace(true);
 
 		// Create all of the colored spaces
 		for(int i = 1; i < spaces.length - 1; i++){
@@ -43,17 +44,35 @@ public class BoardPanel extends JPanel{
 		    	case 4: backgroundColor = Color.ORANGE; break;
 		    }
 
-		    JLabel newLabel = null;
+		    // Check if this space is the middle space
+		    JLabel newLabel = new JLabel("");
 		    if(i == MID_SPACE){
 		    	newLabel = midLabel;
-		    	newLabel.setForeground(Color.WHITE);
 		    }
+
+		    // Add a color-appropriate text color
+		    Color textColor = Color.BLACK;
+		    if(backgroundColor.equals(Color.RED)){
+		    	textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.RED)){
+		    	textColor = Color.WHITE;
+		    } else if(backgroundColor.equals(Color.YELLOW)){
+		    	textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.BLUE)){
+		    	textColor = Color.WHITE;
+		    } else if(backgroundColor.equals(Color.GREEN)){
+		    	textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.ORANGE)){
+		    	textColor = Color.BLACK;
+		    }
+		    newLabel.setForeground(textColor);
 		    
 		    spaces[i] = new BoardSpace(backgroundColor, newLabel);
 		}
 
 		// Create the end space ("Grandma's House")
 		spaces[spaces.length - 1] = new BoardSpace(Color.WHITE, grandma);
+		spaces[spaces.length - 1].setAsGrandmasHouse(true);
 		
 		// --------------------------- //
 		// Add the Spaces to the board //
@@ -70,6 +89,95 @@ public class BoardPanel extends JPanel{
 
     // Retrieve the number of spaces 
     public int getNumSpaces(){
-	return spaces.length;
+		return spaces.length;
+    }
+
+
+
+    public BoardSpace sendPlayerToMiddleSpace(Player player){
+    	BoardSpace previousSpace = this.getSpace(player.getPosition());
+    	previousSpace.removePlayer(player);
+
+    	BoardSpace middleSpace = this.getSpace(BoardPanel.MID_SPACE);
+    	middleSpace.addPlayer(player);
+
+    	player.setPosition(BoardPanel.MID_SPACE);
+
+    	return middleSpace;
+    }
+
+    public BoardSpace sendPlayerToNextSpace(Player player, Card card){
+    	// If the Card passed-in is a "Skip" card,
+    	//	do nothing.
+    	if(card.getValue() == Card.SKIP){
+    		return this.getSpace(player.getPosition());
+    	}
+
+    	// If the Card passed-in is a "Go to Middle", 
+    	//	just send them to the middle BoardSpace.
+    	if(card.getValue() == Card.GO_TO_MIDDLE){
+    		return sendPlayerToMiddleSpace(player);
+    	}
+
+    	// If the Player is already at "Grandma's House", 
+    	//	do nothing.
+    	BoardSpace currentPlayerSpace = this.getSpace(player.getPosition());
+    	if(currentPlayerSpace.isGrandmasHouse()){
+    		return currentPlayerSpace;
+    	}
+
+    	// Find the next space that the Player can go to, 
+    	//	based on the Color and value of the Card passed-in 
+    	//	(aka the one that they drew from the deck)
+    	int oldPlayerIndex = player.getPosition();
+    	int newSpaceIndex = -1;
+    	int grandmasHouseIndex = spaces.length - 1;
+    	Color cardColor = card.getColor();
+    	boolean alreadyFoundFirstSpaceForCardColor = false;	// Used for dealing with "DOUBLE" color cards
+    	
+    	for(int i = player.getPosition() + 1; i < NUM_SPACES - 2; i++){ // We check the spaces that are after the Player's current space, but before Grandma's House
+    		BoardSpace space = this.getSpace(i);
+    		Color spaceColor = space.getSpaceColor();
+
+    		// If the next space we're looking at is "Grandma's House",
+    		//	the Player MUST take that space.
+    		if(space.isGrandmasHouse()){
+    			newSpaceIndex = i;
+    			break;
+    		}
+
+    		if(spaceColor.equals(cardColor)){
+    			if(card.getValue() == Card.SINGLE){
+    				newSpaceIndex = i;
+    				break;
+    			}
+    			else if(card.getValue() == Card.DOUBLE && alreadyFoundFirstSpaceForCardColor){
+    				newSpaceIndex = i;
+    				break;
+    			}
+    			else{
+    				alreadyFoundFirstSpaceForCardColor = true;
+    			}
+    		}
+    	}
+
+    	// If we've gotten this far without finding a new BoardSpace, 
+    	//	it means the next available space for the Player MUST be the end ("Grandma's House").
+    	if(newSpaceIndex == -1){
+    		newSpaceIndex = grandmasHouseIndex;
+    	}
+
+    	// Set the Player's position to the new space's index
+    	player.setPosition(newSpaceIndex);
+
+    	// Remove the Player from their old BoardSpace
+    	BoardSpace previousSpace = this.getSpace(oldPlayerIndex);
+    	previousSpace.removePlayer(player);
+
+    	// Add the Player to their new BoardSpace
+    	BoardSpace newSpace = this.getSpace(player.getPosition());
+    	newSpace.addPlayer(player);
+
+    	return newSpace;
     }
 }

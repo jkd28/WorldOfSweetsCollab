@@ -9,39 +9,74 @@ import java.awt.event.*;
 import javax.swing.*;
 
 public class MainFrame{
-    private static int NUM_PLAYERS;
     // Data for the entire Frame, which will hold all of our Panels
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
-    public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
-
 
     // Data for the Board Panel
-    private BoardPanel boardPanel;
+    private static BoardPanel boardPanel;
 
     // Data for the Deck Panel
     private DeckPanel deckPanel;
 
     // Data for tracking Players
     private static Player[] players;
+    private static int NUM_PLAYERS = 0;
 
     // Data for currentPlayer
+    public static int currentPlayerIndex = 0; // The player first to go will always be player 0, regardless of the number of players
     private static PlayerPanel playerPanel;
 
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
     // --------------------------------------- //
-    public static int getNextPlayer(){
-        int cplay = currentPlayer;
-        currentPlayer = (currentPlayer + 1) % NUM_PLAYERS;
+    public static Player getNextPlayer(){
+    	Player currentPlayer = players[currentPlayerIndex];
 
-        playerPanel.changePlayer(players[cplay]);
-        return cplay;
-    }
-    public static int getCurrentPlayer(){
+    	playerPanel.changePlayer(currentPlayer);
+
+    	currentPlayerIndex = (currentPlayerIndex + 1) % NUM_PLAYERS;
+
     	return currentPlayer;
+    }
+    public static Player getCurrentPlayer(){
+    	return players[currentPlayerIndex];
+    }
+
+    public static int getNumPlayers(){
+    	return NUM_PLAYERS;
+    } 
+
+    public static void updatePlayerPosition(Player player, Card card){
+    	// Get the BoardSpace that this Player currently inhabits
+	    int currentSpaceIndex = player.getPosition();
+	    BoardSpace currentSpace = boardPanel.getSpace(currentSpaceIndex);
+
+	    // If this spot is "Grandma's House", we do not move anywhere
+	    if(currentSpace.isGrandmasHouse()){
+	    	return;
+	    }
+
+	    // If this card is a "Skip" card, we do nothing
+	    if(card.getValue() == Card.SKIP){
+	    	return;
+	    }
+
+	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
+	    if(card.getValue() == Card.GO_TO_MIDDLE){
+	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    }
+
+	    // With a normal Single or Double colored card,
+	    //	send the Player to their next spot.
+	    boardPanel.sendPlayerToNextSpace(player, card);
+    }
+
+    public static boolean playerHasWon(Player player){
+    	BoardSpace currentPlayerSpace = boardPanel.getSpace(player.getPosition());
+    	return currentPlayerSpace.isGrandmasHouse();
     }
 
     public MainFrame(int numPlayers){
