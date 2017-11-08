@@ -37,7 +37,7 @@ public class BoardPanel extends JPanel{
 		spaces.add(newStart);
 
 		// Create all of the colored spaces
-		for(int i = 1; i < NUM_SPACES; i++){
+		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
 		    switch(i % 5){
 		    	case 0: backgroundColor = Color.RED; 	break;
