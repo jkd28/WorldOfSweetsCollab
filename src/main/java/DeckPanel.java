@@ -144,6 +144,7 @@ public class DeckPanel extends JPanel{
 		    	// Check if the current Player has won the game
 		    	if(MainFrame.playerHasWon(currentPlayer)){
 		    		JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+                    System.exit(0);
 		    	}
 		    }
 
@@ -151,7 +152,7 @@ public class DeckPanel extends JPanel{
 
 		    // Rotate to the next Player
 		    // This section is here as a quick "hack" because the Gradle tests do not instantiate any Players,
-		    //		which means that those Gradle tests would otherwise throw an Exception here and 
+		    //		which means that those Gradle tests would otherwise throw an Exception here and
 		    //		crash the whole damn party.
 		    //		It's not really an acceptable long-term solution, but we have other priorities.
 		    //		(BenjaminMuscto)
