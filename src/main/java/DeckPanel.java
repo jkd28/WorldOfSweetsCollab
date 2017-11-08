@@ -143,8 +143,8 @@ public class DeckPanel extends JPanel{
 
 		    	// Check if the current Player has won the game
 		    	if(MainFrame.playerHasWon(currentPlayer)){
-		    		JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
-                    System.exit(0);
+					JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+					System.exit(0);
 		    	}
 		    }
 
