@@ -55,7 +55,7 @@ public class CardTest {
 
     @Test
     public void testIsValidColor(){
-        Color[] validColors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
+        Color[] validColors = Card.VALID_COLORS;
         for(Color color : validColors){
             assertTrue(Card.isValidColor(color));
         }

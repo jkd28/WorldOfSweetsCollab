@@ -4,6 +4,11 @@ import java.awt.Color;
 public class Deck {
     private Stack<Card> cardDeck;
 
+    public static final int NUM_SINGLE_CARDS_PER_COLOR = 10;
+    public static final int NUM_DOUBLE_CARDS_PER_COLOR = 2;
+    public static final int NUM_SKIP_CARDS = 5;
+    public static final int NUM_GO_TO_MIDDLE_CARDS = 3;
+
     public Deck() {
         cardDeck = initializeDeck();
     }
@@ -22,33 +27,32 @@ public class Deck {
 
     private Stack<Card> initializeDeck() {
         Stack<Card> deckStack = new Stack<Card>();
-        // Avoid magic numbers
-        int numCardsPerColor = 12;
-        Color[] colors = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
+        Color[] cardColors = Card.VALID_COLORS;
         Card newCard;
 
-        // Create cards for each color, with a ratio of 10 singles to 2 doubles
-        for(int i = 0; i < colors.length; i++) {
-            for(int j = 0; j < numCardsPerColor; j++) {
-                if (j < 10) {
-                    newCard = new Card(Card.SINGLE, colors[i]);
-                } else {
-                    newCard = new Card(Card.DOUBLE, colors[i]);
-                }
+        // Create cards for each color
+        for(Color cardColor : cardColors){
+            for(int i = 0; i < NUM_SINGLE_CARDS_PER_COLOR; i++){
+                newCard = new Card(Card.SINGLE, cardColor);
+                deckStack.push(newCard);
+            }
+
+            for(int i = 0; i < NUM_DOUBLE_CARDS_PER_COLOR; i++){
+                newCard = new Card(Card.DOUBLE, cardColor);
                 deckStack.push(newCard);
             }
         }
 
         // Add Skip-Turn cards
-        int numberOfSkipCards = 5;
-        for (int i = 0; i < numberOfSkipCards; i++){
-            deckStack.push(new Card(Card.SKIP, Color.RED)); // doesn't really matter what Color we push to it
+        for (int i = 0; i < NUM_SKIP_CARDS; i++){
+            newCard = new Card(Card.SKIP, Color.RED); // doesn't really matter what Color we push to it
+            deckStack.push(newCard);
         }
 
         // Add Go-To-Middle Cards
-        int numberOfMiddleCards = 3;
-        for (int i = 0; i < numberOfMiddleCards; i++){
-            deckStack.push(new Card(Card.GO_TO_MIDDLE, Color.RED)); // doesn't really matter what Color we push to it
+        for (int i = 0; i < NUM_GO_TO_MIDDLE_CARDS; i++){
+            newCard = new Card(Card.GO_TO_MIDDLE, Color.RED); // doesn't really matter what Color we push to it
+            deckStack.push(newCard);
         }
         
         // To emulate a true deck of cards, shuffle
