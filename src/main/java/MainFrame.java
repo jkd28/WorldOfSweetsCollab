@@ -7,8 +7,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class MainFrame{
+public class MainFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
     private JFrame frame;
     private static final int FRAME_HEIGHT = 600;

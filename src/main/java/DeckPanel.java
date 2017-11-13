@@ -5,8 +5,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class DeckPanel extends JPanel{
+public class DeckPanel extends JPanel implements Serializable {
 
     private Deck drawDeck = new Deck();
     private CardPanel cPanel = new CardPanel();

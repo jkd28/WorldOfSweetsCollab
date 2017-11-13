@@ -5,8 +5,9 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.io.Serializable;
 
-public class BoardPanel extends JPanel{
+public class BoardPanel extends JPanel implements Serializable {
     
     // Data for the BoardPanel
 	private ArrayList<BoardSpace> spaces = new ArrayList<BoardSpace>(); 

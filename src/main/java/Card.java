@@ -1,6 +1,7 @@
+import java.io.Serializable;
 import java.awt.Color;
 
-public class Card{
+public class Card implements Serializable {
     private int value;  // Can be 0 (skip), 1 (single), 2 (double)
     private Color color; // Can be Red, Blue
 

@@ -1,6 +1,7 @@
 import javax.swing.JOptionPane;
+import java.io.Serializable;
 
-public class WorldOfSweets {
+public class WorldOfSweets implements Serializable {
 
 	// Basic game information
 	public static final int MIN_PLAYERS = 2; 	// These are "public" because our "MainFrame" class also uses this for input validation
