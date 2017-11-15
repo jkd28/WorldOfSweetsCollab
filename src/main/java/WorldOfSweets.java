@@ -43,28 +43,59 @@ public class WorldOfSweets implements Serializable {
     }
 
     public static void main(String[] args) {
-    	// ------------------------- //
-    	// Get the number of Players //
-    	// ------------------------- //
-    	numPlayers = getNumPlayersFromUser();
+    	// ===================================================== //
+    	// Ask if the user wants to load a previously saved game //
+    	// ===================================================== //
+    	int result = JOptionPane.showConfirmDialog(
+    		null,
+    		"Would you like to load a previously saved game?",
+    		"Load a Saved Game?",
+    		JOptionPane.YES_NO_OPTION
+    	);
 
-    	// Validate that we got a proper response
-    	if(numPlayers == -1){
-    		System.err.println("An unexpected error occurred; exiting program.");
-    		System.exit(1);
+    	// ============================================== //
+    	// If user CANCELLED the window, exit the program //
+    	// ============================================== //
+    	if(result == JOptionPane.CLOSED_OPTION){
+    		JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
+    		System.exit(0);
     	}
-    	else if(numPlayers < MIN_PLAYERS){
-    		System.err.println("You cannot play 'World of Sweets' with less than "+MIN_PLAYERS+" players; exiting program.");
-    		System.exit(1);
+
+    	// ============================================================================================= //
+    	// Else if the user wants to load a game, have them choose a save-file to load, and then load it //
+    	// ============================================================================================= //
+    	else if(result == JOptionPane.YES_OPTION){
+    		JOptionPane.showMessageDialog(null, "We're sorry, but this feature is not yet available. Goodbye!", "Feature Unavailable", JOptionPane.ERROR_MESSAGE);
+    		System.exit(0);
     	}
 
+    	// =========================== //
+    	// Else begin a brand new game //
+    	// =========================== //
+    	else{
+    		// ------------------------- //
+	    	// Get the number of Players //
+	    	// ------------------------- //
+	    	numPlayers = getNumPlayersFromUser();
 
-	    System.out.println("Starting a new game of 'World of Sweets' with " + numPlayers + " players...");
+	    	// Validate that we got a proper response
+	    	if(numPlayers == -1){
+	    		System.err.println("An unexpected error occurred; exiting program.");
+	    		System.exit(1);
+	    	}
+	    	else if(numPlayers < MIN_PLAYERS){
+	    		System.err.println("You cannot play 'World of Sweets' with less than "+MIN_PLAYERS+" players; exiting program.");
+	    		System.exit(1);
+	    	}
 
 
-		// --------------------------------------------------- //
-		// Create the "World of Sweets" GUI and start the game //
-		// --------------------------------------------------- //
-		MainFrame mf = new MainFrame(numPlayers);
+		    System.out.println("Starting a new game of 'World of Sweets' with " + numPlayers + " players...");
+
+
+			// --------------------------------------------------- //
+			// Create the "World of Sweets" GUI and start the game //
+			// --------------------------------------------------- //
+			MainFrame mf = new MainFrame(numPlayers);
+    	}
     }
 }
