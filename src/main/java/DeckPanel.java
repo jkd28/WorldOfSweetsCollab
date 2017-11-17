@@ -82,6 +82,14 @@ public class DeckPanel extends JPanel implements Serializable {
     	return drawDeck;
     }
 
+    public void enableDrawButton(){
+    	drawButton.setEnabled(true);
+    }
+
+    public void disableDrawButton(){
+    	drawButton.setEnabled(false);
+    }
+
 
     // Class for the panel displaying the most recently drawn card.
     class CardPanel extends JPanel{

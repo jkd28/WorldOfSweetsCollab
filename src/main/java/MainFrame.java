@@ -17,6 +17,10 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
 
+    // Data for the "SaveButton" Panel
+    private JPanel savePanel;
+    private JButton saveButton;
+
     // Data for tracking Players
     private Player[] players;
     private int numPlayers;
@@ -158,9 +162,73 @@ public class MainFrame extends JFrame implements Serializable {
         this.add(playerPanel, BorderLayout.CENTER);
 
 
+        // ----------------------------------------------- //
+        // Create the "Save" panel and add it to the Frame //
+        // ----------------------------------------------- //
+        saveButton = new JButton("Save Game");
+        saveButton.addActionListener((ActionListener) new SaveGameListener(this, deckPanel));
+        savePanel = new JPanel();
+        savePanel.add(saveButton);
+        this.add(savePanel, BorderLayout.SOUTH);
+
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //
 		this.setVisible(true);
+    }
+
+    private class SaveGameListener implements ActionListener{
+    	private MainFrame gameFrame;
+    	private DeckPanel deckPanel;
+
+		public SaveGameListener(MainFrame gameFrame, DeckPanel deckPanel){
+			this.gameFrame = gameFrame;
+			this.deckPanel = deckPanel;
+		}
+
+		// Every time we click the button, it will display the
+		// 	color of the next card in the deck
+		public void actionPerformed(ActionEvent e){
+			// ========================= //
+			// Disable the "draw" button //
+			// ========================= //
+			deckPanel.disableDrawButton();
+
+
+			// ====================== //
+			// Disable the game timer //
+			// ====================== //
+
+
+			// ============= //
+			// Save the game //
+			// ============= //
+			boolean successfulSave = WorldOfSweets.saveCurrentGameToFile(gameFrame);
+
+			// If the save was successful, let the user know
+			if(successfulSave){
+				JOptionPane.showMessageDialog(null, "The state of this game has been succesfully saved!");
+			}
+
+			// Else the save was not successful; let the user know
+			else{
+				JOptionPane.showMessageDialog(null, "We were unable to save the state of this game for some reason; please try again!");
+			}
+
+			// ======================== //
+			// Re-enable the game timer //
+			// ======================== //
+
+
+			// =========================== //
+			// Re-enable the "draw" button //
+			// =========================== //
+			deckPanel.enableDrawButton();
+
+			// =============== //
+			// Resume the game //
+			// =============== //
+			return;
+		}
     }
  }
