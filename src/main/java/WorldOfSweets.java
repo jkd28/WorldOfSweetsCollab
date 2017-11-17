@@ -11,6 +11,7 @@ public class WorldOfSweets implements Serializable {
 	// Basic game information
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 4;
+    public static final String SAVE_FILE_EXTENSION = "ser";
 
 
   	private static int getNumPlayersFromUser(){
@@ -43,41 +44,13 @@ public class WorldOfSweets implements Serializable {
 	    	
     }
 
-    private static MainFrame startNewGame(){
-    	// ------------------------- //
-    	// Get the number of Players //
-    	// ------------------------- //
-    	int numPlayers = getNumPlayersFromUser();
-
-    	// Validate that we got a proper response
-    	if(numPlayers == -1){
-    		System.err.println("An unexpected error occurred; exiting program.");
-    		System.exit(1);
-    	}
-        else if(numPlayers < MIN_PLAYERS){
-            System.err.println("You cannot play 'World of Sweets' with less than "+MIN_PLAYERS+" players; exiting program.");
-            System.exit(1);
-        }
-
-
-        System.out.println("Starting a new game of 'World of Sweets' with " + numPlayers + " players...");
-    	
-
-		// --------------------------------------------------- //
-		// Create the "World of Sweets" GUI and start the game //
-		// --------------------------------------------------- //
-		MainFrame newGameFrame = new MainFrame(numPlayers);
-
-		return newGameFrame;
-    }
-
-    private static MainFrame loadPreviousGame(){
+    private static File getSaveFileFromUser(){
         // ---------------------------------- //
         // Ask the user to select a save file //
         // ---------------------------------- //
         // Create the FileChooser
         File workingDirectory = new File(System.getProperty("user.dir"));
-        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("WorldOfSweets Save Files (*.ser)", "ser"); // By convention, serialized objects in Java are stored in ".ser" files
+        FileNameExtensionFilter fileFilter = new FileNameExtensionFilter(String.format("WorldOfSweets Save Files (*.%s)", SAVE_FILE_EXTENSION), SAVE_FILE_EXTENSION); // By convention, serialized objects in Java are stored in ".ser" files
         
         JFileChooser fileChooser = new JFileChooser();
         fileChooser.setAcceptAllFileFilterUsed(false);
@@ -99,14 +72,15 @@ public class WorldOfSweets implements Serializable {
 
             // Check the result from the FileChooser
             if(fileChooserResult == JFileChooser.CANCEL_OPTION){
-                JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
-                System.exit(0);
+                // JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
+                // System.exit(0);
+                return null;
             }
             else if(fileChooserResult == JFileChooser.APPROVE_OPTION){
                 saveFile = fileChooser.getSelectedFile();
 
-                if(saveFile.isFile() && saveFile.getName().endsWith(".ser")){
-                    break;
+                if(WorldOfSweets.isValidSaveFile(saveFile)){
+                    return saveFile;
                 }
                 else{
                     JOptionPane.showMessageDialog(null, "I'm sorry, but \""+saveFile.getName()+"\" is not a valid WorldOfSweets save file name.");
@@ -123,19 +97,64 @@ public class WorldOfSweets implements Serializable {
                 System.exit(1);
             }
         }
-
-        // --------------------------------------------------------- //
-        // Try to "Open" the selected save file and resume that game //
-        // --------------------------------------------------------- //
-        if(saveFile != null){
-            System.exit(0);
-            return null;
-        }
-        else{
-            System.exit(1);
-            return null;
-        }
     }
+
+    private static MainFrame loadPreviousGameFromSaveFile(File saveFile){
+        return null;
+    }
+
+    public static boolean isValidSaveFile(File saveFile){
+        if(saveFile == null){
+            return false;
+        }
+
+        boolean isFile = saveFile.isFile();
+        boolean isValidFileExtension = saveFile.getName().endsWith("."+SAVE_FILE_EXTENSION);
+
+        return isFile && isValidFileExtension;
+    }
+
+    public static boolean saveCurrentGameToFile(File saveFile, MainFrame gameFrame){
+        if(WorldOfSweets.isValidSaveFile(saveFile) == false){
+            return false;
+        }
+
+
+
+
+
+
+        return true;
+    }
+
+    private static MainFrame startNewGame(){
+        // ------------------------- //
+        // Get the number of Players //
+        // ------------------------- //
+        int numPlayers = getNumPlayersFromUser();
+
+        // Validate that we got a proper response
+        if(numPlayers == -1){
+            System.err.println("An unexpected error occurred; exiting program.");
+            System.exit(1);
+        }
+        else if(numPlayers < MIN_PLAYERS){
+            System.err.println("You cannot play 'World of Sweets' with less than "+MIN_PLAYERS+" players; exiting program.");
+            System.exit(1);
+        }
+
+
+        System.out.println("Starting a new game of 'World of Sweets' with " + numPlayers + " players...");
+        
+
+        // --------------------------------------------------- //
+        // Create the "World of Sweets" GUI and start the game //
+        // --------------------------------------------------- //
+        MainFrame newGameFrame = new MainFrame(numPlayers);
+
+        return newGameFrame;
+    }
+
 
     public static void main(String[] args) {
     	MainFrame gameFrame;
@@ -164,7 +183,26 @@ public class WorldOfSweets implements Serializable {
         // Else if the user wants to load a game, have them choose a save-file to load, and then load it //
         // ============================================================================================= //
         else if(loadPreviousGameResult == JOptionPane.YES_OPTION){
-            gameFrame = loadPreviousGame();
+            File saveFile = getSaveFileFromUser();
+
+            if(WorldOfSweets.isValidSaveFile(saveFile)){
+                gameFrame = loadPreviousGameFromSaveFile(saveFile);
+
+                if(gameFrame == null){
+                    JOptionPane.showMessageDialog(null, 
+                        "Something went wrong while trying to load the game saved in \""+saveFile.getName()+"\"."
+                        + "\n\nStarting a new game instead!"
+                    );
+                    gameFrame = startNewGame();
+                }
+            }
+            else{
+                JOptionPane.showMessageDialog(null, 
+                    "I'm sorry, but the file you selected was not a valid WorldOfSweets save file name."
+                    + "\n\nStarting a new game instead!"
+                );
+                gameFrame = startNewGame();
+            }
         }
 
 
