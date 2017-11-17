@@ -1,26 +1,28 @@
+import java.io.File;
+import java.io.Serializable;
+import javax.swing.Action;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicFileChooserUI;
 
-public class WorldOfSweets {
+public class WorldOfSweets implements Serializable {
 
 	// Basic game information
-	public static final int MIN_PLAYERS = 2; 	// These are "public" because our "MainFrame" class also uses this for input validation
-												//		It may eventually get moved to whatever "GameplayDriver" sort of class
-												//		that gets made.
+	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 4;
 
-	public static int numPlayers = 0;
-	public static int currentPlayer = 0;		// The player first to go will always be player 0, regardless of the number of players
 
   	private static int getNumPlayersFromUser(){
-    	int numPlayers = -1;
+		// Create the list of options
+		int numOptions = MAX_PLAYERS - MIN_PLAYERS + 1;
+		Object[] options = new Object[numOptions];
+		for(int i = 0; i < options.length; i++){
+			options[i] = i + MIN_PLAYERS;
+		}
 
-    	// --------------------------------------- //
-    	// Get the number of players from the user //
-    	// --------------------------------------- //
-			// Ask the user for the number of players
-		Object[] options = {2,3,4};
-
-		numPlayers = JOptionPane.showOptionDialog(null,
+		// Ask the user for the number of players
+		int dialogResult = JOptionPane.showOptionDialog(null,
 			"Welcome to 'World of Sweets'!\nHow many players will be in this game?",
 			"Welcome!",
 			JOptionPane.YES_NO_CANCEL_OPTION,
@@ -28,24 +30,24 @@ public class WorldOfSweets {
 			null,
 			options,
 			options[0]);
-		if (numPlayers != JOptionPane.CLOSED_OPTION){
-			numPlayers = numPlayers + 2; //first button returns 0, second 1, third 2;
-		}
 
-	    	// If the user hits "Cancel" or the Exit button, quit the program
-		System.out.println(numPlayers);
-		if (numPlayers == JOptionPane.CLOSED_OPTION){
+	    // If the user hits "Cancel" or the Exit button, quit the program
+		if (dialogResult == JOptionPane.CLOSED_OPTION){
 			JOptionPane.showMessageDialog(null, "Goodbye!");
 			System.exit(0);
 		}
-	    return numPlayers;
+
+		// Else, return the count of players
+		int playerCount = dialogResult + 2; //first button of the JOptionPane returns 0, second 1, third 2;
+		return playerCount;
+	    	
     }
 
-    public static void main(String[] args) {
+    public static MainFrame startNewGame(){
     	// ------------------------- //
     	// Get the number of Players //
     	// ------------------------- //
-    	numPlayers = getNumPlayersFromUser();
+    	int numPlayers = getNumPlayersFromUser();
 
     	// Validate that we got a proper response
     	if(numPlayers == -1){
@@ -64,6 +66,15 @@ public class WorldOfSweets {
 		// --------------------------------------------------- //
 		// Create the "World of Sweets" GUI and start the game //
 		// --------------------------------------------------- //
-		MainFrame mf = new MainFrame(numPlayers);
+		MainFrame newGameFrame = new MainFrame(numPlayers);
+
+		return newGameFrame;
+    }
+
+    public static void main(String[] args) {
+    	MainFrame gameFrame;
+
+    	// Start a new game
+    	gameFrame = startNewGame();
     }
 }

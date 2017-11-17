@@ -1,34 +1,37 @@
-/*
- * @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
- */
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 
 public class DeckPanel extends JPanel{
-
-    private Deck drawDeck = new Deck();
-    private CardPanel cPanel = new CardPanel();
-    private JPanel drawPanel = new JPanel(new BorderLayout());
-    private JButton drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
-
     public static final Color DEFAULT_COLOR = Color.WHITE;
-    private Color currentColor = DEFAULT_COLOR;
-    private Card currentCard = null;
+
+    private Deck drawDeck;
+    private CardPanel cardPanel;
+    private JPanel drawPanel;
+    private JButton drawButton;
+    private Color currentColor;
+    private Card currentCard;
 
     public DeckPanel(){
 		// The two subpanels will be next to each other
 		setLayout(new GridLayout(1, 2));
 
+		// Initialize misc variables
+		drawDeck = new Deck();
+		cardPanel = new CardPanel();
+		drawPanel = new JPanel(new BorderLayout());
+		currentColor = DEFAULT_COLOR;
+		currentCard = null;
+
 		// Add the draw button to the Draw Panel
+		drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 		drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
-		drawButton.addActionListener((ActionListener) new DrawListener(cPanel));
+		drawButton.addActionListener((ActionListener) new DrawListener(this));
 		drawPanel.add(drawButton, BorderLayout.CENTER);
 		
 		//Add both panels to the Frame
 		add(drawPanel);
-		add(cPanel);
+		add(cardPanel);
     }
 
     // Helper method for creating the single color panels
@@ -109,19 +112,26 @@ public class DeckPanel extends JPanel{
 
 
     private class DrawListener implements ActionListener{
-		public DrawListener (CardPanel cPanel){
+    	private DeckPanel deckPanel;
+
+		public DrawListener(DeckPanel deckPanel){
+			this.deckPanel = deckPanel;
 		}
 
 		// Every time we click the button, it will display the
-		// color of the next card in the deck
+		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
-			// Draw a card and pull its data
+			// ----------------------------- //
+			// Draw a card and pull its data //
+			// ----------------------------- //
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 		    int cardValue = drawnCard.getValue();
 		    Color cardColor = drawnCard.getColor();
 
+		    // -------------------------------------------- //
 		    // Create and set the panel for this drawn card
+		    // -------------------------------------------- //
 		    JPanel newPanel = new JPanel();
 		    switch(cardValue){
 		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
@@ -129,38 +139,39 @@ public class DeckPanel extends JPanel{
 		    	case Card.SKIP: 		newPanel = createSpecialPanel("<html>Skip!</html>"); break;
 		    	case Card.GO_TO_MIDDLE: newPanel = createSpecialPanel("<html>Go to<br>Middle!</html>"); break;
 		    }
-		    cPanel.setPanel(newPanel);
+		    cardPanel.setPanel(newPanel);
 		    currentColor = cardColor;
 
 
-		    // Update the current Player with the drawn card
-		    if(MainFrame.getNumPlayers() > 0){
-		    	// Get the Player who just drew a Card
-			    Player currentPlayer = MainFrame.getCurrentPlayer();
+		    // --------------------------------------------- //
+		    // Update the current Player with the drawn card //
+		    // --------------------------------------------- //
+		    // Get the "parent" GUI window that is holding this DeckPanel
+		    Window parent = SwingUtilities.getWindowAncestor(deckPanel);
 
-			    // Move to Player to their next BoardSpace
-			    MainFrame.updatePlayerPosition(currentPlayer, currentCard);
+		    // If this DeckPanel has a "parent", then we're playing a game of WorldOfSweets,
+		    //	so we need to update the Player that just "drew" a card,
+		    //	and then rotate to the next Player
+		    // Else, this DeckPanel doesn't have a "parent" because we're running a Unit Test,
+		    //	so we should not do ANYTHING more.
+		    if(parent != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
+		    	MainFrame gameFrame = (MainFrame) ((JFrame) parent);
+			    if(gameFrame.getNumPlayers() > 0){
+			    	// Get the Player who just drew a Card
+				    Player currentPlayer = gameFrame.getCurrentPlayer();
 
-		    	// Check if the current Player has won the game
-		    	if(MainFrame.playerHasWon(currentPlayer)){
-					JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
-					System.exit(0);
-		    	}
-		    }
+				    // Move to Player to their next BoardSpace
+				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
 
+			    	// Check if the current Player has won the game
+			    	if(gameFrame.playerHasWon(currentPlayer)){
+						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+						System.exit(0);
+			    	}
+			    }
 
-
-		    // Rotate to the next Player
-		    // This section is here as a quick "hack" because the Gradle tests do not instantiate any Players,
-		    //		which means that those Gradle tests would otherwise throw an Exception here and
-		    //		crash the whole damn party.
-		    //		It's not really an acceptable long-term solution, but we have other priorities.
-		    //		(BenjaminMuscto)
-		    try{
-				MainFrame.getNextPlayer();
-		    }catch (Exception a){
-				//System.err.println("No players!");
-				//System.exit(1);
+			    // Rotate to the next Player
+			    gameFrame.getNextPlayer();
 		    }
 		}
     }
