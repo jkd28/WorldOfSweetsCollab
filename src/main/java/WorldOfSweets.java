@@ -45,72 +45,6 @@ public class WorldOfSweets implements Serializable {
 	    	
     }
 
-    public static MainFrame loadPreviousGame(){
-		// ---------------------------------- //
-		// Ask the user to select a save file //
-		// ---------------------------------- //
-		// Create the FileChooser
-		File workingDirectory = new File(System.getProperty("user.dir"));
-		FileNameExtensionFilter fileFilter = new FileNameExtensionFilter("WorldOfSweets Save Files (*.ser)", "ser"); // By convention, serialized objects in Java are stored in ".ser" files
-
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setAcceptAllFileFilterUsed(false);
-		fileChooser.setCurrentDirectory(workingDirectory);
-		fileChooser.setDialogType(JFileChooser.OPEN_DIALOG);
-		fileChooser.setFileFilter(fileFilter);
-		fileChooser.setFileSelectionMode(JFileChooser.FILES_ONLY);
-		fileChooser.setMultiSelectionEnabled(false);
-
-		// Disable the "New Folder" ability in the JFileChooser
-		BasicFileChooserUI ui = (BasicFileChooserUI)fileChooser.getUI();
-		Action folder = ui.getNewFolderAction();
-		folder.setEnabled(false);
-
-		// Get a result from the FileChooser
-		File saveFile = null;
-		while(true){
-			int fileChooserResult = fileChooser.showOpenDialog(null);
-
-			// Check the result from the FileChooser
-			if(fileChooserResult == JFileChooser.CANCEL_OPTION){
-				JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
-				System.exit(0);
-			}
-			else if(fileChooserResult == JFileChooser.APPROVE_OPTION){
-				saveFile = fileChooser.getSelectedFile();
-
-				if(saveFile.isFile() && saveFile.getName().endsWith(".ser")){
-					break;
-				}
-				else{
-					JOptionPane.showMessageDialog(null, "I'm sorry, but \""+saveFile.getName()+"\" is not a valid WorldOfSweets save file name.");
-					continue;
-				}
-			}
-			else{ //Else we assume that an error occurred
-				JOptionPane.showMessageDialog(
-					null, 
-					"An unexpected error occurred while trying to open a save-file; exiting program.", 
-					"Exiting Program", 
-					JOptionPane.ERROR_MESSAGE
-				);
-				System.exit(1);
-			}
-		}
-
-		// --------------------------------------------------------- //
-		// Try to "Open" the selected save file and resume that game //
-		// --------------------------------------------------------- //
-		if(saveFile != null){
-			System.exit(0);
-			return null;
-		}
-		else{
-			System.exit(1);
-			return null;
-		}
-    }
-
     public static MainFrame startNewGame(){
     	// ------------------------- //
     	// Get the number of Players //
@@ -142,36 +76,7 @@ public class WorldOfSweets implements Serializable {
     public static void main(String[] args) {
     	MainFrame gameFrame;
 
-    	// ===================================================== //
-    	// Ask if the user wants to load a previously saved game //
-    	// ===================================================== //
-    	int loadPreviousGameResult = JOptionPane.showConfirmDialog(
-    		null,
-    		"Would you like to load a previously saved game?",
-    		"Load a Saved Game?",
-    		JOptionPane.YES_NO_OPTION
-    	);
-
-    	// ============================================== //
-    	// If user CANCELLED the window, exit the program //
-    	// ============================================== //
-    	if(loadPreviousGameResult == JOptionPane.CLOSED_OPTION){
-    		JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
-    		System.exit(0);
-    	}
-
-    	// ============================================================================================= //
-    	// Else if the user wants to load a game, have them choose a save-file to load, and then load it //
-    	// ============================================================================================= //
-    	else if(loadPreviousGameResult == JOptionPane.YES_OPTION){
-    		gameFrame = loadPreviousGame();
-    	}
-
-    	// =========================== //
-    	// Else begin a brand new game //
-    	// =========================== //
-    	else{
-    		gameFrame = startNewGame();
-    	}
+    	// Start a new game
+    	gameFrame = startNewGame();
     }
 }
