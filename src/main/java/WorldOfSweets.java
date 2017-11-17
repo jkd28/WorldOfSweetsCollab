@@ -9,9 +9,7 @@ import javax.swing.plaf.basic.BasicFileChooserUI;
 public class WorldOfSweets implements Serializable {
 
 	// Basic game information
-	public static final int MIN_PLAYERS = 2; 	// These are "public" because our "MainFrame" class also uses this for input validation
-												//		It may eventually get moved to whatever "GameplayDriver" sort of class
-												//		that gets made.
+	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 4;
 
 
