@@ -28,7 +28,6 @@ public class MainFrame extends JFrame implements Serializable {
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
     // --------------------------------------- //
-
     public Player getNextPlayer(){
     	Player currentPlayer = getCurrentPlayer();
 
@@ -51,7 +50,6 @@ public class MainFrame extends JFrame implements Serializable {
     	return players[playerIndex];
     }
 
-    // public static void updatePlayerPosition(Player player, Card card){
     public void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
 	    BoardSpace currentSpace = player.getPosition();
@@ -101,10 +99,6 @@ public class MainFrame extends JFrame implements Serializable {
 		// ---------------- //
     	// Create the Frame //
 		// ---------------- //
-  		// frame = new JFrame("World of Sweets");
-		// frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
-
 		this.setTitle("World of Sweets");
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
@@ -114,7 +108,6 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
-
 
 		for(int i = 0; i < players.length; i++){
 
@@ -138,11 +131,11 @@ public class MainFrame extends JFrame implements Serializable {
 			players[i] = newPlayer;
 		}
 
+
 		// ----------------------------------------------- //
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
-		// frame.add(boardPanel, BorderLayout.NORTH);
 		this.add(boardPanel, BorderLayout.NORTH);
 
 		//Set all players to starting boardspace (index 0)
@@ -150,22 +143,24 @@ public class MainFrame extends JFrame implements Serializable {
 			player.setPosition(boardPanel.getSpace(0));
 		}
 
+
 		// --------------------------------------------- //
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		// frame.add(deckPanel, BorderLayout.WEST);
 		this.add(deckPanel, BorderLayout.WEST);
+
 
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        // frame.add(playerPanel, BorderLayout.CENTER);
         this.add(playerPanel, BorderLayout.CENTER);
 
-		// Make it all visible!
-		// frame.setVisible(true);
+
+        // -------------------- //
+		// Make it all visible! //
+		// -------------------- //
 		this.setVisible(true);
     }
  }
