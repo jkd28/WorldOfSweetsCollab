@@ -181,10 +181,10 @@ public class DeckPanel extends JPanel implements Serializable {
 			    	// -------------------------------------------- //
 			    	if(gameFrame.playerHasWon(currentPlayer)){
 			    		// Disable the "draw" button //
-			    		deckPanel.getDrawButton().setEnabled(false);
+			    		deckPanel.disableDrawButton();
 
 			    		// Diable the game timer //
-			    		
+
 
 			    		// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
