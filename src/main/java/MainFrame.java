@@ -1,9 +1,3 @@
-/*
- *	@author William Laboon (GitHub: "laboon"). Primary author of this file, used originally in his "GameOfLife" repository.
- *	@author Benjamin Muscato (GitHub: "BenjaminMuscato"). Found and modified this file for use in the "BitsPlease" repository.
- * @author Brian Knotten (GitHub: "BK874"). Modified for use in the "BitsPlease" repository.
-*/
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -15,34 +9,37 @@ public class MainFrame extends JFrame implements Serializable {
     private static final int FRAME_WIDTH = 800;
 
     // Data for the Board Panel
-    private static BoardPanel boardPanel;
+    private BoardPanel boardPanel;
 
     // Data for the Deck Panel
     private DeckPanel deckPanel;
 
+    // Data for the PlayerPanel
+    private PlayerPanel playerPanel;
+
     // Data for tracking Players
-    private static Player[] players;
+    private Player[] players;
     private int numPlayers;
-    public static int NUM_PLAYERS;
 
     // Data for currentPlayer
-    public static int currentPlayerIndex = 0; // The player first to go will always be player 0, regardless of the number of players
-    private static PlayerPanel playerPanel;
+    public int currentPlayerIndex; 
 
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
     // --------------------------------------- //
-    public static Player getNextPlayer(){
-    	Player currentPlayer = players[currentPlayerIndex];
 
-    	currentPlayerIndex = (currentPlayerIndex + 1) % NUM_PLAYERS;
-    	Player nextPlayer = players[currentPlayerIndex];
+    public Player getNextPlayer(){
+    	Player currentPlayer = getCurrentPlayer();
+
+    	currentPlayerIndex = (currentPlayerIndex + 1) % getNumPlayers();
+    	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
     	return currentPlayer;
     }
-    public static Player getCurrentPlayer(){
+
+	public Player getCurrentPlayer(){
     	return players[currentPlayerIndex];
     }
 
@@ -50,7 +47,12 @@ public class MainFrame extends JFrame implements Serializable {
     	return numPlayers;
     } 
 
-    public static void updatePlayerPosition(Player player, Card card){
+    public Player getPlayer(int playerIndex){
+    	return players[playerIndex];
+    }
+
+    // public static void updatePlayerPosition(Player player, Card card){
+    public void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
 	    BoardSpace currentSpace = player.getPosition();
 
@@ -74,14 +76,14 @@ public class MainFrame extends JFrame implements Serializable {
 	    boardPanel.sendPlayerToNextSpace(player, card);
     }
 
-    public static boolean playerHasWon(Player player){
+    public boolean playerHasWon(Player player){
     	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
     public MainFrame(int playerCount){
-    	NUM_PLAYERS = playerCount;
         this.numPlayers = playerCount;
+        currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
     	
     	// ------------------------ //
 		// Validate input arguments //

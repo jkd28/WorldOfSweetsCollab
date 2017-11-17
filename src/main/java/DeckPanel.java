@@ -1,7 +1,3 @@
-/*
- * @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
- */
-
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -162,13 +158,13 @@ public class DeckPanel extends JPanel{
 		    	MainFrame gameFrame = (MainFrame) ((JFrame) parent);
 			    if(gameFrame.getNumPlayers() > 0){
 			    	// Get the Player who just drew a Card
-				    Player currentPlayer = MainFrame.getCurrentPlayer();
+				    Player currentPlayer = gameFrame.getCurrentPlayer();
 
 				    // Move to Player to their next BoardSpace
-				    MainFrame.updatePlayerPosition(currentPlayer, currentCard);
+				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
 
 			    	// Check if the current Player has won the game
-			    	if(MainFrame.playerHasWon(currentPlayer)){
+			    	if(gameFrame.playerHasWon(currentPlayer)){
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
 						System.exit(0);
 			    	}
