@@ -54,6 +54,10 @@ public class MainFrame extends JFrame implements Serializable {
     	return players[playerIndex];
     }
 
+    public DeckPanel getDeckPanel(){
+    	return deckPanel;
+    }
+
     public void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
 	    BoardSpace currentSpace = player.getPosition();

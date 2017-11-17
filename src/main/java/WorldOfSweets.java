@@ -1,5 +1,7 @@
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
@@ -177,7 +179,32 @@ public class WorldOfSweets implements Serializable {
     }
 
     private static MainFrame loadPreviousGameFromSaveFile(File saveFile){
-        return null;
+        if(saveFile == null){
+            return null;
+        }
+
+        if(WorldOfSweets.isValidSaveFile(saveFile)){
+            try {
+                FileInputStream fileIn = new FileInputStream(saveFile);
+                ObjectInputStream in = new ObjectInputStream(fileIn);
+
+                MainFrame gameFrame = (MainFrame) in.readObject();
+
+                in.close();
+                fileIn.close();
+
+                return gameFrame;
+            } 
+            catch (IOException e) {
+                return null;
+            } 
+            catch (ClassNotFoundException e) {
+                return null;
+            }
+        }
+        else{
+            return null;
+        }
     }
 
     public static boolean isValidSaveFile(File saveFile){
@@ -231,9 +258,10 @@ public class WorldOfSweets implements Serializable {
 
                 out.close();
                 fileOut.close();
-                
+
                 return true;
-            } catch (IOException e) {
+            } 
+            catch (IOException e) {
                 return false;
             }
         }
@@ -314,6 +342,10 @@ public class WorldOfSweets implements Serializable {
                     );
                     gameFrame = startNewGame();
                 }
+                else{
+                    gameFrame.setVisible(true);
+                    gameFrame.getDeckPanel().enableDrawButton();
+                }
             }
             else{
                 JOptionPane.showMessageDialog(null, 
@@ -331,5 +363,8 @@ public class WorldOfSweets implements Serializable {
     	else{
             gameFrame = startNewGame();
         }
+
+
+        gameFrame.setVisible(true);
     }
 }
