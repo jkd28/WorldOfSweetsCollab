@@ -14,37 +14,37 @@ public class TokenPanel{
   JFrame _frame = new JFrame("emoji testing");
   JPanel panel = new JPanel();
   JLabel label = new JLabel("Choose a token:");
-  JPanel test2 = new JPanel();
-  JButton test = new JButton(token);
+  //JPanel test2 = new JPanel();
+  //JButton test = new JButton(token);
   JButton end = new JButton("Finish");
 
 	public TokenPanel(){
 		_frame.setSize(800,600);
 		_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        panel.setLayout(new GridLayout(0,5));
-        ActionListener buttonListener = new ButtonListener();
-        for(int i = 0; i < emojis.length; i++){
-            JButton button = new JButton(emojis[i]);
-            button.setFont(new Font("Dialog", Font.PLAIN, 24));
-            button.addActionListener(buttonListener);
-            panel.add(button);
-        }
-        end.setFont(new Font("Dialog", Font.PLAIN, 24));
-        end.addActionListener(buttonListener);
-        test2.add(test);
-        test.setFont(new Font("Dialog", Font.PLAIN, 24));
-        _frame.add(test2, BorderLayout.WEST);
-        _frame.add(panel, BorderLayout.CENTER);
-        label.setFont(new Font("Dialog", Font.PLAIN, 36));
-        _frame.add(label, BorderLayout.NORTH);
-        _frame.add(end,  BorderLayout.SOUTH);
-		_frame.setVisible(true);
+    panel.setLayout(new GridLayout(0,5));
+    ActionListener buttonListener = new ButtonListener();
+    for(int i = 0; i < emojis.length; i++){
+      JButton button = new JButton(emojis[i]);
+      button.setFont(new Font("Dialog", Font.PLAIN, 24));
+      button.addActionListener(buttonListener);
+      panel.add(button);
+    }
+    end.setFont(new Font("Dialog", Font.PLAIN, 24));
+    end.addActionListener(buttonListener);
+    //test2.add(test);
+    //test.setFont(new Font("Dialog", Font.PLAIN, 24));
+    //_frame.add(test2, BorderLayout.WEST);
+    _frame.add(panel, BorderLayout.CENTER);
+    label.setFont(new Font("Dialog", Font.PLAIN, 36));
+    _frame.add(label, BorderLayout.NORTH);
+    _frame.add(end,  BorderLayout.SOUTH);
+    _frame.setVisible(true);
 	}
 
-	public static void main(String[] args) {
+	/* static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new TokenPanel();
-	}
+	}*/
   private class ButtonListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
       JButton source = (JButton)e.getSource();
@@ -52,7 +52,7 @@ public class TokenPanel{
           _frame.dispose();
       }
       setEmoji(source.getText());
-      test.setText(getEmoji());
+      //test.setText(getEmoji());
       source.setEnabled(false);
       if (!previousButton.getText().equals("err")){
         previousButton.setEnabled(true);
