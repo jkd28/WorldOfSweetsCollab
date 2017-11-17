@@ -7,10 +7,10 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class MainFrame{
+public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
-    private JFrame frame;
     private static final int FRAME_HEIGHT = 600;
     private static final int FRAME_WIDTH = 800;
 
@@ -22,7 +22,8 @@ public class MainFrame{
 
     // Data for tracking Players
     private static Player[] players;
-    private static int NUM_PLAYERS = 0;
+    private int numPlayers;
+    public static int NUM_PLAYERS;
 
     // Data for currentPlayer
     public static int currentPlayerIndex = 0; // The player first to go will always be player 0, regardless of the number of players
@@ -45,8 +46,8 @@ public class MainFrame{
     	return players[currentPlayerIndex];
     }
 
-    public static int getNumPlayers(){
-    	return NUM_PLAYERS;
+    public int getNumPlayers(){
+    	return numPlayers;
     } 
 
     public static void updatePlayerPosition(Player player, Card card){
@@ -78,13 +79,14 @@ public class MainFrame{
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
-    public MainFrame(int numPlayers){
-        NUM_PLAYERS = numPlayers;
+    public MainFrame(int playerCount){
+    	NUM_PLAYERS = playerCount;
+        this.numPlayers = playerCount;
     	
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
-    	if(NUM_PLAYERS < WorldOfSweets.MIN_PLAYERS || NUM_PLAYERS > WorldOfSweets.MAX_PLAYERS){
+    	if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
     		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
     		JOptionPane.showMessageDialog(null, 
 				message,
@@ -97,15 +99,19 @@ public class MainFrame{
 		// ---------------- //
     	// Create the Frame //
 		// ---------------- //
-    	frame = new JFrame("World of Sweets");
-		frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
+  		// frame = new JFrame("World of Sweets");
+		// frame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		// frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
+
+		this.setTitle("World of Sweets");
+		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
 
 
 		// ------------------ //
 		// Create the Players //
 		// ------------------ //
-		players = new Player[NUM_PLAYERS];
+		players = new Player[numPlayers];
 
 
 		for(int i = 0; i < players.length; i++){
@@ -134,7 +140,8 @@ public class MainFrame{
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
-		frame.add(boardPanel, BorderLayout.NORTH);
+		// frame.add(boardPanel, BorderLayout.NORTH);
+		this.add(boardPanel, BorderLayout.NORTH);
 
 		//Set all players to starting boardspace (index 0)
 		for(Player player : players){
@@ -145,15 +152,18 @@ public class MainFrame{
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		frame.add(deckPanel, BorderLayout.WEST);
+		// frame.add(deckPanel, BorderLayout.WEST);
+		this.add(deckPanel, BorderLayout.WEST);
 
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        frame.add(playerPanel, BorderLayout.CENTER);
+        // frame.add(playerPanel, BorderLayout.CENTER);
+        this.add(playerPanel, BorderLayout.CENTER);
 
 		// Make it all visible!
-		frame.setVisible(true);
+		// frame.setVisible(true);
+		this.setVisible(true);
     }
  }
