@@ -175,11 +175,6 @@ public class MainFrame extends JFrame implements Serializable {
         savePanel = new JPanel();
         savePanel.add(saveButton);
         this.add(savePanel, BorderLayout.SOUTH);
-
-        // -------------------- //
-		// Make it all visible! //
-		// -------------------- //
-		this.setVisible(true);
     }
 
     private class SaveGameButtonListener implements ActionListener{

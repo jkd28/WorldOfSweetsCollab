@@ -343,7 +343,6 @@ public class WorldOfSweets implements Serializable {
                     gameFrame = startNewGame();
                 }
                 else{
-                    gameFrame.setVisible(true);
                     gameFrame.getDeckPanel().enableDrawButton();
                 }
             }
@@ -363,5 +362,7 @@ public class WorldOfSweets implements Serializable {
     	else{
             gameFrame = startNewGame();
         }
+
+        gameFrame.setVisible(true);
     }
 }
