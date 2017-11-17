@@ -130,17 +130,17 @@ public class DeckPanel extends JPanel implements Serializable {
 		// Every time we click the button, it will display the
 		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
-			// ----------------------------- //
+			// ============================= //
 			// Draw a card and pull its data //
-			// ----------------------------- //
+			// ============================= //
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 		    int cardValue = drawnCard.getValue();
 		    Color cardColor = drawnCard.getColor();
 
-		    // -------------------------------------------- //
+		    // ============================================ //
 		    // Create and set the panel for this drawn card
-		    // -------------------------------------------- //
+		    // ============================================ //
 		    JPanel newPanel = new JPanel();
 		    switch(cardValue){
 		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
@@ -152,9 +152,9 @@ public class DeckPanel extends JPanel implements Serializable {
 		    currentColor = cardColor;
 
 
-		    // --------------------------------------------- //
+		    // ============================================= //
 		    // Update the current Player with the drawn card //
-		    // --------------------------------------------- //
+		    // ============================================= //
 		    // Get the "parent" GUI window that is holding this DeckPanel
 		    Window parent = SwingUtilities.getWindowAncestor(deckPanel);
 
@@ -166,15 +166,30 @@ public class DeckPanel extends JPanel implements Serializable {
 		    if(parent != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
 		    	MainFrame gameFrame = (MainFrame) ((JFrame) parent);
 			    if(gameFrame.getNumPlayers() > 0){
-			    	// Get the Player who just drew a Card
+			    	// ----------------------------------- //
+			    	// Get the Player who just drew a Card //
+			    	// ----------------------------------- //
 				    Player currentPlayer = gameFrame.getCurrentPlayer();
 
-				    // Move to Player to their next BoardSpace
+				    // --------------------------------------- //
+				    // Move to Player to their next BoardSpace //
+				    // --------------------------------------- //
 				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
 
-			    	// Check if the current Player has won the game
+				    // -------------------------------------------- //
+			    	// Check if the current Player has won the game //
+			    	// -------------------------------------------- //
 			    	if(gameFrame.playerHasWon(currentPlayer)){
+			    		// Disable the "draw" button //
+			    		deckPanel.getDrawButton().setEnabled(false);
+
+			    		// Diable the game timer //
+			    		
+
+			    		// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+						
+						// End the game //
 						System.exit(0);
 			    	}
 			    }
