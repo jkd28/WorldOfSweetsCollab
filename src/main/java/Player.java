@@ -30,5 +30,6 @@ public class Player{
     }
     public boolean setToken(String t){
       token = t;
+      return true;
     }
 }

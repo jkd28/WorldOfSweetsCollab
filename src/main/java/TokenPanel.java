@@ -11,7 +11,7 @@ public class TokenPanel{
                            "\uD83E\uDD84", "\uD83E\uDD8D", "\uD83E\uDD91", "\uD83E\uDD86", "\uD83E\uDD8A",
                            "\uD83E\uDD40", "\uD83D\uDC42", "\uD83D\uDD96", "\uD83D\uDCA9", "\uD83D\uDD0A"};
 
-  JFrame _frame = new JFrame("emoji testing");
+  JFrame _frame = new JFrame("Tokens");
   JPanel panel = new JPanel();
   JLabel label = new JLabel("Choose a token:");
   //JPanel test2 = new JPanel();
@@ -19,8 +19,8 @@ public class TokenPanel{
   JButton end = new JButton("Finish");
 
 	public TokenPanel(){
-		_frame.setSize(800,600);
-		_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		//_frame.setSize(800,600);
+		//_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     panel.setLayout(new GridLayout(0,5));
     ActionListener buttonListener = new ButtonListener();
     for(int i = 0; i < emojis.length; i++){
@@ -34,11 +34,17 @@ public class TokenPanel{
     //test2.add(test);
     //test.setFont(new Font("Dialog", Font.PLAIN, 24));
     //_frame.add(test2, BorderLayout.WEST);
-    _frame.add(panel, BorderLayout.CENTER);
+    //_frame.add(panel, BorderLayout.CENTER);
     label.setFont(new Font("Dialog", Font.PLAIN, 36));
-    _frame.add(label, BorderLayout.NORTH);
-    _frame.add(end,  BorderLayout.SOUTH);
-    _frame.setVisible(true);
+    //_frame.add(label, BorderLayout.NORTH);
+    //_frame.add(end,  BorderLayout.SOUTH);
+    JDialog d = new JDialog();
+    d.setSize(800,600);
+		d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    d.add(panel, BorderLayout.CENTER);
+    d.add(label, BorderLayout.NORTH);
+    d.add(end, BorderLayout.SOUTH);
+    d.setVisible(true);
 	}
 
 	/* static void main(String[] args) {
@@ -51,8 +57,8 @@ public class TokenPanel{
       if (source.getText().equals("Finish")){
           _frame.dispose();
       }
-      setEmoji(source.getText());
-      //test.setText(getEmoji());
+      setToken(source.getText());
+      //test.setText(getToken());
       source.setEnabled(false);
       if (!previousButton.getText().equals("err")){
         previousButton.setEnabled(true);
@@ -60,10 +66,10 @@ public class TokenPanel{
       previousButton = source;
     }
   }
-  public String getEmoji(){
+  public String getToken(){
     return token;
   }
-  public boolean setEmoji(String s){
+  public boolean setToken(String s){
     token = s;
     return true;
   }

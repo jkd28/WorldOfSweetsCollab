@@ -7,14 +7,14 @@ import javax.swing.*;
 import java.util.ArrayList;
 
 public class BoardPanel extends JPanel{
-    
+
     // Data for the BoardPanel
-	private ArrayList<BoardSpace> spaces = new ArrayList<BoardSpace>(); 
+	private ArrayList<BoardSpace> spaces = new ArrayList<BoardSpace>();
     // private BoardSpace[] spaces;
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
-    private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
+    private static final Font BUTTON_FONT = new Font("Dialog", Font.PLAIN, 48);
     private static final int BOARD_COLUMNS = 8;
     private static final int BOARD_ROWS = 8;
     private static final int BOARD_HORIZONTAL_GAP = 20;
@@ -22,7 +22,7 @@ public class BoardPanel extends JPanel{
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     private static final int NUM_SPACES = BOARD_COLUMNS * BOARD_ROWS;
     private static final int MID_SPACE = (NUM_SPACES / 2); // The middle space. When even # spaces, the one closer to the final space
-    
+
     public BoardPanel(Player[] players){
 		setLayout(BOARD_LAYOUT);
 
@@ -76,10 +76,10 @@ public class BoardPanel extends JPanel{
 		// Create the end space ("Grandma's House")
 		BoardSpace newGrandma = new BoardSpace(Color.WHITE, grandma);
 		newGrandma.setAsGrandmasHouse(true);
-		
+
 		spaces.add(newGrandma);
 		// spaces.get(spaces.size() - 1).setAsGrandmasHouse(true);
-		
+
 		// --------------------------- //
 		// Add the Spaces to the board //
 		// --------------------------- //
@@ -93,7 +93,7 @@ public class BoardPanel extends JPanel{
 		return spaces.get(index);
     }
 
-    // Retrieve the number of spaces 
+    // Retrieve the number of spaces
     public int getNumSpaces(){
 		return spaces.size();
     }
@@ -119,28 +119,28 @@ public class BoardPanel extends JPanel{
     		return player.getPosition();
     	}
 
-    	// If the Card passed-in is a "Go to Middle", 
+    	// If the Card passed-in is a "Go to Middle",
     	//	just send them to the middle BoardSpace.
     	if(card.getValue() == Card.GO_TO_MIDDLE){
     		return sendPlayerToMiddleSpace(player);
     	}
 
-    	// If the Player is already at "Grandma's House", 
+    	// If the Player is already at "Grandma's House",
     	//	do nothing.
     	BoardSpace currentPlayerSpace = player.getPosition();
     	if(currentPlayerSpace.isGrandmasHouse()){
     		return currentPlayerSpace;
     	}
 
-    	// Find the next space that the Player can go to, 
-    	//	based on the Color and value of the Card passed-in 
+    	// Find the next space that the Player can go to,
+    	//	based on the Color and value of the Card passed-in
     	//	(aka the one that they drew from the deck)
     	BoardSpace oldPlayerSpace = player.getPosition();
     	BoardSpace newSpace = null;
     	BoardSpace grandmasHouseSpace = this.getSpace(spaces.size() - 1);
     	Color cardColor = card.getColor();
     	boolean alreadyFoundFirstSpaceForCardColor = false;	// Used for dealing with "DOUBLE" color cards
-    	
+
     	for(int i = spaces.indexOf(player.getPosition()) + 1; i < NUM_SPACES - 2; i++){ // We check the spaces that are after the Player's current space, but before Grandma's House
     		BoardSpace space = this.getSpace(i);
     		Color spaceColor = space.getSpaceColor();
@@ -167,7 +167,7 @@ public class BoardPanel extends JPanel{
     		}
     	}
 
-    	// If we've gotten this far without finding a new BoardSpace, 
+    	// If we've gotten this far without finding a new BoardSpace,
     	//	it means the next available space for the Player MUST be the end ("Grandma's House").
     	if(newSpace == null){
     		newSpace = grandmasHouseSpace;

@@ -22,7 +22,17 @@ public class MainFrame extends JFrame implements Serializable {
     private int numPlayers;
 
     // Data for currentPlayer
-    public int currentPlayerIndex; 
+    public int currentPlayerIndex;
+
+    public static void setUIFont (javax.swing.plaf.FontUIResource f){
+    java.util.Enumeration keys = UIManager.getDefaults().keys();
+    while (keys.hasMoreElements()) {
+      Object key = keys.nextElement();
+      Object value = UIManager.get (key);
+      if (value instanceof javax.swing.plaf.FontUIResource)
+        UIManager.put (key, f);
+      }
+    }
 
     // --------------------------------------- //
     // Calling this will return the player who //
@@ -44,7 +54,7 @@ public class MainFrame extends JFrame implements Serializable {
 
     public int getNumPlayers(){
     	return numPlayers;
-    } 
+    }
 
     public Player getPlayer(int playerIndex){
     	return players[playerIndex];
@@ -82,13 +92,13 @@ public class MainFrame extends JFrame implements Serializable {
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
-    	
+
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
     	if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
     		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
-    		JOptionPane.showMessageDialog(null, 
+    		JOptionPane.showMessageDialog(null,
 				message,
 				"Invalid Number of Players",
 				JOptionPane.ERROR_MESSAGE);
@@ -108,12 +118,25 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
-
+    String[] options = {"<html>\uD83C\uDF6C</html>", "\uD83C\uDF66", "\uD83C\uDF69", "\uD83C\uDF70", "\uD83E\uDDC0",
+                        "\uD83D\uDC72", "\uD83D\uDDFF", "\uD83E\uDD16", "\uD83D\uDC7D", "\uD83D\uDC7A",
+                        "\uD83E\uDD84", "\uD83E\uDD8D", "\uD83E\uDD91", "\uD83E\uDD86", "\uD83E\uDD8A",
+                        "\uD83E\uDD40", "\uD83D\uDC42", "\uD83D\uDD96", "\uD83D\uDCA9", "\uD83D\uDD0A"};
 		for(int i = 0; i < players.length; i++){
 
 			String playerName = "Player "+i;
+      int token;
+      setUIFont (new javax.swing.plaf.FontUIResource(new Font("Dialog", Font.PLAIN, 12)));
+      //UIManager.put("JOptionPane.messageFont", new javax.swing.plaf.FontUIResource("Dialog",Font.DIALOG,12));
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
+        token = JOptionPane.showOptionDialog(null, "Choose a Token:", "Choose a Token:", JOptionPane.DEFAULT_OPTION,
+  			JOptionPane.PLAIN_MESSAGE,
+  			null,
+  			options,
+  			options[0]);
+        //TokenPanel tp = new TokenPanel();
+        //token = tp.getToken();
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
@@ -122,12 +145,13 @@ public class MainFrame extends JFrame implements Serializable {
 						);
 					continue;
 				}
+
 				break;
 			}
 
 
 			Player newPlayer = new Player(playerName);
-
+      newPlayer.setToken(options[token]);
 			players[i] = newPlayer;
 		}
 

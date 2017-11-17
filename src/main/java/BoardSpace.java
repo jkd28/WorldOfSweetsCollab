@@ -26,7 +26,7 @@ public class BoardSpace extends JPanel{
 
 		// "spaceColor"
 		spaceColor = newBackgroundColor;
-		
+
 		// "label" and "originalText"
 		if(newLabel != null){
 			label = newLabel;
@@ -71,13 +71,13 @@ public class BoardSpace extends JPanel{
 		if(!players.isEmpty()){
 			labelText = labelText + "<br>[";
 			for(Player player : players){
-				labelText = labelText + player.getName() + ", ";
+				labelText = labelText + player.getToken() + ", ";
 			}
 			labelText = labelText.substring(0, labelText.length() - 2);
 			labelText = labelText + "]";
 		}
 		labelText = labelText + "</html>";
-
+		//label.setFont(new Font("Dialog", Font.PLAIN, 12));
 		label.setText(labelText);
 	}
 
