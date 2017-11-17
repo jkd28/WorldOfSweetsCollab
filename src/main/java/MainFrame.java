@@ -109,8 +109,8 @@ public class MainFrame extends JFrame implements Serializable {
 		// ---------------- //
 		this.setTitle("World of Sweets");
 		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
-
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener((WindowAdapter) new ExitGameListener(this));
 
 		// ------------------ //
 		// Create the Players //
@@ -119,9 +119,10 @@ public class MainFrame extends JFrame implements Serializable {
 
 		for(int i = 0; i < players.length; i++){
 
-			String playerName = "Player "+i;
+			String defaultPlayerName = "Player "+i;
+			String playerName = defaultPlayerName;
 			while(true){
-				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
+				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
@@ -170,7 +171,7 @@ public class MainFrame extends JFrame implements Serializable {
         // Create the "Save" panel and add it to the Frame //
         // ----------------------------------------------- //
         saveButton = new JButton("Save Game");
-        saveButton.addActionListener((ActionListener) new SaveGameListener(this, deckPanel));
+        saveButton.addActionListener((ActionListener) new SaveGameButtonListener(this, deckPanel));
         savePanel = new JPanel();
         savePanel.add(saveButton);
         this.add(savePanel, BorderLayout.SOUTH);
@@ -181,11 +182,11 @@ public class MainFrame extends JFrame implements Serializable {
 		this.setVisible(true);
     }
 
-    private class SaveGameListener implements ActionListener{
+    private class SaveGameButtonListener implements ActionListener{
     	private MainFrame gameFrame;
     	private DeckPanel deckPanel;
 
-		public SaveGameListener(MainFrame gameFrame, DeckPanel deckPanel){
+		public SaveGameButtonListener(MainFrame gameFrame, DeckPanel deckPanel){
 			this.gameFrame = gameFrame;
 			this.deckPanel = deckPanel;
 		}
@@ -234,5 +235,42 @@ public class MainFrame extends JFrame implements Serializable {
 			// =============== //
 			return;
 		}
+    }
+
+    private class ExitGameListener extends WindowAdapter{
+    	private MainFrame gameFrame;
+
+    	public ExitGameListener(MainFrame gameFrame){
+    		this.gameFrame = gameFrame;
+    	}
+
+    	@Override
+    	public void windowClosing(WindowEvent e){
+    		// ========================= //
+			// Disable the "draw" button //
+			// ========================= //
+			deckPanel.disableDrawButton();
+
+
+    		// ====================== //
+			// Disable the game timer //
+			// ====================== //
+
+
+    		// ======================================================= //
+    		// Ask if the user wants to save their game before exiting //
+    		// ======================================================= //
+    		String message = "Would you like to save your game before exiting?";
+            String title = "Save Before Exit?";
+            int response = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+
+            if(response == JOptionPane.YES_OPTION){
+            	WorldOfSweets.saveCurrentGameToFile(gameFrame);
+            }
+
+            JOptionPane.showMessageDialog(null, "Goodbye!");
+            gameFrame.setVisible(false);
+            System.exit(0);
+    	}
     }
  }

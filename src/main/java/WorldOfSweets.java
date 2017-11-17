@@ -363,8 +363,5 @@ public class WorldOfSweets implements Serializable {
     	else{
             gameFrame = startNewGame();
         }
-
-
-        gameFrame.setVisible(true);
     }
 }
