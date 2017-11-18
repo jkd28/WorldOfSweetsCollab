@@ -44,9 +44,9 @@ public class TokenPanel{
   private class ButtonListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
       JButton source = (JButton)e.getSource();
-      if (source.getText().equals("Finish")){
+      if (source.getText().equals("Finish") && !token.equals("t")){
           _frame.dispose();
-      }else{
+      }else if (!source.getText().equals("Finish")){
           setToken(source.getText());
           //test.setText(getToken());
           source.setEnabled(false);
