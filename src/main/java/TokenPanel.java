@@ -46,14 +46,15 @@ public class TokenPanel{
       JButton source = (JButton)e.getSource();
       if (source.getText().equals("Finish")){
           _frame.dispose();
+      }else{
+          setToken(source.getText());
+          //test.setText(getToken());
+          source.setEnabled(false);
+          if (!previousButton.getText().equals("err")){
+            previousButton.setEnabled(true);
+          }
+          previousButton = source;
       }
-      setToken(source.getText());
-      //test.setText(getToken());
-      source.setEnabled(false);
-      if (!previousButton.getText().equals("err")){
-        previousButton.setEnabled(true);
-      }
-      previousButton = source;
     }
   }
   public String getToken(){
