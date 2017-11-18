@@ -27,6 +27,11 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for currentPlayer
     public int currentPlayerIndex;
 
+    //get the TimerPanel to check if the game has won
+    public TimerPanel getTimerPanel(){
+        return timerPanel;
+    }
+
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
