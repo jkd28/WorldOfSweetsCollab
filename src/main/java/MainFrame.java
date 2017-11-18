@@ -118,10 +118,6 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
-        String[] options = {"\uD83C\uDF6C", "\uD83C\uDF66", "\uD83C\uDF69", "\uD83C\uDF70", "\uD83E\uDDC0",
-                        "\uD83D\uDC72", "\uD83D\uDDFF", "\uD83E\uDD16", "\uD83D\uDC7D", "\uD83D\uDC7A",
-                        "\uD83E\uDD84", "\uD83E\uDD8D", "\uD83E\uDD91", "\uD83E\uDD86", "\uD83E\uDD8A",
-                        "\uD83E\uDD40", "\uD83D\uDC42", "\uD83D\uDD96", "\uD83D\uDCA9", "\uD83D\uDD0A"};
 		for(int i = 0; i < players.length; i++){
 
 			String playerName = "Player "+i;
