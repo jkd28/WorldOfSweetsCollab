@@ -28,7 +28,7 @@ public class TokenPanel{
     end.setFont(new Font("Dialog", Font.PLAIN, 24));
     end.addActionListener(buttonListener);
     label.setFont(new Font("Dialog", Font.PLAIN, 36));
-    final JDialog frame = new JDialog(_frame, "hello", true);
+    final JDialog frame = new JDialog(_frame, "Token Selector", true);
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     frame.getContentPane().add(panel, BorderLayout.CENTER);
     frame.getContentPane().add(label, BorderLayout.NORTH);
