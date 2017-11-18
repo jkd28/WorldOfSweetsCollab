@@ -14,13 +14,9 @@ public class TokenPanel{
   JFrame _frame = new JFrame("Tokens");
   JPanel panel = new JPanel();
   JLabel label = new JLabel("Choose a token:");
-  //JPanel test2 = new JPanel();
-  //JButton test = new JButton(token);
   JButton end = new JButton("Finish");
 
 	public TokenPanel(){
-		//_frame.setSize(800,600);
-		//_frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
     panel.setLayout(new GridLayout(0,5));
     ActionListener buttonListener = new ButtonListener();
     for(int i = 0; i < emojis.length; i++){
@@ -31,26 +27,20 @@ public class TokenPanel{
     }
     end.setFont(new Font("Dialog", Font.PLAIN, 24));
     end.addActionListener(buttonListener);
-    //test2.add(test);
-    //test.setFont(new Font("Dialog", Font.PLAIN, 24));
-    //_frame.add(test2, BorderLayout.WEST);
-    //_frame.add(panel, BorderLayout.CENTER);
     label.setFont(new Font("Dialog", Font.PLAIN, 36));
-    //_frame.add(label, BorderLayout.NORTH);
-    //_frame.add(end,  BorderLayout.SOUTH);
-    JDialog d = new JDialog();
-    d.setSize(800,600);
-		d.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-    d.add(panel, BorderLayout.CENTER);
-    d.add(label, BorderLayout.NORTH);
-    d.add(end, BorderLayout.SOUTH);
-    d.setVisible(true);
+    final JDialog frame = new JDialog(_frame, "hello", true);
+    frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+    frame.getContentPane().add(panel, BorderLayout.CENTER);
+    frame.getContentPane().add(label, BorderLayout.NORTH);
+    frame.add(end, BorderLayout.SOUTH);
+    frame.pack();
+    frame.setVisible(true);
 	}
 
-	/* static void main(String[] args) {
+	 public static void main(String[] args) {
 		// TODO Auto-generated method stub
 		new TokenPanel();
-	}*/
+	}
   private class ButtonListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
       JButton source = (JButton)e.getSource();

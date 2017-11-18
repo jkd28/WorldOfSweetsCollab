@@ -118,25 +118,20 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
-    String[] options = {"<html>\uD83C\uDF6C</html>", "\uD83C\uDF66", "\uD83C\uDF69", "\uD83C\uDF70", "\uD83E\uDDC0",
+        String[] options = {"\uD83C\uDF6C", "\uD83C\uDF66", "\uD83C\uDF69", "\uD83C\uDF70", "\uD83E\uDDC0",
                         "\uD83D\uDC72", "\uD83D\uDDFF", "\uD83E\uDD16", "\uD83D\uDC7D", "\uD83D\uDC7A",
                         "\uD83E\uDD84", "\uD83E\uDD8D", "\uD83E\uDD91", "\uD83E\uDD86", "\uD83E\uDD8A",
                         "\uD83E\uDD40", "\uD83D\uDC42", "\uD83D\uDD96", "\uD83D\uDCA9", "\uD83D\uDD0A"};
 		for(int i = 0; i < players.length; i++){
 
 			String playerName = "Player "+i;
-      int token;
-      setUIFont (new javax.swing.plaf.FontUIResource(new Font("Dialog", Font.PLAIN, 12)));
-      //UIManager.put("JOptionPane.messageFont", new javax.swing.plaf.FontUIResource("Dialog",Font.DIALOG,12));
+
+        String token;
+
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
-        token = JOptionPane.showOptionDialog(null, "Choose a Token:", "Choose a Token:", JOptionPane.DEFAULT_OPTION,
-  			JOptionPane.PLAIN_MESSAGE,
-  			null,
-  			options,
-  			options[0]);
-        //TokenPanel tp = new TokenPanel();
-        //token = tp.getToken();
+                TokenPanel tp = new TokenPanel();
+                token = tp.getToken();
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
@@ -151,7 +146,7 @@ public class MainFrame extends JFrame implements Serializable {
 
 
 			Player newPlayer = new Player(playerName);
-      newPlayer.setToken(options[token]);
+            newPlayer.setToken(token);
 			players[i] = newPlayer;
 		}
 
