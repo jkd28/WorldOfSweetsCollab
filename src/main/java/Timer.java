@@ -1,17 +1,18 @@
-import java.lang.StringBuilder;
-
 public class Timer{
     public static final int SEC_IN_MS = 1000;
-    private int displaySeconds = 0;
-    private int realSeconds = 0;
+    //total time in seconds
+    private int totalSeconds = 0;
+    //String array representing the parts of the timer
     private String[] times = {"00", ":", "00", ":", "00"};
+    //times array concatenated into a string that is displayed on the timer
     private String realTime = "00:00:00";
 
     public String updateTime(){
-      int hours = realSeconds / 3600;
-      displaySeconds = realSeconds - (hours * 3600);
-      int minutes = realSeconds / 60;
-      displaySeconds = realSeconds - (minutes * 60);
+      int displaySeconds;
+      int hours = totalSeconds / 3600;
+      displaySeconds = totalSeconds - (hours * 3600);
+      int minutes = totalSeconds / 60;
+      displaySeconds = totalSeconds - (minutes * 60);
       minutes -= (minutes / 60 * 60);
       String realTime;
       String str;
@@ -37,16 +38,12 @@ public class Timer{
       }
       times[4] = str;
 
-      StringBuilder strBuilder = new StringBuilder();
-      for (int i = 0; i < times.length; i++){
-        strBuilder.append(times[i]);
-      }
-      realTime = strBuilder.toString();
+      realTime = times[0] + times[1] + times[2] + times[3] + times[4];
       return realTime;
     }
 
     public boolean updateSeconds(){
-      realSeconds++;
+      totalSeconds++;
       return true;
     }
     public String getRealTime(){
