@@ -1,9 +1,3 @@
-import java.io.IOException;
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import javax.swing.ImageIcon;
-
 
 public class Player{
     private String name;
