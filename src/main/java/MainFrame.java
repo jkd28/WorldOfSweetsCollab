@@ -64,10 +64,15 @@ public class MainFrame extends JFrame implements Serializable {
 	    	return;
 	    }
 
-	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
-	    if(card.getValue() == Card.GO_TO_MIDDLE){
-	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    // Temporarily ignore the "Special" cards (currently valued > 2)
+	    if(card.getValue() > 2){
+		return;
 	    }
+
+	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
+	    //	    if(card.getValue() == Card.GO_TO_MIDDLE){
+	    //	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    //	    }
 
 	    // With a normal Single or Double colored card,
 	    //	send the Player to their next spot.

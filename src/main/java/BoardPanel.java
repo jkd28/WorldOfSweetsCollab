@@ -119,11 +119,16 @@ public class BoardPanel extends JPanel{
     		return player.getPosition();
     	}
 
+	// Temporarily ignore "special" cards
+	if(card.getValue() > 2){
+	    return player.getPosition();
+	}
+
     	// If the Card passed-in is a "Go to Middle", 
     	//	just send them to the middle BoardSpace.
-    	if(card.getValue() == Card.GO_TO_MIDDLE){
-    		return sendPlayerToMiddleSpace(player);
-    	}
+	//    	if(card.getValue() == Card.GO_TO_MIDDLE){
+    	//	return sendPlayerToMiddleSpace(player);
+	//    	}
 
     	// If the Player is already at "Grandma's House", 
     	//	do nothing.

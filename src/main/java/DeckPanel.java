@@ -66,7 +66,7 @@ public class DeckPanel extends JPanel{
 
     // Returns the color of the current card
     public Color getCurrentColor(){
-		return currentColor;
+	return currentColor;
     }
 
     public Card getCurrentCard(){
@@ -137,7 +137,12 @@ public class DeckPanel extends JPanel{
 		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
 		    	case Card.DOUBLE: 		newPanel = createDoubleColorPanel(cardColor); break;
 		    	case Card.SKIP: 		newPanel = createSpecialPanel("<html>Skip!</html>"); break;
-		    	case Card.GO_TO_MIDDLE: newPanel = createSpecialPanel("<html>Go to<br>Middle!</html>"); break;
+		    	case Card.GO_TO_FIRST_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>First Special!</html>"); break;
+		    case Card.GO_TO_SECOND_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Second Special!</html>"); break;
+		    	case Card.GO_TO_THIRD_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Third Special!</html>"); break;
+		    	case Card.GO_TO_FOURTH_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Fourth Special!</html>"); break;
+		    	case Card.GO_TO_FIFTH_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Fifth Special!</html>"); break;
+
 		    }
 		    cardPanel.setPanel(newPanel);
 		    currentColor = cardColor;
