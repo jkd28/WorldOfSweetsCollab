@@ -10,7 +10,6 @@ import javax.swing.Action;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.plaf.basic.BasicFileChooserUI;
 
 public class WorldOfSweets implements Serializable {
 
@@ -67,8 +66,7 @@ public class WorldOfSweets implements Serializable {
         fileChooser.setMultiSelectionEnabled(false);
 
         // Disable the "New Folder" ability in the JFileChooser
-        BasicFileChooserUI ui = (BasicFileChooserUI)fileChooser.getUI();
-        Action folder = ui.getNewFolderAction();
+        Action folder = fileChooser.getActionMap().get("New Folder");
         folder.setEnabled(false);
 
         // Get a result from the FileChooser
