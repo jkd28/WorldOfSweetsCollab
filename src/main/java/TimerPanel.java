@@ -28,5 +28,6 @@ public class TimerPanel extends JPanel{
             //System.out.println(gameFinished + " " + gameStarted);
         });
         myThread.start();
+        //afafaff
     }
 }
