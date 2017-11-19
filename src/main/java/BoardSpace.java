@@ -71,7 +71,7 @@ public class BoardSpace extends JPanel{
 		if(!players.isEmpty()){
 			labelText = labelText + "<br>[";
 			for(Player player : players){
-				labelText = labelText + player.getToken() + ", ";
+				labelText = labelText + "<img src=\"" + BoardSpace.class.getResource("./" + player.getToken()) + "\">, ";
 			}
 			labelText = labelText.substring(0, labelText.length() - 2);
 			labelText = labelText + "]";

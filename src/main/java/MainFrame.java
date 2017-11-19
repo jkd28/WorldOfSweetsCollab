@@ -2,11 +2,15 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
+import java.io.*;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
-    private static final int FRAME_HEIGHT = 600;
-    private static final int FRAME_WIDTH = 800;
+    private static final int FRAME_HEIGHT = 800;
+    private static final int FRAME_WIDTH = 1200;
 
     // Data for the Board Panel
     private BoardPanel boardPanel;
@@ -110,7 +114,7 @@ public class MainFrame extends JFrame implements Serializable {
     	// Create the Frame //
 		// ---------------- //
 		this.setTitle("World of Sweets");
-		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		//this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
 
 
@@ -176,6 +180,7 @@ public class MainFrame extends JFrame implements Serializable {
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //
+        this.pack();
 		this.setVisible(true);
     }
  }

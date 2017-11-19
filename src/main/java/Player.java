@@ -1,3 +1,10 @@
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.*;
+import javax.swing.ImageIcon;
+
+
 public class Player{
     private String name;
     private BoardSpace position = null; //all players start at "0th" position according to write up
