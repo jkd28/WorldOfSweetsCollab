@@ -18,7 +18,7 @@ public class TimerPanel extends JPanel{
                     timer.setRealTime(timer.updateTime());
                     label.setText("Game Time: " + timer.getRealTime());
                 }
-                //need to make the thread do something or else it won't be given time to compute
+                //this can't be in the block or else it won't be given time to compute
                 try{
                     Thread.sleep(timer.SEC_IN_MS);
                 }catch(Exception e){
