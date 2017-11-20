@@ -160,7 +160,6 @@ public class BoardPanel extends JPanel{
 
 		// Temporarily ignore "special" cards
 		if(card.getValue() > 2){
-			System.out.println("special");
 			
 			// return player.getPosition();
 
@@ -181,7 +180,6 @@ public class BoardPanel extends JPanel{
 			currentPlayerSpace.removePlayer(player);
 			specialSpace.addPlayer(player);
 
-			System.out.println("Sent player to special");
 			return specialSpace;
 		}
 
