@@ -35,6 +35,7 @@ public class MainFrame extends JFrame implements Serializable {
 
     // Data for currentPlayer
     public int currentPlayerIndex;
+
   
     // Data for music
     private Clip clip;
@@ -44,6 +45,7 @@ public class MainFrame extends JFrame implements Serializable {
     public TimerPanel getTimerPanel(){
         return timerPanel;
     }
+
 
     
     // --------------------------------------- //
@@ -147,13 +149,17 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
-
+        String[] usedTokens = new String[4];
 		for(int i = 0; i < players.length; i++){
-
 			String defaultPlayerName = "Player "+i;
 			String playerName = defaultPlayerName;
+			String token;
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
+                TokenPanel tp = new TokenPanel(usedTokens);
+                token = tp.getToken();
+                usedTokens[i] = tp.getToken();
+
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
@@ -162,12 +168,13 @@ public class MainFrame extends JFrame implements Serializable {
 						);
 					continue;
 				}
+
 				break;
 			}
 
 
 			Player newPlayer = new Player(playerName);
-
+            newPlayer.setToken(token);
 			players[i] = newPlayer;
 		}
 
@@ -254,6 +261,7 @@ public class MainFrame extends JFrame implements Serializable {
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //
+        this.pack();
 		this.setVisible(true);
     }
 

@@ -27,7 +27,7 @@ public class BoardSpace extends JPanel implements Serializable {
 
 		// "spaceColor"
 		spaceColor = newBackgroundColor;
-		
+
 		// "label" and "originalText"
 		if(newLabel != null){
 			label = newLabel;
@@ -72,13 +72,13 @@ public class BoardSpace extends JPanel implements Serializable {
 		if(!players.isEmpty()){
 			labelText = labelText + "<br>[";
 			for(Player player : players){
-				labelText = labelText + player.getName() + ", ";
+				labelText = labelText + "<img src=\"" + BoardSpace.class.getResource(player.getToken()) + "\">, ";
 			}
 			labelText = labelText.substring(0, labelText.length() - 2);
 			labelText = labelText + "]";
 		}
 		labelText = labelText + "</html>";
-
+		//label.setFont(new Font("Dialog", Font.PLAIN, 12));
 		label.setText(labelText);
 	}
 
