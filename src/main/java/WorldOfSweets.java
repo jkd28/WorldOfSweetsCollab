@@ -342,6 +342,11 @@ public class WorldOfSweets implements Serializable {
                 }
                 else{
                     gameFrame.getDeckPanel().enableDrawButton();
+
+                    gameFrame.resetTimerPanel();
+                    // TimerPanel timerPanel = gameFrame.getTimerPanel();
+                    // timerPanel.gameStarted = true;
+                    // timerPanel.startTimer(timerPanel.timer.getRealTime());
                 }
             }
             else{

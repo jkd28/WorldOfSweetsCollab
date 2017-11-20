@@ -9,6 +9,18 @@ public class Timer implements Serializable {
     //times array concatenated into a string that is displayed on the timer
     private String realTime = "00:00:00";
 
+    public Timer(){
+    }
+
+    public Timer(String realTime){
+      this.realTime = realTime;
+
+      String[] newTimes = realTime.split(":");
+      times[0] = newTimes[0];
+      times[2] = newTimes[1];
+      times[4] = newTimes[2];
+    }
+
     public String updateTime(){
       int displaySeconds;
       int hours = totalSeconds / 3600;

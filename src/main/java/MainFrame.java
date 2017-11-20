@@ -41,6 +41,10 @@ public class MainFrame extends JFrame implements Serializable {
     private File file;
     private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
+
+    private JPanel southPanel;
+
+
     //get the TimerPanel to check if the game has won
     public TimerPanel getTimerPanel(){
         return timerPanel;
@@ -174,6 +178,16 @@ public class MainFrame extends JFrame implements Serializable {
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
+    public void resetTimerPanel(){
+    	String realTime = timerPanel.timer.getRealTime();
+    	southPanel.remove(timerPanel);
+    	southPanel.validate();
+    	southPanel.repaint();
+    	timerPanel = new TimerPanel(realTime);
+        southPanel.add(timerPanel, BorderLayout.WEST);
+		timerPanel.gameStarted = true;
+    }
+
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
@@ -262,8 +276,9 @@ public class MainFrame extends JFrame implements Serializable {
         // ---------------------- //
         // Create the Timer panel //
         // ---------------------- //
+        southPanel = new JPanel();
         timerPanel = new TimerPanel();
-        this.add(timerPanel, BorderLayout.SOUTH);
+        southPanel.add(timerPanel, BorderLayout.WEST);
 
 
         // ----------------------------------------------- //
@@ -273,13 +288,9 @@ public class MainFrame extends JFrame implements Serializable {
         saveButton.addActionListener((ActionListener) new SaveGameButtonListener(this, deckPanel));
         savePanel = new JPanel();
         savePanel.add(saveButton);
-        this.add(savePanel, BorderLayout.SOUTH);
+        southPanel.add(savePanel, BorderLayout.EAST);
 
-
-		// ------------------------ //  		
-  		// Add the background music //
-  		// ------------------------ //
-  		
+        this.add(southPanel, BorderLayout.SOUTH);
     }
 
     private class SaveGameButtonListener implements ActionListener, Serializable{
