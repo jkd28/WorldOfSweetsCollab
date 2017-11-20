@@ -31,7 +31,7 @@ public class DeckPanelTest{
         assertEquals(true, Card.isValidColor(testColor));
     }
 
-    // After the draw button is click 60 times there each color should
+    // After the draw button is clicked through the deck, each color should
     // have been displayed ten times as a single card and twice as a
     // double card, with no other color having been displayed.
     @Test
@@ -50,6 +50,7 @@ public class DeckPanelTest{
 
         int numCardsInDeck = testDeckPanel.getDrawDeck().size();
 
+        // Click through the deck, counting each type of card as it appears
         for (int i = 0; i < numCardsInDeck; i++){
             testDeckPanel.getDrawButton().doClick();
             testCard = testDeckPanel.getCurrentCard();
@@ -113,6 +114,7 @@ public class DeckPanelTest{
         orangeCounter + orange2Counter + skipCounter + specialCounter +
         wrongCounter;
 
+        // Verify that each type of card has been counted the proper number of times
         assertEquals(0, wrongCounter);
         assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, redCounter);
         assertEquals(Deck.NUM_SINGLE_CARDS_PER_COLOR, yellowCounter);
