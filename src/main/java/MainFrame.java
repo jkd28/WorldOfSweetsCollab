@@ -2,8 +2,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
-import sun.audio.*;
-import java.io.*;
+import javax.sound.sampled.*;
+import java.net.URL;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
@@ -26,6 +29,10 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for currentPlayer
     public int currentPlayerIndex;
 
+    // Data for music
+    private Clip clip;
+    private File file;
+    
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
@@ -159,22 +166,34 @@ public class MainFrame extends JFrame implements Serializable {
         playerPanel = new PlayerPanel(players);
         this.add(playerPanel, BorderLayout.CENTER);
 
-	
-	String musicFile = "/resources/lets-play-a-while.wav";
-	InputStream in = new FileInputStream(null);
-	AudioStream musicStream = new AudioStream(null);
+
+	// Play the free Music by https://www.free-stock-music.com
 	try{
-	    in = new FileInputStream(musicFile);
-	} catch (Exception e){}
-	try{
-	    musicStream = new AudioStream(in);
-	} catch(Exception e){}
-
-
-
-	
-	AudioPlayer.player.start(musicStream);
-
+	    file = new File("src/main/resources/lets-play-a-while.wav");
+	    if (file.exists()){
+		AudioInputStream music = AudioSystem.getAudioInputStream(file);
+		clip = AudioSystem.getClip();
+		clip.open(music);
+	    } else {
+		throw new RuntimeException("Music: file not found.");
+	    }
+	} catch(MalformedURLException e){
+	    e.printStackTrace();
+	    throw new RuntimeException("Malformed URL: " + e);
+	}
+	catch (UnsupportedAudioFileException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Unsupported Audio File: " + e);
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Input/Output Error: " + e);
+	}
+	catch (LineUnavailableException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Line Unavailable Exception Error: " + e);
+	}
+	clip.loop(Clip.LOOP_CONTINUOUSLY);
 
         // -------------------- //
 		// Make it all visible! //
