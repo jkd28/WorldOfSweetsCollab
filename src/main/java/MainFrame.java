@@ -171,9 +171,11 @@ public class MainFrame extends JFrame implements Serializable {
 	try{
 	    file = new File("src/main/resources/lets-play-a-while.wav");
 	    if (file.exists()){
-		AudioInputStream music = AudioSystem.getAudioInputStream(file);
-		clip = AudioSystem.getClip();
-		clip.open(music);
+	    	AudioInputStream music = AudioSystem.getAudioInputStream(file);
+	    	AudioFormat format = music.getFormat();
+	    	DataLine.Info info = new DataLine.Info(Clip.class, format);
+	    	clip = (Clip)AudioSystem.getLine(info);
+	    	clip.open(music);
 	    } else {
 		throw new RuntimeException("Music: file not found.");
 	    }
