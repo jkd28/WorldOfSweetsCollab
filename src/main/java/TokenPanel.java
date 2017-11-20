@@ -36,7 +36,6 @@ public class TokenPanel implements Serializable{
                 button.addActionListener(buttonListener);
                 for (int i = 0; i < usedTokens.length; i++){
                     if (child.getName().equals(usedTokens[i])){
-                        System.out.println("sucess");
                         button.setEnabled(false);
                     }
                 }

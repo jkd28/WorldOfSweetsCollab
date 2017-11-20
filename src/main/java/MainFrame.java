@@ -39,10 +39,65 @@ public class MainFrame extends JFrame implements Serializable {
   
     // Data for music
     private File file;
+    private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
     //get the TimerPanel to check if the game has won
     public TimerPanel getTimerPanel(){
         return timerPanel;
+    }
+
+
+
+    public void initializeBackgroundAudio(){
+    	initializeBackgroundAudio(BACKGROUND_MUSIC_FILE_PATH);
+    }
+    public void initializeBackgroundAudio(String audioFilePath){
+    	// Play the free Music by https://www.free-stock-music.com
+  		Clip clip;
+		try{
+			if(audioFilePath == null){
+				audioFilePath = BACKGROUND_MUSIC_FILE_PATH;
+			}
+			else if(audioFilePath.equals("")){
+				audioFilePath = BACKGROUND_MUSIC_FILE_PATH;
+			}
+
+			file = new File(audioFilePath);
+			if (file.exists()){
+				AudioInputStream music = AudioSystem.getAudioInputStream(file);
+				AudioFormat format = music.getFormat();
+				DataLine.Info info = new DataLine.Info(Clip.class, format);
+				clip = (Clip)AudioSystem.getLine(info);
+				clip.open(music);
+			} 
+			else {
+				throw new RuntimeException("Music: file not found.");
+			}
+		} 
+		catch(MalformedURLException e){
+			e.printStackTrace();
+			throw new RuntimeException("Malformed URL: " + e);
+		}
+		catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Unsupported Audio File: " + e);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Input/Output Error: " + e);
+		}
+		catch (LineUnavailableException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Line Unavailable Exception Error: " + e);
+		}
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+      
+
+        // -------------------- //
+		// Make it all visible! //
+		// -------------------- //
+        this.pack();
+		this.setVisible(true);
     }
 
 
@@ -224,45 +279,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// ------------------------ //  		
   		// Add the background music //
   		// ------------------------ //
-  		// Play the free Music by https://www.free-stock-music.com
-  		Clip clip;
-		try{
-			file = new File("src/main/resources/lets-play-a-while.wav");
-			if (file.exists()){
-				AudioInputStream music = AudioSystem.getAudioInputStream(file);
-				AudioFormat format = music.getFormat();
-				DataLine.Info info = new DataLine.Info(Clip.class, format);
-				clip = (Clip)AudioSystem.getLine(info);
-				clip.open(music);
-			} 
-			else {
-				throw new RuntimeException("Music: file not found.");
-			}
-		} 
-		catch(MalformedURLException e){
-			e.printStackTrace();
-			throw new RuntimeException("Malformed URL: " + e);
-		}
-		catch (UnsupportedAudioFileException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Unsupported Audio File: " + e);
-		}
-		catch (IOException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Input/Output Error: " + e);
-		}
-		catch (LineUnavailableException e) {
-			e.printStackTrace();
-			throw new RuntimeException("Line Unavailable Exception Error: " + e);
-		}
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
-      
-
-        // -------------------- //
-		// Make it all visible! //
-		// -------------------- //
-        this.pack();
-		this.setVisible(true);
+  		
     }
 
     private class SaveGameButtonListener implements ActionListener, Serializable{

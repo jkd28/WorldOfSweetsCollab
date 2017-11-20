@@ -362,5 +362,6 @@ public class WorldOfSweets implements Serializable {
         }
 
         gameFrame.setVisible(true);
+        gameFrame.initializeBackgroundAudio();
     }
 }
