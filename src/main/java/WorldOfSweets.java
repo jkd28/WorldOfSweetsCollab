@@ -66,8 +66,8 @@ public class WorldOfSweets implements Serializable {
         fileChooser.setMultiSelectionEnabled(false);
 
         // Disable the "New Folder" ability in the JFileChooser
-        Action folder = fileChooser.getActionMap().get("New Folder");
-        folder.setEnabled(false);
+        // Action folder = fileChooser.getActionMap().get("New Folder");
+        // folder.setEnabled(false);
 
         // Get a result from the FileChooser
         File saveFile = null;
