@@ -21,7 +21,10 @@ public class TokenPanel{
         panel.setLayout(new GridLayout(0,5));
         ActionListener buttonListener = new ButtonListener();
         File dir = new File("src/main/resources/");
-        File[] directoryListing = dir.listFiles();
+        File[] directoryListing = dir.listFiles(
+            (directory, name) -> {
+                return name.toLowerCase().endsWith(".png");
+            });
         try{
             for(File child: directoryListing){
                 BufferedImage myPicture = ImageIO.read(child);
