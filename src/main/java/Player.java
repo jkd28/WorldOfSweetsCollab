@@ -1,5 +1,6 @@
+import java.io.Serializable;
 
-public class Player{
+public class Player implements Serializable {
     private String name;
     private BoardSpace position = null; //all players start at "0th" position according to write up
     private String token;

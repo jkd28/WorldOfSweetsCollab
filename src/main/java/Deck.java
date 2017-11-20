@@ -1,7 +1,9 @@
 import java.util.Stack;
 import java.util.Collections;
 import java.awt.Color;
-public class Deck {
+import java.io.Serializable;
+
+public class Deck implements Serializable {
     private Stack<Card> cardDeck;
 
     public static final int NUM_SINGLE_CARDS_PER_COLOR = 10;

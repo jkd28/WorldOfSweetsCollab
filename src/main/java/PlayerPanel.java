@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class PlayerPanel extends JPanel{
+public class PlayerPanel extends JPanel implements Serializable {
     private JPanel currPanel = new JPanel(new GridBagLayout());
     private JPanel nextPanel = new JPanel(new GridBagLayout());
     private GridBagLayout gridBag = new GridBagLayout();

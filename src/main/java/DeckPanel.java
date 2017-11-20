@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class DeckPanel extends JPanel{
+public class DeckPanel extends JPanel implements Serializable {
     public static final Color DEFAULT_COLOR = Color.WHITE;
 
     private Deck drawDeck;
@@ -99,9 +100,17 @@ public class DeckPanel extends JPanel{
     	return drawDeck;
     }
 
+    public void enableDrawButton(){
+    	drawButton.setEnabled(true);
+    }
+
+    public void disableDrawButton(){
+    	drawButton.setEnabled(false);
+    }
+
 
     // Class for the panel displaying the most recently drawn card.
-    class CardPanel extends JPanel{
+    class CardPanel extends JPanel implements Serializable{
 		CardLayout cardLayout = new CardLayout();
 		JPanel panel;
 
@@ -129,7 +138,7 @@ public class DeckPanel extends JPanel{
     }
 
 
-    private class DrawListener implements ActionListener{
+    private class DrawListener implements ActionListener, Serializable{
     	private DeckPanel deckPanel;
 
 		public DrawListener(DeckPanel deckPanel){
@@ -139,17 +148,17 @@ public class DeckPanel extends JPanel{
 		// Every time we click the button, it will display the
 		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
-			// ----------------------------- //
+			// ============================= //
 			// Draw a card and pull its data //
-			// ----------------------------- //
+			// ============================= //
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 		    int cardValue = drawnCard.getValue();
 		    Color cardColor = drawnCard.getColor();
 
-		    // -------------------------------------------- //
+		    // ============================================ //
 		    // Create and set the panel for this drawn card
-		    // -------------------------------------------- //
+		    // ============================================ //
 		    JPanel newPanel = new JPanel();
 		    switch(cardValue){
 		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
@@ -166,9 +175,9 @@ public class DeckPanel extends JPanel{
 		    currentColor = cardColor;
 
 
-		    // --------------------------------------------- //
+		    // ============================================= //
 		    // Update the current Player with the drawn card //
-		    // --------------------------------------------- //
+		    // ============================================= //
 		    // Get the "parent" GUI window that is holding this DeckPanel
 		    Window parent = SwingUtilities.getWindowAncestor(deckPanel);
 
@@ -180,18 +189,35 @@ public class DeckPanel extends JPanel{
 		    if(parent != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
 		    	MainFrame gameFrame = (MainFrame) ((JFrame) parent);
 			    if(gameFrame.getNumPlayers() > 0){
-			    	// Get the Player who just drew a Card
+			    	// ----------------------------------- //
+			    	// Get the Player who just drew a Card //
+			    	// ----------------------------------- //
 				    Player currentPlayer = gameFrame.getCurrentPlayer();
-
+				    
                     //get the timerPanel to check if game has started or ended
                     TimerPanel timer = gameFrame.getTimerPanel();
                     timer.gameStarted = true;
+
 				    // Move to Player to their next BoardSpace
 				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
-			    	// Check if the current Player has won the game
+
+				    // -------------------------------------------- //
+			    	// Check if the current Player has won the game //
+			    	// -------------------------------------------- //
 			    	if(gameFrame.playerHasWon(currentPlayer)){
+			    		// Disable the "draw" button //
+			    		deckPanel.disableDrawButton();
+
+			    		// Disable the "Save Game" button //
+			    		gameFrame.disableSaveButton();
+
+			    		// Diable the game timer //
                         timer.gameFinished = true;
-						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+
+			    		// Congratulate the winning player //
+			    		JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+						
+						// End the game //
 						System.exit(0);
 			    	}
 			    }

@@ -22,6 +22,10 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
 
+    // Data for the "SaveButton" Panel
+    private JPanel savePanel;
+    private JButton saveButton;
+
     // Data for Timer
     private TimerPanel timerPanel;
 
@@ -34,12 +38,70 @@ public class MainFrame extends JFrame implements Serializable {
 
   
     // Data for music
-    private Clip clip;
     private File file;
+    private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
+
+
+    private JPanel southPanel;
+
 
     //get the TimerPanel to check if the game has won
     public TimerPanel getTimerPanel(){
         return timerPanel;
+    }
+
+
+
+    public void initializeBackgroundAudio(){
+    	initializeBackgroundAudio(BACKGROUND_MUSIC_FILE_PATH);
+    }
+    public void initializeBackgroundAudio(String audioFilePath){
+    	// Play the free Music by https://www.free-stock-music.com
+  		Clip clip;
+		try{
+			if(audioFilePath == null){
+				audioFilePath = BACKGROUND_MUSIC_FILE_PATH;
+			}
+			else if(audioFilePath.equals("")){
+				audioFilePath = BACKGROUND_MUSIC_FILE_PATH;
+			}
+
+			file = new File(audioFilePath);
+			if (file.exists()){
+				AudioInputStream music = AudioSystem.getAudioInputStream(file);
+				AudioFormat format = music.getFormat();
+				DataLine.Info info = new DataLine.Info(Clip.class, format);
+				clip = (Clip)AudioSystem.getLine(info);
+				clip.open(music);
+			} 
+			else {
+				throw new RuntimeException("Music: file not found.");
+			}
+		} 
+		catch(MalformedURLException e){
+			e.printStackTrace();
+			throw new RuntimeException("Malformed URL: " + e);
+		}
+		catch (UnsupportedAudioFileException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Unsupported Audio File: " + e);
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Input/Output Error: " + e);
+		}
+		catch (LineUnavailableException e) {
+			e.printStackTrace();
+			throw new RuntimeException("Line Unavailable Exception Error: " + e);
+		}
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
+      
+
+        // -------------------- //
+		// Make it all visible! //
+		// -------------------- //
+        this.pack();
+		this.setVisible(true);
     }
 
 
@@ -68,6 +130,18 @@ public class MainFrame extends JFrame implements Serializable {
 
     public Player getPlayer(int playerIndex){
     	return players[playerIndex];
+    }
+
+    public DeckPanel getDeckPanel(){
+    	return deckPanel;
+    }
+
+    public void disableSaveButton(){
+    	saveButton.setEnabled(false);
+    }
+
+    public void enableSaveButton(){
+    	saveButton.setEnabled(true);
     }
 
     public void updatePlayerPosition(Player player, Card card){
@@ -104,6 +178,16 @@ public class MainFrame extends JFrame implements Serializable {
     	return currentPlayerSpace.isGrandmasHouse();
     }
 
+    public void resetTimerPanel(){
+    	String realTime = timerPanel.timer.getRealTime();
+    	southPanel.remove(timerPanel);
+    	southPanel.validate();
+    	southPanel.repaint();
+    	timerPanel = new TimerPanel(realTime);
+        southPanel.add(timerPanel, BorderLayout.WEST);
+		timerPanel.gameStarted = true;
+    }
+
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
@@ -125,9 +209,9 @@ public class MainFrame extends JFrame implements Serializable {
     	// Create the Frame //
 		// ---------------- //
 		this.setTitle("World of Sweets");
-		//this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); // Exit entire program when window is closed
-
+		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+		this.addWindowListener((WindowAdapter) new ExitGameListener(this));
 
 		// ------------------ //
 		// Create the Players //
@@ -135,15 +219,15 @@ public class MainFrame extends JFrame implements Serializable {
 		players = new Player[numPlayers];
         String[] usedTokens = new String[4];
 		for(int i = 0; i < players.length; i++){
-
-			String playerName = "Player "+i;
-
-        String token;
+			String defaultPlayerName = "Player "+i;
+			String playerName = defaultPlayerName;
+			String token;
 			while(true){
-				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
+				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
                 TokenPanel tp = new TokenPanel(usedTokens);
                 token = tp.getToken();
                 usedTokens[i] = tp.getToken();
+
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
@@ -189,44 +273,116 @@ public class MainFrame extends JFrame implements Serializable {
         this.add(playerPanel, BorderLayout.CENTER);
 
 
+        // ---------------------- //
+        // Create the Timer panel //
+        // ---------------------- //
+        southPanel = new JPanel();
         timerPanel = new TimerPanel();
-        this.add(timerPanel, BorderLayout.SOUTH);
+        southPanel.add(timerPanel, BorderLayout.WEST);
 
-  
-  // Play the free Music by https://www.free-stock-music.com
-	try{
-	    file = new File("src/main/resources/lets-play-a-while.wav");
-	    if (file.exists()){
-	    	AudioInputStream music = AudioSystem.getAudioInputStream(file);
-	    	AudioFormat format = music.getFormat();
-	    	DataLine.Info info = new DataLine.Info(Clip.class, format);
-	    	clip = (Clip)AudioSystem.getLine(info);
-	    	clip.open(music);
-	    } else {
-		throw new RuntimeException("Music: file not found.");
-	    }
-	} catch(MalformedURLException e){
-	    e.printStackTrace();
-	    throw new RuntimeException("Malformed URL: " + e);
-	}
-	catch (UnsupportedAudioFileException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException("Unsupported Audio File: " + e);
-	}
-	catch (IOException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException("Input/Output Error: " + e);
-	}
-	catch (LineUnavailableException e) {
-	    e.printStackTrace();
-	    throw new RuntimeException("Line Unavailable Exception Error: " + e);
-	}
-	clip.loop(Clip.LOOP_CONTINUOUSLY);
-      
-        // -------------------- //
-		// Make it all visible! //
-		// -------------------- //
-        this.pack();
-		this.setVisible(true);
+
+        // ----------------------------------------------- //
+        // Create the "Save" panel and add it to the Frame //
+        // ----------------------------------------------- //
+        saveButton = new JButton("Save Game");
+        saveButton.addActionListener((ActionListener) new SaveGameButtonListener(this, deckPanel));
+        savePanel = new JPanel();
+        savePanel.add(saveButton);
+        southPanel.add(savePanel, BorderLayout.EAST);
+
+        this.add(southPanel, BorderLayout.SOUTH);
+    }
+
+    private class SaveGameButtonListener implements ActionListener, Serializable{
+    	private MainFrame gameFrame;
+    	private DeckPanel deckPanel;
+
+		public SaveGameButtonListener(MainFrame gameFrame, DeckPanel deckPanel){
+			this.gameFrame = gameFrame;
+			this.deckPanel = deckPanel;
+		}
+
+		public void actionPerformed(ActionEvent e){
+			// ========================= //
+			// Disable the "draw" button //
+			// ========================= //
+			deckPanel.disableDrawButton();
+
+
+			// ====================== //
+			// Disable the game timer //
+			// ====================== //
+            gameFrame.getTimerPanel().gameStarted = false;
+
+
+			// ============= //
+			// Save the game //
+			// ============= //
+			boolean successfulSave = WorldOfSweets.saveCurrentGameToFile(gameFrame);
+
+			// If the save was successful, let the user know
+			if(successfulSave){
+				JOptionPane.showMessageDialog(null, "The state of this game has been succesfully saved!");
+			}
+
+			// Else the save was not successful; let the user know
+			else{
+				JOptionPane.showMessageDialog(null, "We were unable to save the state of this game for some reason; please try again!");
+			}
+
+			// ======================== //
+			// Re-enable the game timer //
+			// ======================== //
+            gameFrame.getTimerPanel().gameStarted = true;
+
+
+			// =========================== //
+			// Re-enable the "draw" button //
+			// =========================== //
+			deckPanel.enableDrawButton();
+
+			// =============== //
+			// Resume the game //
+			// =============== //
+			return;
+		}
+    }
+
+    private class ExitGameListener extends WindowAdapter implements Serializable{
+    	private MainFrame gameFrame;
+
+    	public ExitGameListener(MainFrame gameFrame){
+    		this.gameFrame = gameFrame;
+    	}
+
+    	@Override
+    	public void windowClosing(WindowEvent e){
+    		// ========================= //
+			// Disable the "draw" button //
+			// ========================= //
+			deckPanel.disableDrawButton();
+
+
+    		// ====================== //
+			// Disable the game timer //
+			// ====================== //
+            gameFrame.getTimerPanel().gameStarted = false;
+
+
+    		// ======================================================= //
+    		// Ask if the user wants to save their game before exiting //
+    		// ======================================================= //
+    		String message = "Would you like to save your game before exiting?";
+            String title = "Save Before Exit?";
+            int response = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+
+            if(response == JOptionPane.YES_OPTION){
+            	WorldOfSweets.saveCurrentGameToFile(gameFrame);
+            }
+
+            JOptionPane.showMessageDialog(null, "Goodbye!");
+            gameFrame.setVisible(false);
+            System.exit(0);
+    	}
     }
  }

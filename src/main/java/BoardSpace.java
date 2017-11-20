@@ -6,8 +6,9 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.io.Serializable;
 
-public class BoardSpace extends JPanel{
+public class BoardSpace extends JPanel implements Serializable {
 	private JLabel label;
 	private Collection<Player> players;
 	private String originalText;
