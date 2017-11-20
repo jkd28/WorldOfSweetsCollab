@@ -1,6 +1,6 @@
 /*
- * @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
- */
+* @author Brian Knotten (Github: "BK874"). Primary author of this file, used originally in the "BitsPlease" repository.
+*/
 
 import org.junit.*;
 import static org.junit.Assert.*;
@@ -15,20 +15,20 @@ public class BoardPanelTest{
     @Before
     public void setup(){
         Player[] emptyPlayers = new Player[0];
-    	testBoardPanel = new BoardPanel(emptyPlayers);
-    	numSpaces = testBoardPanel.getNumSpaces();
+        testBoardPanel = new BoardPanel(emptyPlayers);
+        numSpaces = testBoardPanel.getNumSpaces();
     }
 
     // The panel should initialize with a starting space first.
     @Test
     public void testInitialBoardPanelSpace(){
-        int index = 0; 
+        int index = 0;
 
-    	BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
-    	JLabel testLabel = testBoardSpace.getLabel();
-    	String testText = testLabel.getText();
+        BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
+        JLabel testLabel = testBoardSpace.getLabel();
+        String testText = testLabel.getText();
 
-    	assertEquals("<html>Start -></html>", testText);
+        assertEquals("<html>Start -></html>", testText);
     }
 
     // The panel should initialize with an ending space (grandma's house).
@@ -36,55 +36,52 @@ public class BoardPanelTest{
     public void testFinalBoardPanelSpace(){
         int index = numSpaces - 1;
 
-    	BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
+        BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
         JLabel testLabel = testBoardSpace.getLabel();
         String testText = testLabel.getText();
 
-    	assertEquals("<html>-> Grandma's House</html>", testText);
+        assertEquals("<html>-> Grandma's House</html>", testText);
     }
 
-    // The middle space should be marked as such.
+    // Test that the Special Spaces are properly marked
     @Test
     public void testSpecialSpaces(){
         int index = numSpaces / 5;
 
-    	BoardSpace testBoardSpace1 = testBoardPanel.getSpace(index);
+        BoardSpace testBoardSpace1 = testBoardPanel.getSpace(index);
         JLabel testLabel1 = testBoardSpace1.getLabel();
         String testText1 = testLabel1.getText();
 
-	BoardSpace testBoardSpace2 = testBoardPanel.getSpace(index * 2);
-	JLabel testLabel2 = testBoardSpace2.getLabel();
-	String testText2 = testLabel2.getText();
+        BoardSpace testBoardSpace2 = testBoardPanel.getSpace(index * 2);
+        JLabel testLabel2 = testBoardSpace2.getLabel();
+        String testText2 = testLabel2.getText();
 
-	BoardSpace testBoardSpace3 = testBoardPanel.getSpace(index * 3);
-	JLabel testLabel3 = testBoardSpace3.getLabel();
-	String testText3 = testLabel3.getText();
+        BoardSpace testBoardSpace3 = testBoardPanel.getSpace(index * 3);
+        JLabel testLabel3 = testBoardSpace3.getLabel();
+        String testText3 = testLabel3.getText();
 
-	BoardSpace testBoardSpace4 = testBoardPanel.getSpace(index * 4);
-	JLabel testLabel4 = testBoardSpace4.getLabel();
-	String testText4 = testLabel4.getText();
+        BoardSpace testBoardSpace4 = testBoardPanel.getSpace(index * 4);
+        JLabel testLabel4 = testBoardSpace4.getLabel();
+        String testText4 = testLabel4.getText();
 
-	BoardSpace testBoardSpace5 = testBoardPanel.getSpace(index * 5);
-	JLabel testLabel5 = testBoardSpace5.getLabel();
-	String testText5 = testLabel5.getText();
+        BoardSpace testBoardSpace5 = testBoardPanel.getSpace(index * 5);
+        JLabel testLabel5 = testBoardSpace5.getLabel();
+        String testText5 = testLabel5.getText();
 
-    	assertEquals("<html>Candy Cane Forest</html>", testText1);
-	assertEquals("<html>Minty Mountains</html>", testText2);
-	assertEquals("<html>Bubble Gum Trapeze</html>", testText3);
-	assertEquals("<html>Marshmallow Marsh</html>", testText4);
-	assertEquals("<html>Licorice Lagoon</html>", testText5);
+        assertEquals("<html>Candy Cane Forest</html>", testText1);
+        assertEquals("<html>Minty Mountains</html>", testText2);
+        assertEquals("<html>Bubble Gum Trapeze</html>", testText3);
+        assertEquals("<html>Marshmallow Marsh</html>", testText4);
+        assertEquals("<html>Licorice Lagoon</html>", testText5);
     }
 
     // An average space - at the start of the game, before Player movement - should be marked as such.
     @Test
     public void testAverageBoardPanelSpace(){
-        int index = 1;
-
-        BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
+        BoardSpace testBoardSpace = testBoardPanel.getSpace(1);
         JLabel testLabel = testBoardSpace.getLabel();
         String testText = testLabel.getText();
 
         assertEquals("<html></html>", testText);
     }
 }
-    
