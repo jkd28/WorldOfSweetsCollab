@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
+import sun.audio.*;
+import java.io.*;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
@@ -22,7 +24,7 @@ public class MainFrame extends JFrame implements Serializable {
     private int numPlayers;
 
     // Data for currentPlayer
-    public int currentPlayerIndex; 
+    public int currentPlayerIndex;
 
     // --------------------------------------- //
     // Calling this will return the player who //
@@ -156,6 +158,22 @@ public class MainFrame extends JFrame implements Serializable {
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
         this.add(playerPanel, BorderLayout.CENTER);
+
+	
+	String musicFile = "/resources/lets-play-a-while.wav";
+	InputStream in = new FileInputStream(null);
+	AudioStream musicStream = new AudioStream(null);
+	try{
+	    in = new FileInputStream(musicFile);
+	} catch (Exception e){}
+	try{
+	    musicStream = new AudioStream(in);
+	} catch(Exception e){}
+
+
+
+	
+	AudioPlayer.player.start(musicStream);
 
 
         // -------------------- //
