@@ -5,7 +5,7 @@ import java.io.Serializable;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
-    private static final int FRAME_HEIGHT = 600;
+    private static final int FRAME_HEIGHT = 800;
     private static final int FRAME_WIDTH = 800;
 
     // Data for the Board Panel
@@ -17,12 +17,20 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
 
+    // Data for Timer
+    private TimerPanel timerPanel;
+
     // Data for tracking Players
     private Player[] players;
     private int numPlayers;
 
     // Data for currentPlayer
-    public int currentPlayerIndex; 
+    public int currentPlayerIndex;
+
+    //get the TimerPanel to check if the game has won
+    public TimerPanel getTimerPanel(){
+        return timerPanel;
+    }
 
     // --------------------------------------- //
     // Calling this will return the player who //
@@ -44,7 +52,7 @@ public class MainFrame extends JFrame implements Serializable {
 
     public int getNumPlayers(){
     	return numPlayers;
-    } 
+    }
 
     public Player getPlayer(int playerIndex){
     	return players[playerIndex];
@@ -87,13 +95,13 @@ public class MainFrame extends JFrame implements Serializable {
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
-    	
+
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
     	if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
     		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
-    		JOptionPane.showMessageDialog(null, 
+    		JOptionPane.showMessageDialog(null,
 				message,
 				"Invalid Number of Players",
 				JOptionPane.ERROR_MESSAGE);
@@ -162,7 +170,8 @@ public class MainFrame extends JFrame implements Serializable {
         playerPanel = new PlayerPanel(players);
         this.add(playerPanel, BorderLayout.CENTER);
 
-
+        timerPanel = new TimerPanel();
+        this.add(timerPanel, BorderLayout.SOUTH);
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //

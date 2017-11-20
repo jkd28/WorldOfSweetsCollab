@@ -28,7 +28,7 @@ public class DeckPanel extends JPanel{
 		drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
 		drawButton.addActionListener((ActionListener) new DrawListener(this));
 		drawPanel.add(drawButton, BorderLayout.CENTER);
-		
+
 		//Add both panels to the Frame
 		add(drawPanel);
 		add(cardPanel);
@@ -183,11 +183,14 @@ public class DeckPanel extends JPanel{
 			    	// Get the Player who just drew a Card
 				    Player currentPlayer = gameFrame.getCurrentPlayer();
 
+                    //get the timerPanel to check if game has started or ended
+                    TimerPanel timer = gameFrame.getTimerPanel();
+                    timer.gameStarted = true;
 				    // Move to Player to their next BoardSpace
 				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
-
 			    	// Check if the current Player has won the game
 			    	if(gameFrame.playerHasWon(currentPlayer)){
+                        timer.gameFinished = true;
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
 						System.exit(0);
 			    	}
