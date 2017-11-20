@@ -57,8 +57,26 @@ public class DeckPanel extends JPanel{
 		JPanel tempPanel = new JPanel(new GridBagLayout());
 		JLabel tempLabel = new JLabel(text);
 		tempLabel.setFont(new Font("Calibri", Font.PLAIN, 48));
-		tempLabel.setForeground(Color.WHITE);
-		tempPanel.setBackground(Color.BLACK);
+
+		if(text.equals("<html>Go to<br>Candy Cane Forest!</html>")){
+		    tempLabel.setForeground(Color.BLACK);
+		    tempPanel.setBackground(Color.MAGENTA);
+		} else if(text.equals("<html>Go to<br>Minty Mountains!</html>")){
+		    tempLabel.setForeground(Color.BLACK);
+		    tempPanel.setBackground(Color.CYAN);
+		} else if(text.equals("<html>Go to<br>Bubble Gum Trapeze!</html>")){
+		    tempLabel.setForeground(Color.BLACK);
+		    tempPanel.setBackground(Color.PINK);
+		} else if (text.equals("<html>Go to<br>Marshmallow Marsh!</html>")){
+		    tempLabel.setForeground(Color.WHITE);
+		    tempPanel.setBackground(Color.GRAY);
+		} else if (text.equals("<html>Go to<br>Licorice Lagoon!</html>")){
+		    tempLabel.setForeground(Color.WHITE);
+		    tempPanel.setBackground(Color.BLACK);
+		} else if (text.equals("<html>Skip!</html>")){
+		    tempLabel.setForeground(Color.WHITE);
+		    tempPanel.setBackground(Color.DARK_GRAY);
+		}
 		tempPanel.add(tempLabel);
 
 		return tempPanel;
@@ -66,7 +84,7 @@ public class DeckPanel extends JPanel{
 
     // Returns the color of the current card
     public Color getCurrentColor(){
-		return currentColor;
+	return currentColor;
     }
 
     public Card getCurrentCard(){
@@ -137,7 +155,12 @@ public class DeckPanel extends JPanel{
 		    	case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
 		    	case Card.DOUBLE: 		newPanel = createDoubleColorPanel(cardColor); break;
 		    	case Card.SKIP: 		newPanel = createSpecialPanel("<html>Skip!</html>"); break;
-		    	case Card.GO_TO_MIDDLE: newPanel = createSpecialPanel("<html>Go to<br>Middle!</html>"); break;
+		    	case Card.GO_TO_FIRST_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Candy Cane Forest!</html>"); break;
+		    case Card.GO_TO_SECOND_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Minty Mountains!</html>"); break;
+		    	case Card.GO_TO_THIRD_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Bubble Gum Trapeze!</html>"); break;
+		    	case Card.GO_TO_FOURTH_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Marshmallow Marsh!</html>"); break;
+		    	case Card.GO_TO_FIFTH_SPECIAL: newPanel = createSpecialPanel("<html>Go to<br>Licorice Lagoon!</html>"); break;
+
 		    }
 		    cardPanel.setPanel(newPanel);
 		    currentColor = cardColor;
