@@ -68,11 +68,11 @@ public class BoardPanelTest{
 	JLabel testLabel5 = testBoardSpace5.getLabel();
 	String testText5 = testLabel5.getText();
 
-    	assertEquals("<html>Special 1!</html>", testText1);
-	assertEquals("<html>Special 2!</html>", testText2);
-	assertEquals("<html>Special 3!</html>", testText3);
-	assertEquals("<html>Special 4!</html>", testText4);
-	assertEquals("<html>Special 5!</html>", testText5);
+    	assertEquals("<html>Candy Cane Forest</html>", testText1);
+	assertEquals("<html>Minty Mountains</html>", testText2);
+	assertEquals("<html>Bubble Gum Trapeze</html>", testText3);
+	assertEquals("<html>Marshmallow Marsh</html>", testText4);
+	assertEquals("<html>Licorice Lagoon</html>", testText5);
     }
 
     // An average space - at the start of the game, before Player movement - should be marked as such.

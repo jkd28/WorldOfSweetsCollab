@@ -14,11 +14,11 @@ public class BoardPanel extends JPanel{
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
-    private JLabel firstLabel = new JLabel("Special 1!");
-    private JLabel secondLabel = new JLabel("Special 2!");
-    private JLabel thirdLabel = new JLabel("Special 3!");
-    private JLabel fourthLabel = new JLabel("Special 4!");
-    private JLabel fifthLabel = new JLabel("Special 5!");
+    private JLabel firstLabel = new JLabel("Candy Cane Forest");
+    private JLabel secondLabel = new JLabel("Minty Mountains");
+    private JLabel thirdLabel = new JLabel("Bubble Gum Trapeze");
+    private JLabel fourthLabel = new JLabel("Marshmallow Marsh");
+    private JLabel fifthLabel = new JLabel("Licorice Lagoon");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
     private static final int BOARD_COLUMNS = 8;
     private static final int BOARD_ROWS = 8;
