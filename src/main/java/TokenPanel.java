@@ -8,6 +8,7 @@ import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 
 public class TokenPanel{
+    private String[] usedTokens;
     private String token = "t";
     private JButton previousButton = new JButton("err");
     JFrame _frame = new JFrame("Tokens");
@@ -15,7 +16,8 @@ public class TokenPanel{
     JLabel label = new JLabel("Choose a token:");
     JButton end = new JButton("Finish");
 
-	public TokenPanel(){
+	public TokenPanel(String[] used){
+        usedTokens = used;
         panel.setLayout(new GridLayout(0,5));
         ActionListener buttonListener = new ButtonListener();
         File dir = new File("src/main/resources/");
@@ -28,6 +30,12 @@ public class TokenPanel{
                 JButton button = new JButton(icon);
                 button.setFont(new Font("Dialog", Font.PLAIN, 24));
                 button.addActionListener(buttonListener);
+                for (int i = 0; i < usedTokens.length; i++){
+                    if (child.getName().equals(usedTokens[i])){
+                        System.out.println("sucess");
+                        button.setEnabled(false);
+                    }
+                }
                 panel.add(button);
             }
         }catch(Exception e){
@@ -49,7 +57,7 @@ public class TokenPanel{
 
 	public static void main(String[] args) {
         // TODO Auto-generated method stub
-        new TokenPanel();
+        new TokenPanel(null);
 	}
     private class ButtonListener implements ActionListener{
         public void actionPerformed(ActionEvent e){

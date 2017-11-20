@@ -118,16 +118,17 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the Players //
 		// ------------------ //
 		players = new Player[numPlayers];
+        String[] usedTokens = new String[4];
 		for(int i = 0; i < players.length; i++){
 
 			String playerName = "Player "+i;
 
         String token;
-
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", playerName);
-                TokenPanel tp = new TokenPanel();
+                TokenPanel tp = new TokenPanel(usedTokens);
                 token = tp.getToken();
+                usedTokens[i] = tp.getToken();
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
 						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
