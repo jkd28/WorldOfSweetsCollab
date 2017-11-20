@@ -89,10 +89,10 @@ public class CardTest {
     // Test that when a go-to-middle card is initialized with the proper
     // values, no error is thrown
     @Test
-    public void testMiddleCardCreation(){
+    public void testSpecialCardCreation(){
         try {
             Card test = new Card(3, Color.RED);
-            Card test2 = new Card(3, Color.BLUE);
+            Card test2 = new Card(6, Color.BLUE);
         } catch (IllegalArgumentException e) {
             fail("Illegal Argument Exception was thrown on creation of a Go-To-Middle Card");
         }
@@ -103,7 +103,7 @@ public class CardTest {
     @Test
     public void testInvalidMiddleCardCreation(){
         try {
-            Card test1 = new Card(3, Color.WHITE);
+            Card test1 = new Card(5, Color.WHITE);
         } catch (IllegalArgumentException e) {
             // Test should pass if error was thrown
         }

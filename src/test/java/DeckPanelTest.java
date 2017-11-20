@@ -38,14 +38,14 @@ public class DeckPanelTest{
     public void testDeckPanelDraw(){
 		int redCounter,red2Counter, yellowCounter, yellow2Counter,
 		    blueCounter, blue2Counter, greenCounter,green2Counter,
-		    orangeCounter, orange2Counter, skipCounter, middleCounter,
+		    orangeCounter, orange2Counter, skipCounter, specialCounter,
 		    wrongCounter, total;
 		Color testColor;
 		Card testCard;
 		int testValue;
 		redCounter = red2Counter = yellowCounter = yellow2Counter =
 		    blueCounter = blue2Counter = greenCounter = green2Counter =
-		    orangeCounter = orange2Counter = skipCounter = middleCounter =
+		    orangeCounter = orange2Counter = skipCounter = specialCounter =
 		    wrongCounter = 0;
 
 		int numCardsInDeck = testDeckPanel.getDrawDeck().size();
@@ -60,8 +60,8 @@ public class DeckPanelTest{
 		    if(testValue == Card.SKIP){
 		    	skipCounter++;
 		    }
-		    else if(testValue == Card.GO_TO_MIDDLE){
-		    	middleCounter++;
+		    else if(testValue >= Card.GO_TO_FIRST_SPECIAL){
+		    	specialCounter++;
 		    }
 		    else if(testValue == Card.SINGLE){
 		    	if(testColor.equals(Color.RED)){
@@ -110,7 +110,7 @@ public class DeckPanelTest{
 		}
 		total = redCounter + red2Counter + yellowCounter + yellow2Counter +
 		    blueCounter + blue2Counter + greenCounter + green2Counter +
-		    orangeCounter + orange2Counter + skipCounter + middleCounter +
+		    orangeCounter + orange2Counter + skipCounter + specialCounter +
 		    wrongCounter;
 
 		assertEquals(0, wrongCounter);
@@ -124,7 +124,7 @@ public class DeckPanelTest{
 		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, blue2Counter);
 		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, green2Counter);
 		assertEquals(Deck.NUM_DOUBLE_CARDS_PER_COLOR, orange2Counter);
-		assertEquals(Deck.NUM_GO_TO_MIDDLE_CARDS, middleCounter);
+		assertEquals(Deck.NUM_GO_TO_CARDS * 5, specialCounter);
 		assertEquals(Deck.NUM_SKIP_CARDS, skipCounter);
 		assertEquals(numCardsInDeck, total);
     }

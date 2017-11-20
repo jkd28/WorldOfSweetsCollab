@@ -9,7 +9,7 @@ public class DeckTest {
         testDeck = new Deck();
     }
 
-    // The deck of cards contains 60 cards.  After drawing all
+    // The deck of cards contains 70 cards.  After drawing all
     // cards, the deck needs to reshuffule and should never return a null.
     // This test assures that the deck reshuffles, and will fail if a
     // NullPointerException is thrown or a null is returned from the draw method.
@@ -47,19 +47,19 @@ public class DeckTest {
         assertEquals(Deck.NUM_SKIP_CARDS, skipCount);
     }
 
-    // Test that exactly 3 Go-To-Middle cards are present in a new deck
+    // Test that exactly 5 Go-To-Special cards are present in a new deck
     @Test
     public void testNumMiddleCards(){
-        int middleCount = 0;
+        int specialCount = 0;
         int deckSize = testDeck.size();
 
         for (int i = 0; i < deckSize; i++){
             Card drawn = testDeck.draw();
-            if (drawn.getValue() == Card.GO_TO_MIDDLE) {
-                middleCount++;
+            if (drawn.getValue() >= Card.GO_TO_FIRST_SPECIAL) {
+                specialCount++;
             }
         }
 
-        assertEquals(Deck.NUM_GO_TO_MIDDLE_CARDS, middleCount);
+        assertEquals(Deck.NUM_GO_TO_CARDS * 5, specialCount);
     }
 }

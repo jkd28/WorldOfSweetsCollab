@@ -10,7 +10,7 @@ import java.net.MalformedURLException;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
-    private static final int FRAME_HEIGHT = 600;
+    private static final int FRAME_HEIGHT = 800;
     private static final int FRAME_WIDTH = 800;
 
     // Data for the Board Panel
@@ -22,16 +22,25 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
 
+    // Data for Timer
+    private TimerPanel timerPanel;
+
     // Data for tracking Players
     private Player[] players;
     private int numPlayers;
 
     // Data for currentPlayer
     public int currentPlayerIndex;
-
+  
     // Data for music
     private Clip clip;
     private File file;
+
+    //get the TimerPanel to check if the game has won
+    public TimerPanel getTimerPanel(){
+        return timerPanel;
+    }
+
     
     // --------------------------------------- //
     // Calling this will return the player who //
@@ -53,7 +62,7 @@ public class MainFrame extends JFrame implements Serializable {
 
     public int getNumPlayers(){
     	return numPlayers;
-    } 
+    }
 
     public Player getPlayer(int playerIndex){
     	return players[playerIndex];
@@ -73,10 +82,15 @@ public class MainFrame extends JFrame implements Serializable {
 	    	return;
 	    }
 
-	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
-	    if(card.getValue() == Card.GO_TO_MIDDLE){
-	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    // Temporarily ignore the "Special" cards (currently valued > 2)
+	    if(card.getValue() > 2){
+		return;
 	    }
+
+	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
+	    //	    if(card.getValue() == Card.GO_TO_MIDDLE){
+	    //	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    //	    }
 
 	    // With a normal Single or Double colored card,
 	    //	send the Player to their next spot.
@@ -91,13 +105,13 @@ public class MainFrame extends JFrame implements Serializable {
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
-    	
+
     	// ------------------------ //
 		// Validate input arguments //
 		// ------------------------ //
     	if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
     		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
-    		JOptionPane.showMessageDialog(null, 
+    		JOptionPane.showMessageDialog(null,
 				message,
 				"Invalid Number of Players",
 				JOptionPane.ERROR_MESSAGE);
@@ -159,7 +173,7 @@ public class MainFrame extends JFrame implements Serializable {
 		deckPanel = new DeckPanel();
 		this.add(deckPanel, BorderLayout.WEST);
 
-
+      
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
@@ -167,7 +181,11 @@ public class MainFrame extends JFrame implements Serializable {
         this.add(playerPanel, BorderLayout.CENTER);
 
 
-	// Play the free Music by https://www.free-stock-music.com
+        timerPanel = new TimerPanel();
+        this.add(timerPanel, BorderLayout.SOUTH);
+
+  
+  // Play the free Music by https://www.free-stock-music.com
 	try{
 	    file = new File("src/main/resources/lets-play-a-while.wav");
 	    if (file.exists()){
@@ -196,7 +214,7 @@ public class MainFrame extends JFrame implements Serializable {
 	    throw new RuntimeException("Line Unavailable Exception Error: " + e);
 	}
 	clip.loop(Clip.LOOP_CONTINUOUSLY);
-
+      
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //
