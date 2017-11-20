@@ -58,6 +58,14 @@ public class MainFrame extends JFrame implements Serializable {
     	return deckPanel;
     }
 
+    public void disableSaveButton(){
+    	saveButton.setEnabled(false);
+    }
+
+    public void enableSaveButton(){
+    	saveButton.setEnabled(true);
+    }
+
     public void updatePlayerPosition(Player player, Card card){
     	// Get the BoardSpace that this Player currently inhabits
 	    BoardSpace currentSpace = player.getPosition();
@@ -177,7 +185,7 @@ public class MainFrame extends JFrame implements Serializable {
         this.add(savePanel, BorderLayout.SOUTH);
     }
 
-    private class SaveGameButtonListener implements ActionListener{
+    private class SaveGameButtonListener implements ActionListener, Serializable{
     	private MainFrame gameFrame;
     	private DeckPanel deckPanel;
 
@@ -186,8 +194,6 @@ public class MainFrame extends JFrame implements Serializable {
 			this.deckPanel = deckPanel;
 		}
 
-		// Every time we click the button, it will display the
-		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
 			// ========================= //
 			// Disable the "draw" button //
@@ -232,7 +238,7 @@ public class MainFrame extends JFrame implements Serializable {
 		}
     }
 
-    private class ExitGameListener extends WindowAdapter{
+    private class ExitGameListener extends WindowAdapter implements Serializable{
     	private MainFrame gameFrame;
 
     	public ExitGameListener(MainFrame gameFrame){

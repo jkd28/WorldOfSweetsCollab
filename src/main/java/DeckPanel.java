@@ -92,7 +92,7 @@ public class DeckPanel extends JPanel implements Serializable {
 
 
     // Class for the panel displaying the most recently drawn card.
-    class CardPanel extends JPanel{
+    class CardPanel extends JPanel implements Serializable{
 		CardLayout cardLayout = new CardLayout();
 		JPanel panel;
 
@@ -120,7 +120,7 @@ public class DeckPanel extends JPanel implements Serializable {
     }
 
 
-    private class DrawListener implements ActionListener{
+    private class DrawListener implements ActionListener, Serializable{
     	private DeckPanel deckPanel;
 
 		public DrawListener(DeckPanel deckPanel){
@@ -182,6 +182,9 @@ public class DeckPanel extends JPanel implements Serializable {
 			    	if(gameFrame.playerHasWon(currentPlayer)){
 			    		// Disable the "draw" button //
 			    		deckPanel.disableDrawButton();
+
+			    		// Disable the "Save Game" button //
+			    		gameFrame.disableSaveButton();
 
 			    		// Diable the game timer //
 
