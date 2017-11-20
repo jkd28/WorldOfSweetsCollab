@@ -32,7 +32,7 @@ public class PlayerPanel extends JPanel implements Serializable {
 	// Add each player's name to the turn order
 	for (int i = 0; i < players.length; i++){
 	    JLabel tempLabel = new JLabel((i+1) + ") " + players[i].getName());
-	    c.gridy = i+1; // Place each JLabel in the next row successively 
+	    c.gridy = i+1; // Place each JLabel in the next row successively
 	    orderPanel.add(tempLabel, c);
 	}
 
