@@ -43,7 +43,7 @@ public class BoardPanelTest{
         assertEquals("<html>-> Grandma's House</html>", testText);
     }
 
-    // The middle space should be marked as such.
+    // Test that the Special Spaces are properly marked
     @Test
     public void testSpecialSpaces(){
         int index = numSpaces / 5;
@@ -78,9 +78,7 @@ public class BoardPanelTest{
     // An average space - at the start of the game, before Player movement - should be marked as such.
     @Test
     public void testAverageBoardPanelSpace(){
-        int index = 1;
-
-        BoardSpace testBoardSpace = testBoardPanel.getSpace(index);
+        BoardSpace testBoardSpace = testBoardPanel.getSpace(1);
         JLabel testLabel = testBoardSpace.getLabel();
         String testText = testLabel.getText();
 
