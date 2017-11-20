@@ -3,7 +3,16 @@ To run the program, clone this repo and run these commands:
 `gradle build`  
 `gradle run`
 
-## Manual Tests
+# Manual Test Descriptions  
+## Player Movement  
+ * <u>Test Special Card Movement</u>  
+ **Execution:** Begin a new game, entering names and selecting tokens for each player.  Draw a few cards.  Continue drawing until a special card is drawn.  
+ **Expected Results:** The drawing player's token advances (or regresses) to the space denoted by the special card that has been drawn.  
+
+ * <u>Test Player Movement</u>  
+ **Execution:** Begin a new game, with each player entering names and selecting tokens.  Begin play as normal.  
+ **Expected Results:** For each card that is drawn, the player who drew it moves to the correct next space as denoted by the card.  
+
 ### Timer
  *  <u>Test Timer Run</u>  
  **Execution:**  Begin game and draw first card.  
