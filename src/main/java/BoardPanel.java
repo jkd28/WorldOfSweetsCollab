@@ -14,6 +14,11 @@ public class BoardPanel extends JPanel{
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
+    private JLabel firstLabel = new JLabel("Special 1!");
+    private JLabel secondLabel = new JLabel("Special 2!");
+    private JLabel thirdLabel = new JLabel("Special 3!");
+    private JLabel fourthLabel = new JLabel("Special 4!");
+    private JLabel fifthLabel = new JLabel("Special 5!");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
     private static final int BOARD_COLUMNS = 8;
     private static final int BOARD_ROWS = 8;
@@ -22,6 +27,12 @@ public class BoardPanel extends JPanel{
     private static final GridLayout BOARD_LAYOUT = new GridLayout(BOARD_ROWS, BOARD_COLUMNS, BOARD_VERTICAL_GAP, BOARD_HORIZONTAL_GAP);
     private static final int NUM_SPACES = BOARD_COLUMNS * BOARD_ROWS;
     private static final int MID_SPACE = (NUM_SPACES / 2); // The middle space. When even # spaces, the one closer to the final space
+    private static final int SPECIAL_MOD = (NUM_SPACES / 5); // The mod for the special spaces. They will be separated by this number of spaces
+    private static final int FIRST_SPECIAL = SPECIAL_MOD;
+    private static final int SECOND_SPECIAL = SPECIAL_MOD * 2;
+    private static final int THIRD_SPECIAL = SPECIAL_MOD * 3;
+    private static final int FOURTH_SPECIAL = SPECIAL_MOD * 4;
+    private static final int FIFTH_SPECIAL = SPECIAL_MOD * 5;
     
     public BoardPanel(Player[] players){
 		setLayout(BOARD_LAYOUT);
@@ -39,18 +50,27 @@ public class BoardPanel extends JPanel{
 		// Create all of the colored spaces
 		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
-		    switch(i % 5){
+		    if(i % SPECIAL_MOD == 0){
+			backgroundColor = Color.MAGENTA;
+		    } else {
+			switch(i % 5){
 		    	case 0: backgroundColor = Color.ORANGE; break;
 		    	case 1: backgroundColor = Color.RED; 	break;
 		    	case 2: backgroundColor = Color.YELLOW; break;
 		    	case 3: backgroundColor = Color.BLUE; 	break;
 		    	case 4: backgroundColor = Color.GREEN; 	break;
+			}
 		    }
 
 		    // Check if this space is the middle space
 		    JLabel newLabel = new JLabel("");
-		    if(i == MID_SPACE){
-		    	newLabel = midLabel;
+		    switch(i){
+		    case FIRST_SPECIAL: newLabel = firstLabel; break;
+		    case SECOND_SPECIAL: newLabel = secondLabel; break;
+		    case THIRD_SPECIAL: newLabel = thirdLabel; break;
+		    case FOURTH_SPECIAL: newLabel = fourthLabel; break;
+		    case FIFTH_SPECIAL: newLabel = fifthLabel; break;
+		    default: break;
 		    }
 
 		    // Add a color-appropriate text color
@@ -67,6 +87,8 @@ public class BoardPanel extends JPanel{
 		    	textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.ORANGE)){
 		    	textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.MAGENTA)){
+			textColor = Color.BLACK;
 		    }
 		    newLabel.setForeground(textColor);
 		    BoardSpace newSpace = new BoardSpace(backgroundColor, newLabel);
