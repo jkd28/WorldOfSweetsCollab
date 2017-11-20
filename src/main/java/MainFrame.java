@@ -38,7 +38,6 @@ public class MainFrame extends JFrame implements Serializable {
 
   
     // Data for music
-    private Clip clip;
     private File file;
 
     //get the TimerPanel to check if the game has won
@@ -226,6 +225,7 @@ public class MainFrame extends JFrame implements Serializable {
   		// Add the background music //
   		// ------------------------ //
   		// Play the free Music by https://www.free-stock-music.com
+  		Clip clip;
 		try{
 			file = new File("src/main/resources/lets-play-a-while.wav");
 			if (file.exists()){

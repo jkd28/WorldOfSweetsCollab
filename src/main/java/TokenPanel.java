@@ -6,8 +6,9 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.Serializable;
 
-public class TokenPanel{
+public class TokenPanel implements Serializable{
     private String[] usedTokens;
     private String token = "t";
     private JButton previousButton = new JButton("err");
@@ -62,7 +63,7 @@ public class TokenPanel{
         // TODO Auto-generated method stub
         new TokenPanel(null);
 	}
-    private class ButtonListener implements ActionListener{
+    private class ButtonListener implements ActionListener, Serializable{
         public void actionPerformed(ActionEvent e){
             JButton source = (JButton)e.getSource();
             end.setEnabled(true);

@@ -1,8 +1,9 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
+import java.io.Serializable;
 
-public class TimerPanel extends JPanel{
+public class TimerPanel extends JPanel implements Serializable{
     public boolean gameFinished = false;
     public boolean gameStarted = false;
     public TimerPanel(){

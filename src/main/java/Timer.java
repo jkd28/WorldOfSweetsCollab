@@ -1,4 +1,6 @@
-public class Timer{
+import java.io.Serializable;
+
+public class Timer implements Serializable {
     public static final int SEC_IN_MS = 1000;
     //total time in seconds
     private int totalSeconds = 0;
