@@ -6,7 +6,7 @@ import java.io.Serializable;
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
     private static final int FRAME_HEIGHT = 800;
-    private static final int FRAME_WIDTH = 1200;
+    private static final int FRAME_WIDTH = 800;
 
     // Data for the Board Panel
     private BoardPanel boardPanel;
@@ -23,16 +23,6 @@ public class MainFrame extends JFrame implements Serializable {
 
     // Data for currentPlayer
     public int currentPlayerIndex;
-
-    public static void setUIFont (javax.swing.plaf.FontUIResource f){
-    java.util.Enumeration keys = UIManager.getDefaults().keys();
-    while (keys.hasMoreElements()) {
-      Object key = keys.nextElement();
-      Object value = UIManager.get (key);
-      if (value instanceof javax.swing.plaf.FontUIResource)
-        UIManager.put (key, f);
-      }
-    }
 
     // --------------------------------------- //
     // Calling this will return the player who //
