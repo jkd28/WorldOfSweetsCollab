@@ -25,6 +25,7 @@ public class TokenPanel{
   JPanel panel = new JPanel();
   JLabel label = new JLabel("Choose a token:");
   JButton end = new JButton("Finish");
+
 	public TokenPanel(){
     panel.setLayout(new GridLayout(0,5));
     ActionListener buttonListener = new ButtonListener();
@@ -45,6 +46,7 @@ public class TokenPanel{
     }
     end.setFont(new Font("Dialog", Font.PLAIN, 24));
     end.addActionListener(buttonListener);
+    end.setEnabled(false);
     label.setFont(new Font("Dialog", Font.PLAIN, 36));
     final JDialog frame = new JDialog(_frame, "Token Selector", true);
     frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -62,6 +64,7 @@ public class TokenPanel{
   private class ButtonListener implements ActionListener{
     public void actionPerformed(ActionEvent e){
       JButton source = (JButton)e.getSource();
+      end.setEnabled(true);
       if (source.getText().equals("Finish")){
           _frame.dispose();
       }else if (!source.getText().equals("Finish")){
