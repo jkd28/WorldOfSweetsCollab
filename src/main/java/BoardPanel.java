@@ -149,16 +149,41 @@ public class BoardPanel extends JPanel{
     }
 
     public BoardSpace sendPlayerToNextSpace(Player player, Card card){
+		System.out.println(card.getValue());
+		
     	// If the Card passed-in is a "Skip" card,
     	//	do nothing.
     	if(card.getValue() == Card.SKIP){
     		return player.getPosition();
     	}
+		BoardSpace currentPlayerSpace = player.getPosition();
 
-	// Temporarily ignore "special" cards
-	if(card.getValue() > 2){
-	    return player.getPosition();
-	}
+		// Temporarily ignore "special" cards
+		if(card.getValue() > 2){
+			System.out.println("special");
+			
+			// return player.getPosition();
+
+			int cardValue = card.getValue();
+			BoardSpace specialSpace = null;
+			if (cardValue == Card.GO_TO_FIRST_SPECIAL){
+				specialSpace = getSpace(FIRST_SPECIAL);
+			} else if (cardValue == Card.GO_TO_SECOND_SPECIAL) {
+				specialSpace = getSpace(SECOND_SPECIAL);
+			} else if (cardValue == Card.GO_TO_THIRD_SPECIAL) {
+				specialSpace = getSpace(THIRD_SPECIAL);
+			} else if (cardValue == Card.GO_TO_FOURTH_SPECIAL) {
+				specialSpace = getSpace(FOURTH_SPECIAL);
+			} else if (cardValue == Card.GO_TO_FIFTH_SPECIAL) {
+				specialSpace = getSpace(FIFTH_SPECIAL);
+			}
+			player.setPosition(specialSpace);
+			currentPlayerSpace.removePlayer(player);
+			specialSpace.addPlayer(player);
+
+			System.out.println("Sent player to special");
+			return specialSpace;
+		}
 
     	// If the Card passed-in is a "Go to Middle", 
     	//	just send them to the middle BoardSpace.
@@ -168,7 +193,6 @@ public class BoardPanel extends JPanel{
 
     	// If the Player is already at "Grandma's House", 
     	//	do nothing.
-    	BoardSpace currentPlayerSpace = player.getPosition();
     	if(currentPlayerSpace.isGrandmasHouse()){
     		return currentPlayerSpace;
     	}
