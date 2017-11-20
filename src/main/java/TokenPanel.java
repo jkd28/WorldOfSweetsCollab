@@ -16,6 +16,7 @@ public class TokenPanel implements Serializable{
     JPanel panel = new JPanel();
     JLabel label = new JLabel("Choose a token:");
     JButton end = new JButton("Finish");
+    final JDialog frame;
 
 	public TokenPanel(String[] used){
         usedTokens = used;
@@ -49,8 +50,8 @@ public class TokenPanel implements Serializable{
         end.addActionListener(buttonListener);
         end.setEnabled(false);
         label.setFont(new Font("Dialog", Font.PLAIN, 36));
-        final JDialog frame = new JDialog(_frame, "Token Selector", true);
-        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame = new JDialog(_frame, "Token Selector", true);
+        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
         frame.getContentPane().add(panel, BorderLayout.CENTER);
         frame.getContentPane().add(label, BorderLayout.NORTH);
         frame.add(end, BorderLayout.SOUTH);
@@ -69,6 +70,7 @@ public class TokenPanel implements Serializable{
             if (source.getText().equals("Finish")){
                 _frame.dispose();
             }else if (!source.getText().equals("Finish")){
+                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 ImageIcon icon = (ImageIcon)source.getIcon();
                 setToken(icon.getDescription());
                 source.setEnabled(false);
