@@ -14,7 +14,7 @@ public class BoardPanel extends JPanel{
     private JLabel start = new JLabel("Start ->");
     private JLabel grandma = new JLabel("-> Grandma's House");
     private JLabel midLabel = new JLabel("MID");
-    private static final Font BUTTON_FONT = new Font("Dialog", Font.PLAIN, 48);
+    private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
     private static final int BOARD_COLUMNS = 8;
     private static final int BOARD_ROWS = 8;
     private static final int BOARD_HORIZONTAL_GAP = 20;
