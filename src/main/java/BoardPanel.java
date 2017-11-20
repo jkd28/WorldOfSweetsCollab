@@ -149,7 +149,6 @@ public class BoardPanel extends JPanel{
     }
 
     public BoardSpace sendPlayerToNextSpace(Player player, Card card){
-		System.out.println(card.getValue());
 		
     	// If the Card passed-in is a "Skip" card,
     	//	do nothing.
