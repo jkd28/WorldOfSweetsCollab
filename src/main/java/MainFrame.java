@@ -2,6 +2,11 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
+import javax.sound.sampled.*;
+import java.net.URL;
+import java.io.File;
+import java.io.IOException;
+import java.net.MalformedURLException;
 
 public class MainFrame extends JFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
@@ -17,6 +22,9 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
 
+    // Data for Timer
+    private TimerPanel timerPanel;
+
     // Data for tracking Players
     private Player[] players;
     private int numPlayers;
@@ -24,6 +32,18 @@ public class MainFrame extends JFrame implements Serializable {
     // Data for currentPlayer
     public int currentPlayerIndex;
 
+  
+    // Data for music
+    private Clip clip;
+    private File file;
+
+    //get the TimerPanel to check if the game has won
+    public TimerPanel getTimerPanel(){
+        return timerPanel;
+    }
+
+
+    
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
@@ -64,10 +84,15 @@ public class MainFrame extends JFrame implements Serializable {
 	    	return;
 	    }
 
-	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
-	    if(card.getValue() == Card.GO_TO_MIDDLE){
-	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    // Temporarily ignore the "Special" cards (currently valued > 2)
+	    if(card.getValue() > 2){
+		return;
 	    }
+
+	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
+	    //	    if(card.getValue() == Card.GO_TO_MIDDLE){
+	    //	    	boardPanel.sendPlayerToMiddleSpace(player);
+	    //	    }
 
 	    // With a normal Single or Double colored card,
 	    //	send the Player to their next spot.
@@ -156,7 +181,7 @@ public class MainFrame extends JFrame implements Serializable {
 		deckPanel = new DeckPanel();
 		this.add(deckPanel, BorderLayout.WEST);
 
-
+      
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
@@ -164,6 +189,40 @@ public class MainFrame extends JFrame implements Serializable {
         this.add(playerPanel, BorderLayout.CENTER);
 
 
+        timerPanel = new TimerPanel();
+        this.add(timerPanel, BorderLayout.SOUTH);
+
+  
+  // Play the free Music by https://www.free-stock-music.com
+	try{
+	    file = new File("src/main/resources/lets-play-a-while.wav");
+	    if (file.exists()){
+	    	AudioInputStream music = AudioSystem.getAudioInputStream(file);
+	    	AudioFormat format = music.getFormat();
+	    	DataLine.Info info = new DataLine.Info(Clip.class, format);
+	    	clip = (Clip)AudioSystem.getLine(info);
+	    	clip.open(music);
+	    } else {
+		throw new RuntimeException("Music: file not found.");
+	    }
+	} catch(MalformedURLException e){
+	    e.printStackTrace();
+	    throw new RuntimeException("Malformed URL: " + e);
+	}
+	catch (UnsupportedAudioFileException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Unsupported Audio File: " + e);
+	}
+	catch (IOException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Input/Output Error: " + e);
+	}
+	catch (LineUnavailableException e) {
+	    e.printStackTrace();
+	    throw new RuntimeException("Line Unavailable Exception Error: " + e);
+	}
+	clip.loop(Clip.LOOP_CONTINUOUSLY);
+      
         // -------------------- //
 		// Make it all visible! //
 		// -------------------- //
