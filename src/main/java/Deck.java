@@ -9,7 +9,7 @@ public class Deck implements Serializable {
     public static final int NUM_SINGLE_CARDS_PER_COLOR = 10;
     public static final int NUM_DOUBLE_CARDS_PER_COLOR = 2;
     public static final int NUM_SKIP_CARDS = 5;
-    public static final int NUM_GO_TO_MIDDLE_CARDS = 3;
+    public static final int NUM_GO_TO_CARDS = 1; // Number of copies of each go to card
 
     public Deck() {
         cardDeck = initializeDeck();
@@ -51,9 +51,17 @@ public class Deck implements Serializable {
             deckStack.push(newCard);
         }
 
-        // Add Go-To-Middle Cards
-        for (int i = 0; i < NUM_GO_TO_MIDDLE_CARDS; i++){
-            newCard = new Card(Card.GO_TO_MIDDLE, Color.RED); // doesn't really matter what Color we push to it
+        // Add Go-To-Speical Cards
+        for (int i = 0; i < NUM_GO_TO_CARDS; i++){
+            newCard = new Card(Card.GO_TO_FIRST_SPECIAL, Color.RED); // doesn't really matter what Color we push to it
+	    deckStack.push(newCard);
+	    newCard = new Card(Card.GO_TO_SECOND_SPECIAL, Color.RED);
+	    deckStack.push(newCard);
+	    newCard = new Card(Card.GO_TO_THIRD_SPECIAL, Color.RED);
+	    deckStack.push(newCard);
+	    newCard = new Card(Card.GO_TO_FOURTH_SPECIAL, Color.RED);
+	    deckStack.push(newCard);
+	    newCard = new Card(Card.GO_TO_FIFTH_SPECIAL, Color.RED);
             deckStack.push(newCard);
         }
         

@@ -2,13 +2,17 @@ import java.io.Serializable;
 import java.awt.Color;
 
 public class Card implements Serializable {
-    private int value;  // Can be 0 (skip), 1 (single), 2 (double)
-    private Color color; // Can be Red, Blue
+    private int value;  // Can be 0 (skip), 1 (single), 2 (double), 3-7 (special)
+    private Color color; // Can be Red, Yellow, Blue, Green, Orange
 
     public static final int SKIP = 0;
     public static final int SINGLE = 1;
     public static final int DOUBLE = 2;
-    public static final int GO_TO_MIDDLE = 3;
+    public static final int GO_TO_FIRST_SPECIAL = 3;
+    public static final int GO_TO_SECOND_SPECIAL = 4;
+    public static final int GO_TO_THIRD_SPECIAL = 5;
+    public static final int GO_TO_FOURTH_SPECIAL = 6;
+    public static final int GO_TO_FIFTH_SPECIAL = 7;
 
     public static final Color[] VALID_COLORS = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
 
@@ -52,7 +56,15 @@ public class Card implements Serializable {
 
         } else if (value == Card.SKIP) {
             return true;
-        }else if (value == Card.GO_TO_MIDDLE){
+        }else if (value == Card.GO_TO_FIRST_SPECIAL){
+            return true;
+	}else if (value == Card.GO_TO_SECOND_SPECIAL){
+            return true;
+	}else if (value == Card.GO_TO_THIRD_SPECIAL){
+            return true;
+	}else if (value == Card.GO_TO_FOURTH_SPECIAL){
+            return true;
+	}else if (value == Card.GO_TO_FIFTH_SPECIAL){
             return true;
         } else {
             return false;
