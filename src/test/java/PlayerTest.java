@@ -6,14 +6,16 @@ public class PlayerTest{
 
     @Before
     public void setup(){
-        p = new Player("test");
+        p = new Player("testname");
     }
 
+    // Test that the Player is initialized properly with the given name
     @Test
     public void testInitialize(){
-        assertEquals("test", p.getName());
+        assertEquals("testname", p.getName());
     }
 
+    // Test that a Player returns its current position (BoardSpace)
     @Test
     public void testPosition(){
         BoardSpace space = new BoardSpace();
@@ -21,6 +23,7 @@ public class PlayerTest{
         assertEquals(space, p.getPosition());
     }
 
+    // Test that setName properly sets the name of the Player
     @Test
     public void testName(){
         p.setName("Kevin");
