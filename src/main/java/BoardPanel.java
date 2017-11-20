@@ -50,26 +50,32 @@ public class BoardPanel extends JPanel{
 		// Create all of the colored spaces
 		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
-		    if(i % SPECIAL_MOD == 0){
-			backgroundColor = Color.MAGENTA;
-		    } else {
-			switch(i % 5){
-		    	case 0: backgroundColor = Color.ORANGE; break;
-		    	case 1: backgroundColor = Color.RED; 	break;
-		    	case 2: backgroundColor = Color.YELLOW; break;
-		    	case 3: backgroundColor = Color.BLUE; 	break;
-		    	case 4: backgroundColor = Color.GREEN; 	break;
-			}
+		    switch(i % 5){
+		    case 0: backgroundColor = Color.ORANGE; break;
+		    case 1: backgroundColor = Color.RED; break;
+		    case 2: backgroundColor = Color.YELLOW; break;
+		    case 3: backgroundColor = Color.BLUE; break;
+		    case 4: backgroundColor = Color.GREEN; break;
 		    }
 
-		    // Check if this space is the middle space
+		    // Check if this space is a special square.
 		    JLabel newLabel = new JLabel("");
 		    switch(i){
-		    case FIRST_SPECIAL: newLabel = firstLabel; break;
-		    case SECOND_SPECIAL: newLabel = secondLabel; break;
-		    case THIRD_SPECIAL: newLabel = thirdLabel; break;
-		    case FOURTH_SPECIAL: newLabel = fourthLabel; break;
-		    case FIFTH_SPECIAL: newLabel = fifthLabel; break;
+		    case FIRST_SPECIAL: newLabel = firstLabel;
+			backgroundColor = Color.MAGENTA;
+			break;
+		    case SECOND_SPECIAL: newLabel = secondLabel;
+			backgroundColor = Color.CYAN;
+			break;
+		    case THIRD_SPECIAL: newLabel = thirdLabel;
+			backgroundColor = Color.PINK;
+			break;
+		    case FOURTH_SPECIAL: newLabel = fourthLabel;
+			backgroundColor = Color.GRAY;
+			break;
+		    case FIFTH_SPECIAL: newLabel = fifthLabel;
+			backgroundColor = Color.BLACK;
+			break;
 		    default: break;
 		    }
 
@@ -89,6 +95,14 @@ public class BoardPanel extends JPanel{
 		    	textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.MAGENTA)){
 			textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.CYAN)){
+			textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.PINK)){
+			textColor = Color.BLACK;
+		    } else if(backgroundColor.equals(Color.GRAY)){
+			textColor = Color.WHITE;
+		    } else if(backgroundColor.equals(Color.BLACK)){
+			textColor = Color.WHITE;
 		    }
 		    newLabel.setForeground(textColor);
 		    BoardSpace newSpace = new BoardSpace(backgroundColor, newLabel);
