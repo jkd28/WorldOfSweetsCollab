@@ -151,28 +151,38 @@ public class BoardPanel extends JPanel implements Serializable {
     }
 
     public BoardSpace sendPlayerToNextSpace(Player player, Card card){
+		
     	// If the Card passed-in is a "Skip" card,
     	//	do nothing.
     	if(card.getValue() == Card.SKIP){
     		return player.getPosition();
     	}
+		BoardSpace currentPlayerSpace = player.getPosition();
 
+		// Handle "special" cards
+		if(card.getValue() > 2){
+			int cardValue = card.getValue();
+			BoardSpace specialSpace = null;
+			if (cardValue == Card.GO_TO_FIRST_SPECIAL){
+				specialSpace = getSpace(FIRST_SPECIAL);
+			} else if (cardValue == Card.GO_TO_SECOND_SPECIAL) {
+				specialSpace = getSpace(SECOND_SPECIAL);
+			} else if (cardValue == Card.GO_TO_THIRD_SPECIAL) {
+				specialSpace = getSpace(THIRD_SPECIAL);
+			} else if (cardValue == Card.GO_TO_FOURTH_SPECIAL) {
+				specialSpace = getSpace(FOURTH_SPECIAL);
+			} else if (cardValue == Card.GO_TO_FIFTH_SPECIAL) {
+				specialSpace = getSpace(FIFTH_SPECIAL);
+			}
+			player.setPosition(specialSpace);
+			currentPlayerSpace.removePlayer(player);
+			specialSpace.addPlayer(player);
 
-	// Temporarily ignore "special" cards
-	if(card.getValue() > 2){
-	    return player.getPosition();
-	}
-
-    	// If the Card passed-in is a "Go to Middle", 
-
-    	//	just send them to the middle BoardSpace.
-	//    	if(card.getValue() == Card.GO_TO_MIDDLE){
-    	//	return sendPlayerToMiddleSpace(player);
-	//    	}
+			return specialSpace;
+		}
 
     	// If the Player is already at "Grandma's House",
     	//	do nothing.
-    	BoardSpace currentPlayerSpace = player.getPosition();
     	if(currentPlayerSpace.isGrandmasHouse()){
     		return currentPlayerSpace;
     	}
