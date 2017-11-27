@@ -225,8 +225,9 @@ public class MainFrame extends JFrame implements Serializable {
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
                 TokenPanel tp = new TokenPanel(usedTokens);
-                token = tp.getToken();
-                usedTokens[i] = tp.getToken();
+                tp.setVisible(true);
+                token = tp.getSelectedToken();
+                usedTokens[i] = token;
 
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
