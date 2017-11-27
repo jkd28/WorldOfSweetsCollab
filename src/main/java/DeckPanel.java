@@ -196,7 +196,9 @@ public class DeckPanel extends JPanel implements Serializable {
 				    
                     //get the timerPanel to check if game has started or ended
                     TimerPanel timer = gameFrame.getTimerPanel();
-                    timer.gameStarted = true;
+                    if(!timer.timerIsRunning()){
+                    	timer.startTimer();
+                    }
 
 				    // Move to Player to their next BoardSpace
 				    gameFrame.updatePlayerPosition(currentPlayer, currentCard);
@@ -212,7 +214,7 @@ public class DeckPanel extends JPanel implements Serializable {
 			    		gameFrame.disableSaveButton();
 
 			    		// Diable the game timer //
-                        timer.gameFinished = true;
+                        timer.stopTimer();
 
 			    		// Congratulate the winning player //
 			    		JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
