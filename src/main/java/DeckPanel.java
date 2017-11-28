@@ -12,30 +12,43 @@ public class DeckPanel implements Serializable {
     private Color currentColor;
     private Card currentCard;
 
-    private JPanel mainPanel;
-    private JPanel drawPanel;
-    private JButton drawButton;
+    private transient JPanel mainPanel;
+    private transient JPanel drawPanel;
+    private transient JButton drawButton;
 
     public DeckPanel(){
-		// The two subpanels will be next to each other
-		mainPanel = new JPanel();
-		mainPanel.setLayout(new GridLayout(1, 2));
-
-		// Initialize misc variables
 		drawDeck = new Deck();
 		cardPanel = new CardPanel();
-		drawPanel = new JPanel(new BorderLayout());
 		currentColor = DEFAULT_COLOR;
 		currentCard = null;
 
-		// Add the draw button to the Draw Panel
-		drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
+    	initializeMainPanel();
+    }
+
+    private void initializeDrawButton(){
+    	drawButton = new JButton("<html>World of Sweets!<br /> Click to Draw!</html>");
 		drawButton.setFont(new Font("Calibri", Font.PLAIN, 24));
 		drawButton.addActionListener((ActionListener) new DrawListener(this));
-		drawPanel.add(drawButton, BorderLayout.CENTER);
+    }
 
-		//Add both panels to the Frame
-		this.refreshPanels();
+    private void initializeDrawPanel(){
+    	if(drawButton == null){
+    		initializeDrawButton();
+    	}
+
+    	drawPanel = new JPanel(new BorderLayout());
+		drawPanel.add(drawButton, BorderLayout.CENTER);
+    }
+
+    private void initializeMainPanel(){
+    	mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(1, 2));
+
+		if(drawPanel == null){
+			initializeDrawPanel();
+		}
+
+		refreshPanels();
     }
 
     public void refreshPanels(){
