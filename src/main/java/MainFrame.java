@@ -41,7 +41,6 @@ public class MainFrame extends JFrame implements Serializable {
     private File file;
     private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
-
     private JPanel southPanel;
 
 
@@ -117,8 +116,7 @@ public class MainFrame extends JFrame implements Serializable {
     	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
-        this.remove(playerPanel.getPanel());
-        this.add(playerPanel.getPanel());
+        this.refreshPanels();
 
     	return currentPlayer;
     }
@@ -189,6 +187,20 @@ public class MainFrame extends JFrame implements Serializable {
     	timerPanel = new TimerPanel(realTime);
         southPanel.add(timerPanel, BorderLayout.WEST);
 		timerPanel.gameStarted = true;
+    }
+
+    public void refreshPanels(){
+        this.getContentPane().removeAll();
+    	this.validate();
+    	this.repaint();
+
+    	this.add(boardPanel, BorderLayout.NORTH);
+        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
+        this.add(southPanel, BorderLayout.SOUTH);
+        this.add(deckPanel.getPanel(), BorderLayout.WEST);
+        deckPanel.refreshCardPanelBackground();
+    	this.validate();
+    	this.repaint();
     }
 
     public MainFrame(int playerCount){
@@ -267,7 +279,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		this.add(deckPanel, BorderLayout.WEST);
+		this.add(deckPanel.getPanel(), BorderLayout.WEST);
 
       
         // ----------------------------------------------- //

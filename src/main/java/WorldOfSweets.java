@@ -1,15 +1,7 @@
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
-
-import javax.swing.Action;
+import java.awt.*;
+import java.io.*;
+import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
 
 public class WorldOfSweets implements Serializable {
 
@@ -187,6 +179,7 @@ public class WorldOfSweets implements Serializable {
                 ObjectInputStream in = new ObjectInputStream(fileIn);
 
                 MainFrame gameFrame = (MainFrame) in.readObject();
+                gameFrame.refreshPanels();
 
                 in.close();
                 fileIn.close();
