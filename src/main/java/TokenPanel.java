@@ -9,70 +9,134 @@ import java.awt.image.BufferedImage;
 import java.io.Serializable;
 
 public class TokenPanel implements Serializable{
-    private String[] usedTokens;
-    private String token = "t";
-    private JButton previousButton = new JButton("err");
-    JFrame _frame = new JFrame("Tokens");
-    JPanel panel = new JPanel();
-    JLabel label = new JLabel("Choose a token:");
-    JButton end = new JButton("Finish");
-    final JDialog frame;
+    private static final long serialVersionUID = 1L;
+    public static final int FRAME_HEIGHT = 300;
+    public static final int FRAME_WIDTH = 300;
+    public static final String DEFAULT_DIRECTORY = "src/main/resources/";
 
-	public TokenPanel(String[] used){
+    private String[] usedTokens;
+    private String token = null;
+    private ActionListener buttonListener;
+    private File directory;
+    
+    private transient JFrame frame;
+    private transient JPanel panel;
+    private transient JDialog dialog;
+    private transient JLabel label;
+    private transient JButton previousButton;
+    private transient JButton end;
+
+    public TokenPanel(String[] used){
+        initializeDefaultTokenPanelFrameStuff();
+
         usedTokens = used;
-        panel.setLayout(new GridLayout(0,5));
-        ActionListener buttonListener = new ButtonListener();
-        File dir = new File("src/main/resources/");
-        File[] directoryListing = dir.listFiles(
-            (directory, name) -> {
-                return name.toLowerCase().endsWith(".png");
-            });
+        
+        directory = new File(DEFAULT_DIRECTORY);
+        // directory = new File("../resources/");
+        loadPanelWithIcons(directory);
+    }
+    public TokenPanel(){
+        this(new String[0]);
+    }
+
+    public void setVisible(boolean setVisible){
+        if(frame == null){
+            initializeDefaultTokenPanelFrameStuff();
+        }
+
+        frame.setVisible(setVisible);
+        dialog.setVisible(setVisible);
+    }
+    public String getSelectedToken(){
+        return token;
+    }
+    public boolean setSelectedToken(String i){
+        token = i;
+        return true;
+    }
+
+
+    private void loadPanelWithIcons(File directory){
+        if(!directory.isDirectory()){
+            System.err.println(String.format("'%s' is not a valid resource directory.", directory.getName()));
+            System.exit(1);
+        }
+
+        if(frame == null){
+            initializeDefaultTokenPanelFrameStuff();
+        }
+
         try{
-            for(File child: directoryListing){
-                BufferedImage myPicture = ImageIO.read(child);
-                ImageIcon icon = new ImageIcon(myPicture);
-                icon.setDescription(child.getName());
-                JButton button = new JButton(icon);
-                button.setFont(new Font("Dialog", Font.PLAIN, 24));
-                button.addActionListener(buttonListener);
-                for (int i = 0; i < usedTokens.length; i++){
-                    if (child.getName().equals(usedTokens[i])){
-                        button.setEnabled(false);
+            for(File child : directory.listFiles()){
+                if(child.getName().toLowerCase().endsWith(".png")){
+                    BufferedImage myPicture = ImageIO.read(child);
+                    ImageIcon icon = new ImageIcon(myPicture);
+                    icon.setDescription(child.getName());
+                    JButton button = new JButton(icon);
+                    button.setFont(new Font("Dialog", Font.PLAIN, 24));
+                    button.addActionListener(buttonListener);
+                    for (int i = 0; i < usedTokens.length; i++){
+                        if (child.getName().equals(usedTokens[i])){
+                            button.setEnabled(false);
+                        }
                     }
+                    panel.add(button);
                 }
-                panel.add(button);
             }
-        }catch(Exception e){
+        }
+        catch(Exception e){
             System.out.println("Something went wrong.");
             e.printStackTrace();
+            System.exit(1);
         }
+    }
+
+
+    private void initializeDefaultTokenPanelFrameStuff(){
+        buttonListener = new ButtonListener();
+
+        frame = new JFrame("Tokens");
+
+        previousButton = new JButton("err");
+
+        end = new JButton("Finish");
         end.setFont(new Font("Dialog", Font.PLAIN, 24));
         end.addActionListener(buttonListener);
         end.setEnabled(false);
-        label.setFont(new Font("Dialog", Font.PLAIN, 36));
-        frame = new JDialog(_frame, "Token Selector", true);
-        frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        frame.getContentPane().add(panel, BorderLayout.CENTER);
-        frame.getContentPane().add(label, BorderLayout.NORTH);
-        frame.add(end, BorderLayout.SOUTH);
-        frame.pack();
-        frame.setVisible(true);
-	   }
 
-	public static void main(String[] args) {
-        // TODO Auto-generated method stub
-        new TokenPanel(null);
-	}
+        panel = new JPanel();
+        panel.setLayout(new GridLayout(0,5));
+
+        label = new JLabel("Choose a token:");
+        label.setFont(new Font("Dialog", Font.PLAIN, 36));
+
+        dialog = new JDialog(frame, "Token Selector", true);
+        dialog.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        dialog.getContentPane().add(panel, BorderLayout.CENTER);
+        dialog.getContentPane().add(label, BorderLayout.NORTH);
+        dialog.add(end, BorderLayout.SOUTH);
+        dialog.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        // dialog.pack();
+    }
+
+
+
     private class ButtonListener implements ActionListener, Serializable{
+        private static final long serialVersionUID = 1L;
+
         public void actionPerformed(ActionEvent e){
+            if(frame == null){
+                initializeDefaultTokenPanelFrameStuff();
+            }
+
             JButton source = (JButton)e.getSource();
             end.setEnabled(true);
             if (source.getText().equals("Finish")){
-                _frame.dispose();
+                frame.dispose();
             }else if (!source.getText().equals("Finish")){
-                frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                dialog.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
                 ImageIcon icon = (ImageIcon)source.getIcon();
-                setToken(icon.getDescription());
+                setSelectedToken(icon.getDescription());
                 source.setEnabled(false);
                 if (!previousButton.getText().equals("err")){
                     previousButton.setEnabled(true);
@@ -80,12 +144,5 @@ public class TokenPanel implements Serializable{
                 previousButton = source;
             }
         }
-    }
-    public String getToken(){
-        return token;
-    }
-    public boolean setToken(String i){
-        token = i;
-        return true;
     }
 }
