@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.io.Serializable;
 
 public class DeckPanel implements Serializable {
+	private static final long serialVersionUID = 1L;
     public static final Color DEFAULT_COLOR = Color.WHITE;
 
     private Deck drawDeck;
@@ -118,6 +119,7 @@ public class DeckPanel implements Serializable {
 
     // Class for the panel displaying the most recently drawn card.
     private class CardPanel extends JPanel implements Serializable{
+		private static final long serialVersionUID = 1L;
 		private JPanel panel;
 
 		public CardPanel(){
@@ -145,6 +147,7 @@ public class DeckPanel implements Serializable {
 
 
     private class DrawListener implements ActionListener, Serializable{
+		private static final long serialVersionUID = 1L;
     	private DeckPanel deckPanel;
 
 		public DrawListener(DeckPanel deckPanel){
