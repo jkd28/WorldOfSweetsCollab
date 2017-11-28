@@ -116,8 +116,7 @@ public class MainFrame extends JFrame implements Serializable {
     	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
-        this.remove(playerPanel.getPanel());
-        this.add(playerPanel.getPanel());
+        this.refreshPanels();
 
     	return currentPlayer;
     }
@@ -191,15 +190,12 @@ public class MainFrame extends JFrame implements Serializable {
     }
 
     public void refreshPanels(){
-    	this.remove(boardPanel);
-    	this.remove(playerPanel);
-    	this.remove(southPanel);
-    	this.getContentPane().remove(0); //aka removing the deckPanel's mainPanel
+        this.getContentPane().removeAll();
     	this.validate();
     	this.repaint();
 
     	this.add(boardPanel, BorderLayout.NORTH);
-        this.add(playerPanel, BorderLayout.CENTER);
+        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
         this.add(southPanel, BorderLayout.SOUTH);
         this.add(deckPanel.getPanel(), BorderLayout.WEST);
         deckPanel.refreshCardPanelBackground();
