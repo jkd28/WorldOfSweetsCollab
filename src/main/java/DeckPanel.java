@@ -117,12 +117,11 @@ public class DeckPanel implements Serializable {
 
 
     // Class for the panel displaying the most recently drawn card.
-    class CardPanel extends JPanel implements Serializable{
-		CardLayout cardLayout = new CardLayout();
-		JPanel panel;
+    private class CardPanel extends JPanel implements Serializable{
+		private JPanel panel;
 
 		public CardPanel(){
-		    setLayout(cardLayout);
+		    setLayout(new CardLayout());
 
 		    // Set initial blank card
 		    currentColor = DEFAULT_COLOR;
