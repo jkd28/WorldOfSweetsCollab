@@ -117,6 +117,9 @@ public class MainFrame extends JFrame implements Serializable {
     	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
+        this.remove(playerPanel.getPanel());
+        this.add(playerPanel.getPanel());
+
     	return currentPlayer;
     }
 
@@ -271,7 +274,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        this.add(playerPanel, BorderLayout.CENTER);
+        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
 
 
         // ---------------------- //
