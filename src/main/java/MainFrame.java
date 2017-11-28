@@ -187,6 +187,23 @@ public class MainFrame extends JFrame implements Serializable {
 		timerPanel.gameStarted = true;
     }
 
+    public void refreshPanels(){
+    	this.remove(boardPanel);
+    	this.remove(playerPanel);
+    	this.remove(southPanel);
+    	this.getContentPane().remove(0); //aka removing the deckPanel's mainPanel
+    	this.validate();
+    	this.repaint();
+
+    	this.add(boardPanel, BorderLayout.NORTH);
+        this.add(playerPanel, BorderLayout.CENTER);
+        this.add(southPanel, BorderLayout.SOUTH);
+        this.add(deckPanel.getPanel(), BorderLayout.WEST);
+        deckPanel.refreshCardPanelBackground();
+    	this.validate();
+    	this.repaint();
+    }
+
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
