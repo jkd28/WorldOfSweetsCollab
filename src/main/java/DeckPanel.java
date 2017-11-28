@@ -12,9 +12,9 @@ public class DeckPanel implements Serializable {
     private Color currentColor;
     private Card currentCard;
 
-    private transient JPanel mainPanel;
-    private transient JPanel drawPanel;
-    private transient JButton drawButton;
+    private JPanel mainPanel;
+    private JPanel drawPanel;
+    private JButton drawButton;
 
     public DeckPanel(){
 		// The two subpanels will be next to each other
@@ -35,8 +35,13 @@ public class DeckPanel implements Serializable {
 		drawPanel.add(drawButton, BorderLayout.CENTER);
 
 		//Add both panels to the Frame
+		this.refreshPanels();
+    }
+
+    public void refreshPanels(){
+    	mainPanel.removeAll();
 		mainPanel.add(drawPanel);
-		mainPanel.add(cardPanel.getWrapperPanel());
+		mainPanel.add(cardPanel.getPanel());
     }
 
     public JPanel getPanel(){
@@ -118,46 +123,60 @@ public class DeckPanel implements Serializable {
 
 
     // Class for the panel displaying the most recently drawn card.
-    private class CardPanel extends JPanel implements Serializable{
+    private class CardPanel implements Serializable{
 		private static final long serialVersionUID = 1L;
-		private JPanel panel;
-		private JPanel wrapperPanel;
+		
+		private transient JPanel panel;
+		private transient JPanel wrapperPanel;
 
 		public CardPanel(){
 		    // Set initial blank card
 		    currentColor = DEFAULT_COLOR;
 
-		    panel = new JPanel();
+		    initializePanel();
 		    panel.setBackground(currentColor);
 		    
-		    wrapperPanel = new JPanel();
-		    wrapperPanel.add(panel);
-		    wrapperPanel.setLayout(new CardLayout());
+		    initializeWrapperPanel();
 
-		    this.setLayout(new CardLayout());
-		    this.add(panel);
+		    wrapperPanel.add(panel);
 		}
 
 		public JPanel getPanel(){
-			return panel;
+			if(panel == null){
+				initializePanel();
+			}
+
+			if(wrapperPanel == null){
+				initializeWrapperPanel();
+			}
+
+			setPanel(panel);
+
+			return wrapperPanel;
 		}
 
 		public void setPanel(JPanel newPanel){
-			// this.remove(panel);
-			// panel = newPanel;
-			// this.add(panel);
-			// this.validate();
-			// this.repaint();
+			if(wrapperPanel == null){
+				initializeWrapperPanel();
+			}
 
-			wrapperPanel.remove(panel);
+			if(wrapperPanel.isAncestorOf(panel)){
+				wrapperPanel.remove(panel);
+			}
+
 			panel = newPanel;
 			wrapperPanel.add(panel);
 			wrapperPanel.validate();
 			wrapperPanel.repaint();
 		}
 
-		public JPanel getWrapperPanel(){
-			return wrapperPanel;
+		private void initializeWrapperPanel(){
+			wrapperPanel = new JPanel();
+			wrapperPanel.setLayout(new CardLayout());
+		}
+
+		private void initializePanel(){
+			panel = new JPanel();
 		}
     }
 
@@ -197,6 +216,8 @@ public class DeckPanel implements Serializable {
 
 		    }
 		    cardPanel.setPanel(newPanel);
+		    deckPanel.refreshPanels();
+		    drawButton.requestFocus();
 		    currentColor = cardColor;
 
 
