@@ -41,7 +41,6 @@ public class MainFrame extends JFrame implements Serializable {
     private File file;
     private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
-
     private JPanel southPanel;
 
 
@@ -263,7 +262,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		this.add(deckPanel, BorderLayout.WEST);
+		this.add(deckPanel.getPanel(), BorderLayout.WEST);
 
       
         // ----------------------------------------------- //

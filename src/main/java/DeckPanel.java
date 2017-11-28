@@ -3,19 +3,22 @@ import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
 
-public class DeckPanel extends JPanel implements Serializable {
+public class DeckPanel implements Serializable {
     public static final Color DEFAULT_COLOR = Color.WHITE;
 
     private Deck drawDeck;
     private CardPanel cardPanel;
-    private JPanel drawPanel;
-    private JButton drawButton;
     private Color currentColor;
     private Card currentCard;
 
+    private transient JPanel mainPanel;
+    private transient JPanel drawPanel;
+    private transient JButton drawButton;
+
     public DeckPanel(){
 		// The two subpanels will be next to each other
-		setLayout(new GridLayout(1, 2));
+		mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(1, 2));
 
 		// Initialize misc variables
 		drawDeck = new Deck();
@@ -31,8 +34,12 @@ public class DeckPanel extends JPanel implements Serializable {
 		drawPanel.add(drawButton, BorderLayout.CENTER);
 
 		//Add both panels to the Frame
-		add(drawPanel);
-		add(cardPanel);
+		mainPanel.add(drawPanel);
+		mainPanel.add(cardPanel);
+    }
+
+    public JPanel getPanel(){
+    	return mainPanel;
     }
 
     // Helper method for creating the single color panels
@@ -179,7 +186,7 @@ public class DeckPanel extends JPanel implements Serializable {
 		    // Update the current Player with the drawn card //
 		    // ============================================= //
 		    // Get the "parent" GUI window that is holding this DeckPanel
-		    Window parent = SwingUtilities.getWindowAncestor(deckPanel);
+		    Window parent = SwingUtilities.getWindowAncestor(deckPanel.getPanel());
 
 		    // If this DeckPanel has a "parent", then we're playing a game of WorldOfSweets,
 		    //	so we need to update the Player that just "drew" a card,
