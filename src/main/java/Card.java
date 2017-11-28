@@ -14,6 +14,13 @@ public class Card implements Serializable {
     public static final int GO_TO_FOURTH_SPECIAL = 6;
     public static final int GO_TO_FIFTH_SPECIAL = 7;
 
+    public static final String SKIP_TEXT = "<html>Skip!</html>";
+    public static final String GO_TO_FIRST_SPECIAL_TEXT = "<html>Go to<br>Candy Cane Forest!</html>";
+    public static final String GO_TO_SECOND_SPECIAL_TEXT = "<html>Go to<br>Minty Mountains!</html>";
+    public static final String GO_TO_THIRD_SPECIAL_TEXT = "<html>Go to<br>Bubble Gum Trapeze!</html>";
+    public static final String GO_TO_FOURTH_SPECIAL_TEXT = "<html>Go to<br>Marshmallow Marsh!</html>";
+    public static final String GO_TO_FIFTH_SPECIAL_TEXT = "<html>Go to<br>Licorice Lagoon!</html>";
+
     public static final Color[] VALID_COLORS = {Color.RED, Color.YELLOW, Color.BLUE, Color.GREEN, Color.ORANGE};
 
     public Card(int v, Color c){

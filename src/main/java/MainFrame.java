@@ -41,7 +41,6 @@ public class MainFrame extends JFrame implements Serializable {
     private File file;
     private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
-
     private JPanel southPanel;
 
 
@@ -130,6 +129,8 @@ public class MainFrame extends JFrame implements Serializable {
     	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
 
+        this.refreshPanels();
+
     	return currentPlayer;
     }
 
@@ -190,6 +191,20 @@ public class MainFrame extends JFrame implements Serializable {
     	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
+    
+    public void refreshPanels(){
+        this.getContentPane().removeAll();
+    	this.validate();
+    	this.repaint();
+
+    	this.add(boardPanel, BorderLayout.NORTH);
+        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
+        this.add(southPanel, BorderLayout.SOUTH);
+        this.add(deckPanel.getPanel(), BorderLayout.WEST);
+        deckPanel.refreshCardPanelBackground();
+    	this.validate();
+    	this.repaint();
+    }
 
     public MainFrame(int playerCount){
         this.numPlayers = playerCount;
@@ -228,8 +243,9 @@ public class MainFrame extends JFrame implements Serializable {
 			while(true){
 				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
                 TokenPanel tp = new TokenPanel(usedTokens);
-                token = tp.getToken();
-                usedTokens[i] = tp.getToken();
+                tp.setVisible(true);
+                token = tp.getSelectedToken();
+                usedTokens[i] = token;
 
 				if(playerName == null || playerName.equals("")){
 					JOptionPane.showMessageDialog(null,
@@ -266,14 +282,14 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		this.add(deckPanel, BorderLayout.WEST);
+		this.add(deckPanel.getPanel(), BorderLayout.WEST);
 
       
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        this.add(playerPanel, BorderLayout.CENTER);
+        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
 
 
         // ---------------------- //
