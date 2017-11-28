@@ -36,7 +36,7 @@ public class DeckPanel implements Serializable {
 
 		//Add both panels to the Frame
 		mainPanel.add(drawPanel);
-		mainPanel.add(cardPanel);
+		mainPanel.add(cardPanel.getWrapperPanel());
     }
 
     public JPanel getPanel(){
@@ -121,14 +121,20 @@ public class DeckPanel implements Serializable {
     private class CardPanel extends JPanel implements Serializable{
 		private static final long serialVersionUID = 1L;
 		private JPanel panel;
+		private JPanel wrapperPanel;
 
 		public CardPanel(){
-		    setLayout(new CardLayout());
-
 		    // Set initial blank card
 		    currentColor = DEFAULT_COLOR;
+
 		    panel = new JPanel();
 		    panel.setBackground(currentColor);
+		    
+		    wrapperPanel = new JPanel();
+		    wrapperPanel.add(panel);
+		    wrapperPanel.setLayout(new CardLayout());
+
+		    this.setLayout(new CardLayout());
 		    this.add(panel);
 		}
 
@@ -137,11 +143,21 @@ public class DeckPanel implements Serializable {
 		}
 
 		public void setPanel(JPanel newPanel){
-			this.remove(panel);
+			// this.remove(panel);
+			// panel = newPanel;
+			// this.add(panel);
+			// this.validate();
+			// this.repaint();
+
+			wrapperPanel.remove(panel);
 			panel = newPanel;
-			this.add(panel);
-			this.validate();
-			this.repaint();
+			wrapperPanel.add(panel);
+			wrapperPanel.validate();
+			wrapperPanel.repaint();
+		}
+
+		public JPanel getWrapperPanel(){
+			return wrapperPanel;
 		}
     }
 
