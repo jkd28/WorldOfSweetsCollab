@@ -46,7 +46,7 @@ public class MainFrame implements Serializable {
 
     private ActionListener saveGameButtonListener;
 
-    public JFrame getPanel(){
+    public JFrame getFrame(){
         if(mainFrame == null){
             initializeMainFrame();
         }
@@ -95,6 +95,10 @@ public class MainFrame implements Serializable {
     }
 
     public void refreshSouthPanel(){
+        if(mainFrame == null){
+            initializeMainFrame();
+        }
+
         if(savePanel == null){
             initializeSavePanel();
         }
