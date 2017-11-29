@@ -315,6 +315,7 @@ public class MainFrame extends JFrame implements Serializable {
     }
 
     private class SaveGameButtonListener implements ActionListener, Serializable{
+        private static final long serialVersionUID = 1L;
     	private MainFrame gameFrame;
     	private DeckPanel deckPanel;
 
@@ -370,7 +371,8 @@ public class MainFrame extends JFrame implements Serializable {
     }
 
     private class ExitGameListener extends WindowAdapter implements Serializable{
-    	private MainFrame gameFrame;
+        private static final long serialVersionUID = 1L;
+        private MainFrame gameFrame;
 
     	public ExitGameListener(MainFrame gameFrame){
     		this.gameFrame = gameFrame;
