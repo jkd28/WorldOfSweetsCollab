@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.io.Serializable;
 
 public class Deck implements Serializable {
+    private static final long serialVersionUID = 1L;
     private Stack<Card> cardDeck;
 
     public static final int NUM_SINGLE_CARDS_PER_COLOR = 10;
