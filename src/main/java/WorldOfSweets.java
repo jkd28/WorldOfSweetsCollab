@@ -346,7 +346,6 @@ public class WorldOfSweets {
 
         if(WorldOfSweets.isValidSaveFile(saveFile)){
             MainFrame gameFrame = (MainFrame) loadSerializable(saveFile);
-            gameFrame.refreshPanels();
             return gameFrame;
         }
         else{
@@ -480,9 +479,6 @@ public class WorldOfSweets {
                     mainGameFrame.getDeckPanel().enableDrawButton();
 
                     mainGameFrame.resetTimerPanel();
-                    // TimerPanel timerPanel = mainGameFrame.getTimerPanel();
-                    // timerPanel.gameStarted = true;
-                    // timerPanel.startTimer(timerPanel.timer.getRealTime());
                 }
             }
             else{
@@ -502,7 +498,7 @@ public class WorldOfSweets {
             mainGameFrame = startNewGame();
         }
 
-        mainGameFrame.getFrame().setVisible(true);
+        mainGameFrame.setVisible(true);
         mainGameFrame.initializeBackgroundAudio();
     }
 }

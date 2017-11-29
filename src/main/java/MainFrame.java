@@ -1,17 +1,22 @@
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
-import java.io.Serializable;
+import java.io.*;
 import javax.sound.sampled.*;
 import java.net.URL;
-import java.io.File;
-import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class MainFrame implements Serializable {
+public class MainFrame implements Externalizable {
     // Data for the entire Frame, which will hold all of our Panels
-    private static final int FRAME_HEIGHT = 800;
-    private static final int FRAME_WIDTH = 800;
+    public static final int FRAME_HEIGHT = 800;
+    public static final int FRAME_WIDTH = 800;
+    private static final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
+    private static final String SAVE_GAME_BUTTON_TEXT = "Save Game";
+    private static final String MAIN_FRAME_TITLE = "World of Sweets";
+
+
+    private ActionListener saveGameButtonListener;
+    private WindowAdapter exitGameListener;
 
     // Data for the Board Panel
     private BoardPanel boardPanel;
@@ -21,10 +26,6 @@ public class MainFrame implements Serializable {
 
     // Data for the PlayerPanel
     private PlayerPanel playerPanel;
-
-    // Data for the "SaveButton" Panel
-    private transient JPanel savePanel;
-    private transient JButton saveButton;
 
     // Data for Timer
     private TimerPanel timerPanel;
@@ -36,34 +37,20 @@ public class MainFrame implements Serializable {
     // Data for currentPlayer
     public int currentPlayerIndex;
 
-  
-    // Data for music
-    private File file;
-    private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
-    private transient JPanel southPanel;
     private transient JFrame mainFrame;
+    private transient JPanel southPanel;    // Holds the "SaveButton" and "TimerPanel" pieces
+    private transient JButton saveButton;   // Data for the "SaveButton" Panel
+    private transient JPanel savePanel;     //
 
-    private ActionListener saveGameButtonListener;
+    
 
     public JFrame getFrame(){
-        if(mainFrame == null){
-            initializeMainFrame();
-        }
-
         return mainFrame;
     }
 
     public void setVisible(boolean setVisible){
         mainFrame.setVisible(setVisible);
-    }
-
-    private void initializeMainFrame(){
-        mainFrame = new JFrame();
-        mainFrame.setTitle("World of Sweets");
-        mainFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-        mainFrame.addWindowListener((WindowAdapter) new ExitGameListener(this));
     }
 
     //get the TimerPanel to check if the game has won
@@ -78,67 +65,6 @@ public class MainFrame implements Serializable {
     	if(!timerPanel.timerIsRunning()){
 			timerPanel.startTimer();
     	}
-        
-        if(southPanel == null){
-            initializeSouthPanel();
-        }
-
-        this.refreshSouthPanel();
-    }
-
-    private void initializeSouthPanel(){
-        southPanel = new JPanel();
-        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
-
-        this.refreshSavePanel();
-        southPanel.add(savePanel, BorderLayout.EAST);
-    }
-
-    public void refreshSouthPanel(){
-        if(mainFrame == null){
-            initializeMainFrame();
-        }
-
-        if(savePanel == null){
-            initializeSavePanel();
-        }
-
-        initializeSouthPanel();
-        southPanel.add(savePanel, BorderLayout.EAST);
-        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
-        southPanel.revalidate();
-        southPanel.repaint();
-
-        mainFrame.add(southPanel, BorderLayout.SOUTH);
-        mainFrame.revalidate();
-        mainFrame.repaint();
-    }
-
-    public void refreshSavePanel(){
-        if(saveButton == null){
-            initializeSaveButton();
-        }
-
-        if(savePanel == null){
-            initializeSavePanel();
-        }
-
-        savePanel.removeAll();
-        savePanel.add(saveButton);
-    }
-
-    private void initializeSaveButton(){
-        saveButton = new JButton("Save Game");
-        saveButton.addActionListener(saveGameButtonListener);
-    }
-
-    private void initializeSavePanel(){
-        if(saveButton == null){
-            initializeSaveButton();
-        }
-
-        savePanel = new JPanel();
-        this.refreshSavePanel();
     }
   
     public BoardPanel getBoardPanel(){
@@ -161,16 +87,16 @@ public class MainFrame implements Serializable {
 				audioFilePath = BACKGROUND_MUSIC_FILE_PATH;
 			}
 
-			file = new File(audioFilePath);
-			if (file.exists()){
-				AudioInputStream music = AudioSystem.getAudioInputStream(file);
+			File musicFile = new File(audioFilePath);
+			if (musicFile.exists()){
+				AudioInputStream music = AudioSystem.getAudioInputStream(musicFile);
 				AudioFormat format = music.getFormat();
 				DataLine.Info info = new DataLine.Info(Clip.class, format);
 				clip = (Clip)AudioSystem.getLine(info);
 				clip.open(music);
 			} 
 			else {
-				throw new RuntimeException("Music: file not found.");
+				throw new RuntimeException(String.format("Music file '%s' not found.", musicFile.getName()));
 			}
 		} 
 		catch(MalformedURLException e){
@@ -204,8 +130,6 @@ public class MainFrame implements Serializable {
     	currentPlayerIndex = (currentPlayerIndex + 1) % getNumPlayers();
     	Player nextPlayer = getPlayer(currentPlayerIndex);
     	playerPanel.changePlayer(currentPlayer, nextPlayer);
-
-        this.refreshPanels();
 
     	return currentPlayer;
     }
@@ -248,16 +172,6 @@ public class MainFrame implements Serializable {
 	    	return;
 	    }
 
-	    // Temporarily ignore the "Special" cards (currently valued > 2)
-	    // if(card.getValue() > 2){
-		// return;
-	    // }
-
-	    // If this card is a "Go to Middle" card, send the Player directly to the middle of the board
-	    //	    if(card.getValue() == Card.GO_TO_MIDDLE){
-	    //	    	boardPanel.sendPlayerToMiddleSpace(player);
-	    //	    }
-
 	    // With a normal Single or Double colored card,
 	    //	send the Player to their next spot.
 	    boardPanel.sendPlayerToNextSpace(player, card);
@@ -268,32 +182,109 @@ public class MainFrame implements Serializable {
     	return currentPlayerSpace.isGrandmasHouse();
     }
     
-    public void refreshPanels(){
-        if(mainFrame == null){
-            initializeMainFrame();
-        }
 
-        mainFrame.getContentPane().removeAll();
-    	mainFrame.validate();
-    	mainFrame.repaint();
+    private void initializeSwingComponents(){
+        saveButton = new JButton(MainFrame.SAVE_GAME_BUTTON_TEXT);
+        saveButton.addActionListener(saveGameButtonListener);
 
-        // "boardPanel"
-    	mainFrame.add(boardPanel.getPanel(), BorderLayout.NORTH);
-        boardPanel.refreshBoardPanel();
+        savePanel = new JPanel();
+        savePanel.add(saveButton);
 
-        // "playerPanel"
-        mainFrame.add(playerPanel.getPanel(), BorderLayout.CENTER);
+        southPanel = new JPanel();
+        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
+        southPanel.add(savePanel, BorderLayout.EAST);
 
-        // "southPanel"
-        this.refreshSouthPanel();
-        // mainFrame.add(southPanel, BorderLayout.SOUTH);
+        mainFrame = new JFrame();
+        mainFrame.setTitle(MainFrame.MAIN_FRAME_TITLE);
+        mainFrame.setSize(MainFrame.FRAME_WIDTH, MainFrame.FRAME_HEIGHT);
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener(exitGameListener);
 
-        // "deckPanel"
+        mainFrame.add(boardPanel.getPanel(), BorderLayout.NORTH);
         mainFrame.add(deckPanel.getPanel(), BorderLayout.WEST);
-        deckPanel.refreshCardPanelBackground();
+        deckPanel.refreshCardPanelBackground(); // If we don't call this, "deckPanel" will be blank, rather than displaying the last card chosen (if we're loading a game)
 
-    	mainFrame.validate();
-    	mainFrame.repaint();
+        mainFrame.add(playerPanel.getPanel(), BorderLayout.CENTER);
+        mainFrame.add(southPanel, BorderLayout.SOUTH);
+
+        mainFrame.validate();
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
+    private void createPlayers(){
+        players = new Player[numPlayers];
+        String[] usedTokens = new String[4];
+        for(int i = 0; i < players.length; i++){
+            String defaultPlayerName = "Player "+i;
+            String playerName = defaultPlayerName;
+            String token;
+            while(true){
+                playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
+                TokenPanel tp = new TokenPanel(usedTokens);
+                tp.setVisible(true);
+                token = tp.getSelectedToken();
+                usedTokens[i] = token;
+
+                if(playerName == null || playerName.equals("")){
+                    JOptionPane.showMessageDialog(null,
+                        "I'm sorry, that's not a valid name for player #"+i+", please try again.",
+                        "Invalid Player Name",
+                        JOptionPane.WARNING_MESSAGE
+                        );
+                    continue;
+                }
+
+                break;
+            }
+
+
+            Player newPlayer = new Player(playerName);
+            newPlayer.setToken(token);
+            players[i] = newPlayer;
+        }
+    }
+
+    @Override
+    public void writeExternal(ObjectOutput out) throws IOException{
+        out.writeObject(saveGameButtonListener);
+        out.writeObject(exitGameListener);
+        out.writeObject(boardPanel);
+        out.writeObject(deckPanel);
+        out.writeObject(playerPanel);
+        out.writeObject(timerPanel);
+        out.writeObject(players);
+        out.writeInt(numPlayers);
+        out.writeInt(currentPlayerIndex);
+        
+        // All of the data needed to reconstruct the Swing objects
+        //  is already saved, by virtue of the data already saved above.
+    }
+
+    @Override
+    public void readExternal(ObjectInput in) throws IOException,
+                                                    ClassNotFoundException{
+        saveGameButtonListener = (ActionListener) ((SaveGameButtonListener) in.readObject());
+        exitGameListener = (WindowAdapter) ((ExitGameListener) in.readObject());
+        boardPanel = (BoardPanel) in.readObject();
+        boardPanel.refreshBoardPanel();
+        deckPanel = (DeckPanel) in.readObject();
+        playerPanel = (PlayerPanel) in.readObject();
+        timerPanel = (TimerPanel) in.readObject();
+        players = (Player[]) in.readObject();
+        numPlayers = (int) in.readInt();
+        currentPlayerIndex = (int) in.readInt();
+
+        // Regenerate the Swing objects
+        initializeSwingComponents();
+    }
+
+    public MainFrame(){
+        /*
+        * FOR THE LOVE OF THE DIVINE TRINITY DO NOT DELETE ME; 
+            I - the B L A N K C O N S T R U C T O R - am required by the Holy Ghost of Externalizable to be present
+            (I'm pretty sure becasuse it uses me to instantiate any class variables, like all of my "static final" variables) 
+        */
     }
 
     public MainFrame(int playerCount){
@@ -313,90 +304,21 @@ public class MainFrame implements Serializable {
     	}
 
 
-		// ---------------- //
-    	// Create the Frame //
-		// ---------------- //
-		initializeMainFrame();
+		createPlayers();
 
-		// ------------------ //
-		// Create the Players //
-		// ------------------ //
-		players = new Player[numPlayers];
-        String[] usedTokens = new String[4];
-		for(int i = 0; i < players.length; i++){
-			String defaultPlayerName = "Player "+i;
-			String playerName = defaultPlayerName;
-			String token;
-			while(true){
-				playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
-                TokenPanel tp = new TokenPanel(usedTokens);
-                tp.setVisible(true);
-                token = tp.getSelectedToken();
-                usedTokens[i] = token;
-
-				if(playerName == null || playerName.equals("")){
-					JOptionPane.showMessageDialog(null,
-						"I'm sorry, that's not a valid name for player #"+i+", please try again.",
-						"Invalid Player Name",
-						JOptionPane.WARNING_MESSAGE
-						);
-					continue;
-				}
-
-				break;
-			}
-
-
-			Player newPlayer = new Player(playerName);
-            newPlayer.setToken(token);
-			players[i] = newPlayer;
-		}
-
-
-		// ----------------------------------------------- //
-		// Create game-board Panel and add it to the Frame //
-		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
-		mainFrame.add(boardPanel.getPanel(), BorderLayout.NORTH);
+		for(Player player : players){                     //Set all players to starting boardspace (index 0)
+			player.setPosition(boardPanel.getSpace(0));   //
+		}                                                 //
 
-		//Set all players to starting boardspace (index 0)
-		for(Player player : players){
-			player.setPosition(boardPanel.getSpace(0));
-		}
-
-
-		// --------------------------------------------- //
-		// Create the deck Panel and add it to the Frame //
-		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		mainFrame.add(deckPanel.getPanel(), BorderLayout.WEST);
-
-      
-        // ----------------------------------------------- //
-		// Create the player Panel and add it to the Frame //
-		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        mainFrame.add(playerPanel.getPanel(), BorderLayout.CENTER);
-
-
-        // ---------------------- //
-        // Create the Timer panel //
-        // ---------------------- //
-        southPanel = new JPanel();
         timerPanel = new TimerPanel();
-        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
 
-
-        // ----------------------------------------------- //
-        // Create the "Save" panel and add it to the Frame //
-        // ----------------------------------------------- //
         saveGameButtonListener = (ActionListener) new SaveGameButtonListener(this, deckPanel);
-        this.initializeSaveButton();
-        this.initializeSavePanel();
-        this.refreshSouthPanel();
+        exitGameListener = (WindowAdapter) new ExitGameListener(this);
 
-        mainFrame.add(southPanel, BorderLayout.SOUTH);
-        this.refreshPanels();
+        initializeSwingComponents();
     }
 
     private class SaveGameButtonListener implements ActionListener, Serializable{
@@ -480,17 +402,25 @@ public class MainFrame implements Serializable {
     		// ======================================================= //
     		// Ask if the user wants to save their game before exiting //
     		// ======================================================= //
-    		String message = "Would you like to save your game before exiting?";
-            String title = "Save Before Exit?";
-            int response = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
+            while(true){
+        		String message = "Would you like to save your game before exiting?";
+                String title = "Save Before Exit?";
+                int response = JOptionPane.showConfirmDialog(null, message, title, JOptionPane.YES_NO_OPTION);
 
-            if(response == JOptionPane.YES_OPTION){
-            	WorldOfSweets.saveCurrentGameToFile(gameFrame);
+                if(response == JOptionPane.YES_OPTION){
+                	boolean successfulSave = WorldOfSweets.saveCurrentGameToFile(gameFrame);
+                    if(successfulSave){
+                        JOptionPane.showMessageDialog(null, "The state of this game has been succesfully saved!");
+                    }
+                    else{
+                        JOptionPane.showMessageDialog(null, "We were unable to save the state of this game for some reason; please try again!");
+                    }
+                }
+
+                JOptionPane.showMessageDialog(null, "Goodbye!");
+                gameFrame.setVisible(false);
+                System.exit(0);
             }
-
-            JOptionPane.showMessageDialog(null, "Goodbye!");
-            gameFrame.setVisible(false);
-            System.exit(0);
     	}
     }
  }
