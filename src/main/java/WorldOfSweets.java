@@ -1,8 +1,5 @@
 import java.awt.*;
 import java.io.*;
-import java.math.*;
-import java.security.*;
-import java.util.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
@@ -13,171 +10,8 @@ public class WorldOfSweets {
 	public static final int MAX_PLAYERS = 4;
     public static final String SAVE_FILE_EXTENSION = "ser";
     public static final FileNameExtensionFilter SAVE_FILE_FILTER = new FileNameExtensionFilter(String.format("WorldOfSweets Save Files (*.%s)", SAVE_FILE_EXTENSION), SAVE_FILE_EXTENSION);
-    public static final String CHECKSUM_ALGORITHM = "MD5";
-    public static final String CHECKSUM_FILE_EXTENSION = "chksum";
-
+    
     private static MainFrame mainGameFrame;
-
-    /**
-     * @param ser The Serializable to be saved to saveFile, along with a checksum.
-     * @param saveFile The File to save ser to, along with a chechsum.
-     * @return Boolean value on whether the save was successful or not.
-     */
-    private static boolean saveSerializable(Serializable ser, File saveFile){
-        if(ser == null || saveFile == null){
-            return false;
-        }
-
-        // Print the Serializable - with its checksum - out to file
-        boolean isValidFile = saveFile.isFile() || ( !saveFile.exists() && !saveFile.isDirectory() );
-        if(isValidFile){
-            try{
-                // Serialize the Serializable
-                FileOutputStream fileStream = new FileOutputStream(saveFile);
-                ObjectOutputStream oos = new ObjectOutputStream(fileStream);
-                oos.writeObject(ser);
-                oos.flush();
-                oos.reset();
-                fileStream.flush();
-
-                oos.close();
-                fileStream.close();
-
-
-                // Calculate the checksum for this Object
-                BigInteger checksum = WorldOfSweets.calculateChecksum(ser);
-
-                // Get the appropriate checksum file
-                String checksumFileName = saveFile.getName() + "." + WorldOfSweets.CHECKSUM_FILE_EXTENSION;
-                File checksumFile = new File(checksumFileName);
-
-                // Write the checksum out to the appropriate checksum file
-                FileWriter checksumFileWriter = new FileWriter(checksumFile);
-                checksumFileWriter.write(checksum.toString());
-                checksumFileWriter.write(" ");
-                checksumFileWriter.write(saveFile.getName());
-                checksumFileWriter.close();
-                
-                // Return
-                return true;
-            }
-            catch(Exception e){
-                e.printStackTrace();
-                System.exit(1);
-                return false;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param loadFile The File containing a serialized Serializable, along with its checksum.
-     * @return De-serialized Serializable.
-     * @throws ChecksumValueException
-     */
-    private static Serializable loadSerializable(File loadFile){
-        if(loadFile == null){
-            return null;
-        }
-
-        // Pull the checksum and the Serializable out of the loadFile
-        boolean isValidFile = loadFile.isFile();
-        if(isValidFile){
-            try{
-                // ----------------------------------- //
-                // Read-in the Serializable and the Checksum //
-                // ----------------------------------- //
-                // Read-in the Serializable itself
-                FileInputStream fileStream = new FileInputStream(loadFile);
-                ObjectInputStream oos = new ObjectInputStream(fileStream);
-                
-                Serializable resultObj = (Serializable) oos.readObject();
-
-                oos.close();
-                fileStream.close();
-
-                // Read-in the checksum
-                String checksumFileName = loadFile.getName() + "." + WorldOfSweets.CHECKSUM_FILE_EXTENSION;
-                File checksumFile = new File(checksumFileName);
-                Scanner scanner = new Scanner(checksumFile);
-
-                String checksumString = scanner.next();
-                String checksumIntendedFileName = scanner.nextLine().trim();
-                scanner.close();
-
-                if(!loadFile.getName().equals(checksumIntendedFileName)){
-                    // TODO: Exception needs to be thrown here!
-                    System.err.println(loadFile.getName() + " vs " + checksumIntendedFileName);
-                    return null;
-                }
-
-                BigInteger checksumFromFile = new BigInteger(checksumString, 10);
-
-                // --------------------- //
-                // Validate the checksum //
-                // --------------------- //
-                // Calculate the checksum of the Serializable that was just read-in
-                BigInteger calculatedChecksum = WorldOfSweets.calculateChecksum(resultObj);
-
-                // Compare the calculated checksum to the read-in checksum
-                if(calculatedChecksum.compareTo(checksumFromFile) != 0){
-                    /////String message = String.format("The checksum contained in '%s' does not match the checksum calculated using that file's contents; "
-                    /////   + "this save file is CORRUPTED or has been TAMPERED WITH.", loadFile.getName());
-                    String message = "Unequal checksums; CORRUPTED SAVE FILE.";
-                    System.err.println(message);
-                    System.exit(1);
-                }
-                else{
-                    return resultObj;
-                }
-            }
-            catch(IOException e){
-                e.printStackTrace();
-                System.exit(1);
-                return null;
-            }
-            catch(ClassNotFoundException e){
-                e.printStackTrace();
-                System.exit(1);
-                return null;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * @see Serializable
-     * @param obj The Object that will have a checksum generated for it. This object MUST implement Serializable.
-     * @return A BigInteger representing the checksum for the given Serializable object.
-     */
-    public static BigInteger calculateChecksum(Object obj) {
-        if (obj == null) {
-          return null;   
-        }
-
-        try{
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.close();
-            bos.close(); // This doesn't do anything, but it's good habit to explicitly close every Stream you use
-
-            
-            MessageDigest m = MessageDigest.getInstance(WorldOfSweets.CHECKSUM_ALGORITHM);
-            m.update(bos.toByteArray());
-
-            BigInteger result = new BigInteger(1, m.digest());
-
-            return result;
-        }
-        catch(Exception e){
-            e.printStackTrace();
-            System.exit(1);
-            return null;
-        }
-    }
 
     public static MainFrame getMainGameFrame(){
         return mainGameFrame;
@@ -345,7 +179,18 @@ public class WorldOfSweets {
         }
 
         if(WorldOfSweets.isValidSaveFile(saveFile)){
-            MainFrame gameFrame = (MainFrame) loadSerializable(saveFile);
+            MainFrame gameFrame = null;
+            try{
+                gameFrame = (MainFrame) Utility.loadSerializable(saveFile);                
+            }
+            catch(Utility.ChecksumValueException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
+            catch(Utility.InvalidChecksumFileNameException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
             return gameFrame;
         }
         else{
@@ -396,7 +241,7 @@ public class WorldOfSweets {
 
         // If the file from the user is valid, save it
         if(WorldOfSweets.isValidSaveFileName(saveFile.getName())){
-            WorldOfSweets.saveSerializable(gameFrame, saveFile);
+            Utility.saveSerializable(gameFrame, saveFile);
 
             return true;
         }
@@ -501,4 +346,13 @@ public class WorldOfSweets {
         mainGameFrame.setVisible(true);
         mainGameFrame.initializeBackgroundAudio();
     }
+
+
+
+
+
+
+
+
+    
 }
