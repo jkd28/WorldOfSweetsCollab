@@ -8,37 +8,40 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.io.Serializable;
 
-public class BoardSpace extends JPanel implements Serializable {
-	private JLabel label;
+public class BoardSpace implements Serializable {
+    private static final long serialVersionUID = 1L;
+	private static final Color BORDER_COLOR = Color.BLACK;
+	private static final Color DEFAULT_LABEL_FOREGROUND_COLOR = Color.BLACK;
+
 	private Collection<Player> players;
 	private String originalText;
-	private static final Color BORDER_COLOR = Color.BLACK;
+	private Color spaceColor = DeckPanel.DEFAULT_COLOR;
+	private Color labelForegroundColor = DEFAULT_LABEL_FOREGROUND_COLOR;
 	private boolean isGrandmasHouse = false;
 	private boolean isStartSpace = false;
-	private Color spaceColor = DeckPanel.DEFAULT_COLOR;
 
+	private transient JPanel mainPanel;
+	private transient JLabel label;
 
 	// ------------ //
 	// Constructors //
 	// ------------ //
 	public BoardSpace(Color newBackgroundColor, JLabel newLabel, Player[] newPlayers){
-		this.setBackground(newBackgroundColor);
-		this.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
-
 		// "spaceColor"
 		spaceColor = newBackgroundColor;
 
-		// "label" and "originalText"
-		if(newLabel != null){
-			label = newLabel;
-			add(label); 		// Actually add the JLabel to this BoardSpace (which is just an extension of JPanel)
+		intitializeMainPanel();
 
-			originalText = newLabel.getText();
+		// "label"
+		label = newLabel;
+		if(label == null){
+			intitializeLabel();
 		}
-		else{
-			label = new JLabel("");
-			originalText = new String("");
-		}
+		mainPanel.add(label);
+		labelForegroundColor = label.getForeground();
+
+		// "originalText"
+		originalText = label.getText();
 
 		// "players"
 		if(newPlayers != null){
@@ -67,7 +70,32 @@ public class BoardSpace extends JPanel implements Serializable {
 	// ------------- //
 	// Misc. Methods //
 	// ------------- //
-	private void updateText(){
+	public JPanel getPanel(){
+		if(mainPanel == null){
+			this.intitializeMainPanel();
+			this.updateText();
+		}
+
+		return mainPanel;
+	}
+
+	private void intitializeMainPanel(){
+		mainPanel = new JPanel();
+		mainPanel.setBackground(spaceColor);
+		mainPanel.setBorder(BorderFactory.createLineBorder(BORDER_COLOR));
+	}
+
+	private void intitializeLabel(){
+		label = new JLabel(originalText);
+		label.setForeground(labelForegroundColor);
+
+		if(mainPanel == null){
+			intitializeMainPanel();
+		}
+		mainPanel.add(label);
+	}
+
+	public void updateText(){
 		String labelText = new String("<html>" + originalText);
 		if(!players.isEmpty()){
 			labelText = labelText + "<br>[";
@@ -79,12 +107,14 @@ public class BoardSpace extends JPanel implements Serializable {
 		}
 		labelText = labelText + "</html>";
 		//label.setFont(new Font("Dialog", Font.PLAIN, 12));
-		label.setText(labelText);
-	}
 
-	// TODO
-	public String toString(){
-		return super.toString();
+		if(label == null){
+			intitializeLabel();
+		}
+
+		label.setText(labelText);
+		label.setForeground(labelForegroundColor);
+		label.setVisible(true);
 	}
 
 
