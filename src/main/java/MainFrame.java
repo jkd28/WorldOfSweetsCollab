@@ -49,6 +49,10 @@ public class MainFrame extends JFrame implements Serializable {
         return timerPanel;
     }
 
+    public BoardPanel getBoardPanel(){
+        return boardPanel;
+    }
+
 
 
     public void initializeBackgroundAudio(){
@@ -195,6 +199,7 @@ public class MainFrame extends JFrame implements Serializable {
     	this.repaint();
 
     	this.add(boardPanel, BorderLayout.NORTH);
+        boardPanel.refreshBoardPanel();
         this.add(playerPanel.getPanel(), BorderLayout.CENTER);
         this.add(southPanel, BorderLayout.SOUTH);
         this.add(deckPanel.getPanel(), BorderLayout.WEST);

@@ -42,8 +42,6 @@ public class BoardPanel extends JPanel implements Serializable {
 		// ----------------- //
 		// Create the Spaces //
 		// ----------------- //
-		// spaces = new BoardSpace[NUM_SPACES];
-
 		// Create the "Start" space
 		BoardSpace newStart = new BoardSpace(Color.WHITE, start, players);
 		newStart.setAsStartSpace(true);
@@ -52,33 +50,33 @@ public class BoardPanel extends JPanel implements Serializable {
 		// Create all of the colored spaces
 		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
-		    switch(i % 5){
-		    case 0: backgroundColor = Color.ORANGE; break;
-		    case 1: backgroundColor = Color.RED; break;
-		    case 2: backgroundColor = Color.YELLOW; break;
-		    case 3: backgroundColor = Color.BLUE; break;
-		    case 4: backgroundColor = Color.GREEN; break;
+			    switch(i % 5){
+			    case 0: backgroundColor = Color.ORANGE; break;
+			    case 1: backgroundColor = Color.RED; break;
+			    case 2: backgroundColor = Color.YELLOW; break;
+			    case 3: backgroundColor = Color.BLUE; break;
+			    case 4: backgroundColor = Color.GREEN; break;
 		    }
 
 		    // Check if this space is a special square.
 		    JLabel newLabel = new JLabel("");
 		    switch(i){
-		    case FIRST_SPECIAL: newLabel = firstLabel;
-			backgroundColor = Color.MAGENTA;
-			break;
-		    case SECOND_SPECIAL: newLabel = secondLabel;
-			backgroundColor = Color.CYAN;
-			break;
-		    case THIRD_SPECIAL: newLabel = thirdLabel;
-			backgroundColor = Color.PINK;
-			break;
-		    case FOURTH_SPECIAL: newLabel = fourthLabel;
-			backgroundColor = Color.GRAY;
-			break;
-		    case FIFTH_SPECIAL: newLabel = fifthLabel;
-			backgroundColor = Color.BLACK;
-			break;
-		    default: break;
+			    case FIRST_SPECIAL: newLabel = firstLabel;
+				backgroundColor = Color.MAGENTA;
+				break;
+			    case SECOND_SPECIAL: newLabel = secondLabel;
+				backgroundColor = Color.CYAN;
+				break;
+			    case THIRD_SPECIAL: newLabel = thirdLabel;
+				backgroundColor = Color.PINK;
+				break;
+			    case FOURTH_SPECIAL: newLabel = fourthLabel;
+				backgroundColor = Color.GRAY;
+				break;
+			    case FIFTH_SPECIAL: newLabel = fifthLabel;
+				backgroundColor = Color.BLACK;
+				break;
+			    default: break;
 		    }
 
 		    // Add a color-appropriate text color
@@ -96,15 +94,15 @@ public class BoardPanel extends JPanel implements Serializable {
 		    } else if(backgroundColor.equals(Color.ORANGE)){
 		    	textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.MAGENTA)){
-			textColor = Color.BLACK;
+				textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.CYAN)){
-			textColor = Color.BLACK;
+				textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.PINK)){
-			textColor = Color.BLACK;
+				textColor = Color.BLACK;
 		    } else if(backgroundColor.equals(Color.GRAY)){
-			textColor = Color.WHITE;
+				textColor = Color.WHITE;
 		    } else if(backgroundColor.equals(Color.BLACK)){
-			textColor = Color.WHITE;
+				textColor = Color.WHITE;
 		    }
 		    newLabel.setForeground(textColor);
 		    BoardSpace newSpace = new BoardSpace(backgroundColor, newLabel);
@@ -116,14 +114,28 @@ public class BoardPanel extends JPanel implements Serializable {
 		newGrandma.setAsGrandmasHouse(true);
 
 		spaces.add(newGrandma);
-		// spaces.get(spaces.size() - 1).setAsGrandmasHouse(true);
 
 		// --------------------------- //
 		// Add the Spaces to the board //
 		// --------------------------- //
+		refreshBoardPanel();
+    }
+
+    public void refreshBoardPanel(){
+		this.removeAll();
+		this.revalidate();
+		this.repaint();
+
 		for(BoardSpace space : spaces){
-			add(space);
+			this.add(space.getPanel());
+			space.updateText();
 		}
+		this.revalidate();
+		this.repaint();
+    }
+
+    public void add(BoardSpace space){
+    	this.add(space.getPanel());
     }
 
     // Retrieve a specific board space
