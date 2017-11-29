@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.MalformedURLException;
 
-public class MainFrame extends JFrame implements Serializable {
+public class MainFrame implements Serializable {
     // Data for the entire Frame, which will hold all of our Panels
     private static final int FRAME_HEIGHT = 800;
     private static final int FRAME_WIDTH = 800;
@@ -23,8 +23,8 @@ public class MainFrame extends JFrame implements Serializable {
     private PlayerPanel playerPanel;
 
     // Data for the "SaveButton" Panel
-    private JPanel savePanel;
-    private JButton saveButton;
+    private transient JPanel savePanel;
+    private transient JButton saveButton;
 
     // Data for Timer
     private TimerPanel timerPanel;
@@ -41,8 +41,30 @@ public class MainFrame extends JFrame implements Serializable {
     private File file;
     private final String BACKGROUND_MUSIC_FILE_PATH = "src/main/resources/lets-play-a-while.wav";
 
-    private JPanel southPanel;
+    private transient JPanel southPanel;
+    private transient JFrame mainFrame;
 
+    private ActionListener saveGameButtonListener;
+
+    public JFrame getPanel(){
+        if(mainFrame == null){
+            initializeMainFrame();
+        }
+
+        return mainFrame;
+    }
+
+    public void setVisible(boolean setVisible){
+        mainFrame.setVisible(setVisible);
+    }
+
+    private void initializeMainFrame(){
+        mainFrame = new JFrame();
+        mainFrame.setTitle("World of Sweets");
+        mainFrame.setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        mainFrame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+        mainFrame.addWindowListener((WindowAdapter) new ExitGameListener(this));
+    }
 
     //get the TimerPanel to check if the game has won
     public TimerPanel getTimerPanel(){
@@ -56,10 +78,63 @@ public class MainFrame extends JFrame implements Serializable {
     	if(!timerPanel.timerIsRunning()){
 			timerPanel.startTimer();
     	}
-  
-    	southPanel.removeAll();
+        
+        if(southPanel == null){
+            initializeSouthPanel();
+        }
+
+        this.refreshSouthPanel();
+    }
+
+    private void initializeSouthPanel(){
+        southPanel = new JPanel();
         southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
+
+        this.refreshSavePanel();
         southPanel.add(savePanel, BorderLayout.EAST);
+    }
+
+    public void refreshSouthPanel(){
+        if(savePanel == null){
+            initializeSavePanel();
+        }
+
+        initializeSouthPanel();
+        southPanel.add(savePanel, BorderLayout.EAST);
+        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
+        southPanel.revalidate();
+        southPanel.repaint();
+
+        mainFrame.add(southPanel, BorderLayout.SOUTH);
+        mainFrame.revalidate();
+        mainFrame.repaint();
+    }
+
+    public void refreshSavePanel(){
+        if(saveButton == null){
+            initializeSaveButton();
+        }
+
+        if(savePanel == null){
+            initializeSavePanel();
+        }
+
+        savePanel.removeAll();
+        savePanel.add(saveButton);
+    }
+
+    private void initializeSaveButton(){
+        saveButton = new JButton("Save Game");
+        saveButton.addActionListener(saveGameButtonListener);
+    }
+
+    private void initializeSavePanel(){
+        if(saveButton == null){
+            initializeSaveButton();
+        }
+
+        savePanel = new JPanel();
+        this.refreshSavePanel();
     }
   
     public BoardPanel getBoardPanel(){
@@ -111,13 +186,6 @@ public class MainFrame extends JFrame implements Serializable {
 			throw new RuntimeException("Line Unavailable Exception Error: " + e);
 		}
 		clip.loop(Clip.LOOP_CONTINUOUSLY);
-      
-
-        // -------------------- //
-		// Make it all visible! //
-		// -------------------- //
-        this.pack();
-		this.setVisible(true);
     }
 
 
@@ -197,18 +265,31 @@ public class MainFrame extends JFrame implements Serializable {
     }
     
     public void refreshPanels(){
-        this.getContentPane().removeAll();
-    	this.validate();
-    	this.repaint();
+        if(mainFrame == null){
+            initializeMainFrame();
+        }
 
-    	this.add(boardPanel.getPanel(), BorderLayout.NORTH);
+        mainFrame.getContentPane().removeAll();
+    	mainFrame.validate();
+    	mainFrame.repaint();
+
+        // "boardPanel"
+    	mainFrame.add(boardPanel.getPanel(), BorderLayout.NORTH);
         boardPanel.refreshBoardPanel();
-        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
-        this.add(southPanel, BorderLayout.SOUTH);
-        this.add(deckPanel.getPanel(), BorderLayout.WEST);
+
+        // "playerPanel"
+        mainFrame.add(playerPanel.getPanel(), BorderLayout.CENTER);
+
+        // "southPanel"
+        this.refreshSouthPanel();
+        // mainFrame.add(southPanel, BorderLayout.SOUTH);
+
+        // "deckPanel"
+        mainFrame.add(deckPanel.getPanel(), BorderLayout.WEST);
         deckPanel.refreshCardPanelBackground();
-    	this.validate();
-    	this.repaint();
+
+    	mainFrame.validate();
+    	mainFrame.repaint();
     }
 
     public MainFrame(int playerCount){
@@ -231,10 +312,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// ---------------- //
     	// Create the Frame //
 		// ---------------- //
-		this.setTitle("World of Sweets");
-		this.setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
-		this.addWindowListener((WindowAdapter) new ExitGameListener(this));
+		initializeMainFrame();
 
 		// ------------------ //
 		// Create the Players //
@@ -275,7 +353,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
-		this.add(boardPanel.getPanel(), BorderLayout.NORTH);
+		mainFrame.add(boardPanel.getPanel(), BorderLayout.NORTH);
 
 		//Set all players to starting boardspace (index 0)
 		for(Player player : players){
@@ -287,14 +365,14 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create the deck Panel and add it to the Frame //
 		// --------------------------------------------- //
 		deckPanel = new DeckPanel();
-		this.add(deckPanel.getPanel(), BorderLayout.WEST);
+		mainFrame.add(deckPanel.getPanel(), BorderLayout.WEST);
 
       
         // ----------------------------------------------- //
 		// Create the player Panel and add it to the Frame //
 		// ----------------------------------------------- //
         playerPanel = new PlayerPanel(players);
-        this.add(playerPanel.getPanel(), BorderLayout.CENTER);
+        mainFrame.add(playerPanel.getPanel(), BorderLayout.CENTER);
 
 
         // ---------------------- //
@@ -308,13 +386,13 @@ public class MainFrame extends JFrame implements Serializable {
         // ----------------------------------------------- //
         // Create the "Save" panel and add it to the Frame //
         // ----------------------------------------------- //
-        saveButton = new JButton("Save Game");
-        saveButton.addActionListener((ActionListener) new SaveGameButtonListener(this, deckPanel));
-        savePanel = new JPanel();
-        savePanel.add(saveButton);
-        southPanel.add(savePanel, BorderLayout.EAST);
+        saveGameButtonListener = (ActionListener) new SaveGameButtonListener(this, deckPanel);
+        this.initializeSaveButton();
+        this.initializeSavePanel();
+        this.refreshSouthPanel();
 
-        this.add(southPanel, BorderLayout.SOUTH);
+        mainFrame.add(southPanel, BorderLayout.SOUTH);
+        this.refreshPanels();
     }
 
     private class SaveGameButtonListener implements ActionListener, Serializable{
