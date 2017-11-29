@@ -198,7 +198,7 @@ public class MainFrame extends JFrame implements Serializable {
     	this.validate();
     	this.repaint();
 
-    	this.add(boardPanel, BorderLayout.NORTH);
+    	this.add(boardPanel.getPanel(), BorderLayout.NORTH);
         boardPanel.refreshBoardPanel();
         this.add(playerPanel.getPanel(), BorderLayout.CENTER);
         this.add(southPanel, BorderLayout.SOUTH);
@@ -272,7 +272,7 @@ public class MainFrame extends JFrame implements Serializable {
 		// Create game-board Panel and add it to the Frame //
 		// ----------------------------------------------- //
 		boardPanel = new BoardPanel(players);
-		this.add(boardPanel, BorderLayout.NORTH);
+		this.add(boardPanel.getPanel(), BorderLayout.NORTH);
 
 		//Set all players to starting boardspace (index 0)
 		for(Player player : players){

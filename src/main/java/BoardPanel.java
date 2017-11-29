@@ -7,18 +7,10 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.io.Serializable;
 
-public class BoardPanel extends JPanel implements Serializable {
+public class BoardPanel implements Serializable {
+    private static final long serialVersionUID = 1L;
     // Data for the BoardPanel
 	private ArrayList<BoardSpace> spaces = new ArrayList<BoardSpace>();
-    // private BoardSpace[] spaces;
-    private JLabel start = new JLabel("Start ->");
-    private JLabel grandma = new JLabel("-> Grandma's House");
-    private JLabel midLabel = new JLabel("MID");
-    private JLabel firstLabel = new JLabel("Candy Cane Forest");
-    private JLabel secondLabel = new JLabel("Minty Mountains");
-    private JLabel thirdLabel = new JLabel("Bubble Gum Trapeze");
-    private JLabel fourthLabel = new JLabel("Marshmallow Marsh");
-    private JLabel fifthLabel = new JLabel("Licorice Lagoon");
     private static final Font BUTTON_FONT = new Font("Courier", Font.PLAIN, 48);
     private static final int BOARD_COLUMNS = 8;
     private static final int BOARD_ROWS = 8;
@@ -34,23 +26,32 @@ public class BoardPanel extends JPanel implements Serializable {
     private static final int THIRD_SPECIAL = SPECIAL_MOD * 3;
     private static final int FOURTH_SPECIAL = SPECIAL_MOD * 4;
     private static final int FIFTH_SPECIAL = SPECIAL_MOD * 5;
-    
+
+    private static final String START_SPACE_TEXT = "Start ->";
+    private static final String GRANDMAS_HOUSE_TEXT = "-> Grandma's House";
+    private static final String FIRST_SPECIAL_SPACE_TEXT = "Candy Cane Forest";
+    private static final String SECOND_SPECIAL_SPACE_TEXT = "Minty Mountains";
+    private static final String THIRD_SPECIAL_SPACE_TEXT = "Bubble Gum Trapeze";
+    private static final String FOURTH_SPECIAL_SPACE_TEXT = "Marshmallow Marsh";
+    private static final String FIFTH_SPECIAL_SPACE_TEXT = "Licorice Lagoon";
+
+    private transient JPanel mainPanel;
 
     public BoardPanel(Player[] players){
-		setLayout(BOARD_LAYOUT);
+		this.initializeMainPanel();
 
 		// ----------------- //
 		// Create the Spaces //
 		// ----------------- //
 		// Create the "Start" space
-		BoardSpace newStart = new BoardSpace(Color.WHITE, start, players);
+		BoardSpace newStart = new BoardSpace(Color.WHITE, new JLabel(START_SPACE_TEXT), players);
 		newStart.setAsStartSpace(true);
 		spaces.add(newStart);
 
 		// Create all of the colored spaces
 		for(int i = 1; i < NUM_SPACES-1; i++){
 		    Color backgroundColor = Color.WHITE;
-			    switch(i % 5){
+			switch(i % 5){
 			    case 0: backgroundColor = Color.ORANGE; break;
 			    case 1: backgroundColor = Color.RED; break;
 			    case 2: backgroundColor = Color.YELLOW; break;
@@ -61,19 +62,19 @@ public class BoardPanel extends JPanel implements Serializable {
 		    // Check if this space is a special square.
 		    JLabel newLabel = new JLabel("");
 		    switch(i){
-			    case FIRST_SPECIAL: newLabel = firstLabel;
+			    case FIRST_SPECIAL: newLabel = new JLabel(FIRST_SPECIAL_SPACE_TEXT);
 				backgroundColor = Color.MAGENTA;
 				break;
-			    case SECOND_SPECIAL: newLabel = secondLabel;
+			    case SECOND_SPECIAL: newLabel = new JLabel(SECOND_SPECIAL_SPACE_TEXT);
 				backgroundColor = Color.CYAN;
 				break;
-			    case THIRD_SPECIAL: newLabel = thirdLabel;
+			    case THIRD_SPECIAL: newLabel = new JLabel(THIRD_SPECIAL_SPACE_TEXT);
 				backgroundColor = Color.PINK;
 				break;
-			    case FOURTH_SPECIAL: newLabel = fourthLabel;
+			    case FOURTH_SPECIAL: newLabel = new JLabel(FOURTH_SPECIAL_SPACE_TEXT);
 				backgroundColor = Color.GRAY;
 				break;
-			    case FIFTH_SPECIAL: newLabel = fifthLabel;
+			    case FIFTH_SPECIAL: newLabel = new JLabel(FIFTH_SPECIAL_SPACE_TEXT);
 				backgroundColor = Color.BLACK;
 				break;
 			    default: break;
@@ -110,7 +111,7 @@ public class BoardPanel extends JPanel implements Serializable {
 		}
 
 		// Create the end space ("Grandma's House")
-		BoardSpace newGrandma = new BoardSpace(Color.WHITE, grandma);
+		BoardSpace newGrandma = new BoardSpace(Color.WHITE, new JLabel(GRANDMAS_HOUSE_TEXT));
 		newGrandma.setAsGrandmasHouse(true);
 
 		spaces.add(newGrandma);
@@ -118,24 +119,37 @@ public class BoardPanel extends JPanel implements Serializable {
 		// --------------------------- //
 		// Add the Spaces to the board //
 		// --------------------------- //
-		refreshBoardPanel();
+		this.refreshBoardPanel();
+    }
+
+    public JPanel getPanel(){
+    	if(mainPanel == null){
+    		this.initializeMainPanel();
+    	}
+
+    	return mainPanel;
+    }
+
+    private void initializeMainPanel(){
+    	mainPanel = new JPanel();
+    	mainPanel.setLayout(BOARD_LAYOUT);
     }
 
     public void refreshBoardPanel(){
-		this.removeAll();
-		this.revalidate();
-		this.repaint();
+		mainPanel.removeAll();
+		mainPanel.revalidate();
+		mainPanel.repaint();
 
 		for(BoardSpace space : spaces){
-			this.add(space.getPanel());
+			mainPanel.add(space.getPanel());
 			space.updateText();
 		}
-		this.revalidate();
-		this.repaint();
+		mainPanel.revalidate();
+		mainPanel.repaint();
     }
 
     public void add(BoardSpace space){
-    	this.add(space.getPanel());
+    	mainPanel.add(space.getPanel());
     }
 
     // Retrieve a specific board space
