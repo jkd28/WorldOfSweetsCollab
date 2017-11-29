@@ -49,6 +49,19 @@ public class MainFrame extends JFrame implements Serializable {
         return timerPanel;
     }
 
+    public void resetTimerPanel(){
+    	timerPanel.updateLabel();
+    	timerPanel.startTimer();
+    	
+    	if(!timerPanel.timerIsRunning()){
+			timerPanel.startTimer();
+    	}
+  
+    	southPanel.removeAll();
+        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
+        southPanel.add(savePanel, BorderLayout.EAST);
+    }
+  
     public BoardPanel getBoardPanel(){
         return boardPanel;
     }
@@ -182,17 +195,7 @@ public class MainFrame extends JFrame implements Serializable {
     	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
-
-    public void resetTimerPanel(){
-    	String realTime = timerPanel.timer.getRealTime();
-    	southPanel.remove(timerPanel);
-    	southPanel.validate();
-    	southPanel.repaint();
-    	timerPanel = new TimerPanel(realTime);
-        southPanel.add(timerPanel, BorderLayout.WEST);
-		timerPanel.gameStarted = true;
-    }
-
+    
     public void refreshPanels(){
         this.getContentPane().removeAll();
     	this.validate();
@@ -299,7 +302,7 @@ public class MainFrame extends JFrame implements Serializable {
         // ---------------------- //
         southPanel = new JPanel();
         timerPanel = new TimerPanel();
-        southPanel.add(timerPanel, BorderLayout.WEST);
+        southPanel.add(timerPanel.getLabel(), BorderLayout.WEST);
 
 
         // ----------------------------------------------- //
@@ -334,7 +337,7 @@ public class MainFrame extends JFrame implements Serializable {
 			// ====================== //
 			// Disable the game timer //
 			// ====================== //
-            gameFrame.getTimerPanel().gameStarted = false;
+            gameFrame.getTimerPanel().stopTimer();
 
 
 			// ============= //
@@ -355,7 +358,7 @@ public class MainFrame extends JFrame implements Serializable {
 			// ======================== //
 			// Re-enable the game timer //
 			// ======================== //
-            gameFrame.getTimerPanel().gameStarted = true;
+            gameFrame.getTimerPanel().startTimer();
 
 
 			// =========================== //
@@ -389,7 +392,7 @@ public class MainFrame extends JFrame implements Serializable {
     		// ====================== //
 			// Disable the game timer //
 			// ====================== //
-            gameFrame.getTimerPanel().gameStarted = false;
+            gameFrame.getTimerPanel().stopTimer();
 
 
     		// ======================================================= //
