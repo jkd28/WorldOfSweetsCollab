@@ -4,7 +4,7 @@ import javax.swing.*;
 import java.io.Serializable;
 import java.math.*;
 
-public class TimerPanel extends JPanel implements Serializable{
+public class TimerPanel implements Serializable{
     private static final long serialVersionUID = 1L;
     private static final Font LABEL_FONT = new Font("Dialog", Font.BOLD, 20);
 
