@@ -3,7 +3,7 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WorldOfSweets implements Serializable {
+public class WorldOfSweets {
 
 	// Basic game information
 	public static final int MIN_PLAYERS = 2;
