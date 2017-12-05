@@ -11,6 +11,8 @@ public class PlayerPanel implements Serializable {
     private static final String ORD_PRE_TEXT = "Player Order: \n";
 
     private Player[] players;
+    private Player currentPlayer;
+    private Player nextPlayer;
 
     private transient JPanel mainPanel;
     private transient JPanel currPanel;
@@ -24,6 +26,9 @@ public class PlayerPanel implements Serializable {
 
     public PlayerPanel(Player[] newPlayers){
     	players = newPlayers;
+        if(players.length > 0){
+            nextPlayer = players[0];
+        }
 
     	initializeSwingComponents();
     }
@@ -45,8 +50,26 @@ public class PlayerPanel implements Serializable {
     		initializeSwingComponents();
     	}
 
-		currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName());
-	    nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName());
+        this.currentPlayer = currentPlayer;
+        this.nextPlayer = nextPlayer;
+
+        this.updateCurrAndNextPlayerDisplayText();
+    }
+
+    private void updateCurrAndNextPlayerDisplayText(){
+        if(currentPlayer != null){
+            currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName());
+        }
+        else{
+            currDisplayText.setText(START_TEXT);
+        }
+
+        if(nextPlayer != null){
+            nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName());
+        }
+        else{
+            nextDisplayText.setText(NEXT_PRE_TEXT);
+        }
     }
 
     public String getCurrPlayerText(){
@@ -94,13 +117,7 @@ public class PlayerPanel implements Serializable {
 	    constraints = new GridBagConstraints();
 
 	    // Set the initial text of each JPanel
-		currDisplayText.setText(START_TEXT);
-		if(players.length > 0){
-			nextDisplayText.setText(NEXT_PRE_TEXT + players[0].getName());
-		}
-		else{
-			nextDisplayText.setText(NEXT_PRE_TEXT);
-		}
+		updateCurrAndNextPlayerDisplayText();
 		ordDisplayText.setText(ORD_PRE_TEXT);
 
 	    constraints.anchor = GridBagConstraints.WEST; // Force JLabels to align left

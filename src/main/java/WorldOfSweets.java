@@ -3,14 +3,19 @@ import java.io.*;
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
-public class WorldOfSweets implements Serializable {
+public class WorldOfSweets {
 
 	// Basic game information
 	public static final int MIN_PLAYERS = 2;
 	public static final int MAX_PLAYERS = 4;
     public static final String SAVE_FILE_EXTENSION = "ser";
     public static final FileNameExtensionFilter SAVE_FILE_FILTER = new FileNameExtensionFilter(String.format("WorldOfSweets Save Files (*.%s)", SAVE_FILE_EXTENSION), SAVE_FILE_EXTENSION);
+    
+    private static MainFrame mainGameFrame;
 
+    public static MainFrame getMainGameFrame(){
+        return mainGameFrame;
+    }
 
   	private static int getNumPlayersFromUser(){
 		// Create the list of options
@@ -174,24 +179,19 @@ public class WorldOfSweets implements Serializable {
         }
 
         if(WorldOfSweets.isValidSaveFile(saveFile)){
-            try {
-                FileInputStream fileIn = new FileInputStream(saveFile);
-                ObjectInputStream in = new ObjectInputStream(fileIn);
-
-                MainFrame gameFrame = (MainFrame) in.readObject();
-                gameFrame.refreshPanels();
-
-                in.close();
-                fileIn.close();
-
-                return gameFrame;
-            } 
-            catch (IOException e) {
-                return null;
-            } 
-            catch (ClassNotFoundException e) {
-                return null;
+            MainFrame gameFrame = null;
+            try{
+                gameFrame = (MainFrame) Utility.loadSerializable(saveFile);                
             }
+            catch(Utility.ChecksumValueException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
+            catch(Utility.InvalidChecksumFileNameException e){
+                e.printStackTrace();
+                System.exit(1);
+            }
+            return gameFrame;
         }
         else{
             return null;
@@ -241,20 +241,9 @@ public class WorldOfSweets implements Serializable {
 
         // If the file from the user is valid, save it
         if(WorldOfSweets.isValidSaveFileName(saveFile.getName())){
-            try {
-                FileOutputStream fileOut = new FileOutputStream(saveFile);
-                ObjectOutputStream out = new ObjectOutputStream(fileOut);
+            Utility.saveSerializable(gameFrame, saveFile);
 
-                out.writeObject(gameFrame);
-
-                out.close();
-                fileOut.close();
-
-                return true;
-            } 
-            catch (IOException e) {
-                return false;
-            }
+            return true;
         }
         else{
             return false;
@@ -294,8 +283,6 @@ public class WorldOfSweets implements Serializable {
 
 
     public static void main(String[] args) {
-    	MainFrame gameFrame;
-
         // ===================================================== //
         // Ask if the user wants to load a previously saved game //
         // ===================================================== //
@@ -324,22 +311,19 @@ public class WorldOfSweets implements Serializable {
             File saveFile = getFileToLoadFromUser();
 
             if(WorldOfSweets.isValidSaveFile(saveFile)){
-                gameFrame = loadPreviousGameFromSaveFile(saveFile);
+                mainGameFrame = loadPreviousGameFromSaveFile(saveFile);
 
-                if(gameFrame == null){
+                if(mainGameFrame == null){
                     JOptionPane.showMessageDialog(null, 
                         "Something went wrong while trying to load the game saved in \""+saveFile.getName()+"\"."
                         + "\n\nStarting a new game instead!"
                     );
-                    gameFrame = startNewGame();
+                    mainGameFrame = startNewGame();
                 }
                 else{
-                    gameFrame.getDeckPanel().enableDrawButton();
+                    mainGameFrame.getDeckPanel().enableDrawButton();
 
-                    gameFrame.resetTimerPanel();
-                    // TimerPanel timerPanel = gameFrame.getTimerPanel();
-                    // timerPanel.gameStarted = true;
-                    // timerPanel.startTimer(timerPanel.timer.getRealTime());
+                    mainGameFrame.resetTimerPanel();
                 }
             }
             else{
@@ -347,7 +331,7 @@ public class WorldOfSweets implements Serializable {
                     "I'm sorry, but the file you selected was not a valid WorldOfSweets save file name."
                     + "\n\nStarting a new game instead!"
                 );
-                gameFrame = startNewGame();
+                mainGameFrame = startNewGame();
             }
         }
 
@@ -356,10 +340,19 @@ public class WorldOfSweets implements Serializable {
     	// Else, Start a new game //
         // ====================== //
     	else{
-            gameFrame = startNewGame();
+            mainGameFrame = startNewGame();
         }
 
-        gameFrame.setVisible(true);
-        gameFrame.initializeBackgroundAudio();
+        mainGameFrame.setVisible(true);
+        mainGameFrame.initializeBackgroundAudio();
     }
+
+
+
+
+
+
+
+
+    
 }

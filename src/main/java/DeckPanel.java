@@ -79,16 +79,21 @@ public class DeckPanel implements Serializable {
 	}
 
 	public void refreshCardPanelBackground(){
-		switch(currentCard.getValue()){
-			case Card.SINGLE: 				cardPanel.setPanel(createSingleColorPanel(currentCard.getColor())); break;
-			case Card.DOUBLE: 				cardPanel.setPanel(createDoubleColorPanel(currentCard.getColor())); break;
-			case Card.SKIP: 				cardPanel.setPanel(createSpecialPanel(Card.SKIP_TEXT)); break;
-			case Card.GO_TO_FIRST_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT)); break;
-			case Card.GO_TO_SECOND_SPECIAL: cardPanel.setPanel(createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT)); break;
-			case Card.GO_TO_THIRD_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT)); break;
-			case Card.GO_TO_FOURTH_SPECIAL: cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT)); break;
-			case Card.GO_TO_FIFTH_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT)); break;
+		if(currentCard == null){
+			cardPanel.setPanel(createSingleColorPanel(currentColor));
+		}
+		else{
+			switch(currentCard.getValue()){
+				case Card.SINGLE: 				cardPanel.setPanel(createSingleColorPanel(currentCard.getColor())); break;
+				case Card.DOUBLE: 				cardPanel.setPanel(createDoubleColorPanel(currentCard.getColor())); break;
+				case Card.SKIP: 				cardPanel.setPanel(createSpecialPanel(Card.SKIP_TEXT)); break;
+				case Card.GO_TO_FIRST_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT)); break;
+				case Card.GO_TO_SECOND_SPECIAL: cardPanel.setPanel(createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT)); break;
+				case Card.GO_TO_THIRD_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT)); break;
+				case Card.GO_TO_FOURTH_SPECIAL: cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT)); break;
+				case Card.GO_TO_FIFTH_SPECIAL: 	cardPanel.setPanel(createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT)); break;
 
+			}
 		}
 	}
 
@@ -301,15 +306,15 @@ public class DeckPanel implements Serializable {
 			// Update the current Player with the drawn card //
 			// ============================================= //
 			// Get the "parent" GUI window that is holding this DeckPanel
-			Window parent = SwingUtilities.getWindowAncestor(deckPanel.getPanel());
+			// Window parent = SwingUtilities.getWindowAncestor(deckPanel.getPanel());
 
 			// If this DeckPanel has a "parent", then we're playing a game of WorldOfSweets,
 			//	so we need to update the Player that just "drew" a card,
 			//	and then rotate to the next Player
 			// Else, this DeckPanel doesn't have a "parent" because we're running a Unit Test,
 			//	so we should not do ANYTHING more.
-			if(parent != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
-				MainFrame gameFrame = (MainFrame) ((JFrame) parent);
+			MainFrame gameFrame = WorldOfSweets.getMainGameFrame();
+			if(gameFrame != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
 				if(gameFrame.getNumPlayers() > 0){
 					// ----------------------------------- //
 					// Get the Player who just drew a Card //
@@ -318,7 +323,9 @@ public class DeckPanel implements Serializable {
 					
 					//get the timerPanel to check if game has started or ended
 					TimerPanel timer = gameFrame.getTimerPanel();
-					timer.gameStarted = true;
+                    if(!timer.timerIsRunning()){
+                    	timer.startTimer();
+                    }
 
 					// Move to Player to their next BoardSpace
 					gameFrame.updatePlayerPosition(currentPlayer, currentCard);
@@ -334,7 +341,7 @@ public class DeckPanel implements Serializable {
 						gameFrame.disableSaveButton();
 
 						// Diable the game timer //
-						timer.gameFinished = true;
+						timer.stopTimer();
 
 						// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
@@ -342,10 +349,10 @@ public class DeckPanel implements Serializable {
 						// End the game //
 						System.exit(0);
 					}
+					
+					// Rotate to the next Player
+					gameFrame.getNextPlayer();
 				}
-
-				// Rotate to the next Player
-				gameFrame.getNextPlayer();
 			}
 		}
 	}

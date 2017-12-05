@@ -136,6 +136,10 @@ public class BoardPanel implements Serializable {
     }
 
     public void refreshBoardPanel(){
+        if(mainPanel == null){
+            initializeMainPanel();
+        }
+        
 		mainPanel.removeAll();
 		mainPanel.revalidate();
 		mainPanel.repaint();
