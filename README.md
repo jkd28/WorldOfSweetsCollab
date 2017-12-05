@@ -71,5 +71,5 @@ To run the program, clone this repo and run these commands:
 
 
  *  Test Load Game with Invalid Checksum  
- **Execution:** Start a brand new game, draw a few cards and let some time pass, save the game to file, and exit WorldOfSweets. In a text editor, modify the checksum file for the save file you just created (i.e. if you just created a file called "WorldOfSweets Saved Game.ser", there should be a complementary file called "WorldOfSweets Saved Game.ser.chksum" containing the checksum. Alter one or more of the numbers). Re-open WorldOfSweets and try to load the save file you just saved.
+ **Execution:** Start a brand new game, draw a few cards and let some time pass, save the game to file, and exit WorldOfSweets. In a text editor, modify the checksum file for the save file you just created (i.e. if you just created a file called "WorldOfSweets Saved Game.ser", there should be a complementary file called "WorldOfSweets Saved Game.ser.chksum" containing the checksum. Alter one or more of the numbers). Re-open WorldOfSweets and try to load the save file you just saved.  
  **Expected Results:** WorldOfSweets forcibly exits with a `ChecksumValueException`.
