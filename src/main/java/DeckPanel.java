@@ -325,10 +325,13 @@ public class DeckPanel implements Serializable {
 					TimerPanel timer = gameFrame.getTimerPanel();
                     if(!timer.timerIsRunning()){
                     	timer.startTimer();
-                    }
+					}
+					
+					//TEMPORARY, check if this is a boomerang action
+					Boolean reverse = false;
 
 					// Move to Player to their next BoardSpace
-					gameFrame.updatePlayerPosition(currentPlayer, currentCard);
+					gameFrame.updatePlayerPosition(currentPlayer, currentCard, reverse);
 
 					// -------------------------------------------- //
 					// Check if the current Player has won the game //

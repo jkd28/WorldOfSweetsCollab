@@ -293,7 +293,8 @@ public class BoardPanel implements Serializable {
 
     	// If we've gotten this far without finding a new BoardSpace,
 		//	it means the next available space for the Player MUST be the end ("Grandma's House").
-		// NOTE: This can probably be removed since we are checking for grandma's house on every loop.
+		// NOTE: This can probably be removed since we are checking for grandma's house on every loop. 
+		//		Throw an exception if newSpace is null
     	if(newSpace == null){
     		newSpace = grandmasHouseSpace;
     	}
