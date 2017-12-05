@@ -38,4 +38,17 @@ public class Player implements Serializable {
       token = t;
       return true;
     }
+
+    public int getNumBoomerangs(){
+        return remainingBoomerangs;
+    }
+
+    public void useBoomerang(Player p, BoardSpace bs){
+        if(this.remainingBoomerangs <= 0){
+            System.out.println(this.name + " has no boomerangs remaining");
+            return;
+        }
+        this.remainingBoomerangs -= 1;
+        p.setPosition(bs);
+    }
 }
