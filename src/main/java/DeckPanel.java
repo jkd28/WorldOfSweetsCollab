@@ -362,7 +362,7 @@ public class DeckPanel implements Serializable {
 							options,
 							options[0]);
 						boomerangedPlayer = otherPlayers[dialogResult];
-						System.out.println("boomeranged player is " + boomerangedPlayer.getName());
+						// System.out.println("boomeranged player is " + boomerangedPlayer.getName());
 
 						gameFrame.updatePlayerPosition(boomerangedPlayer, currentCard, true);
 						boomerangError = false;
