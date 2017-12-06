@@ -40,7 +40,9 @@ public class DeckPanel implements Serializable {
 	if(drawButton == null){
 	    initializeDrawButton();
 	}
-
+	public DeckPanel(){
+		this(false);
+	}
 	drawPanel = new JPanel(new BorderLayout());
 	drawPanel.add(drawButton, BorderLayout.CENTER);
     }
@@ -48,7 +50,6 @@ public class DeckPanel implements Serializable {
     private void initializeMainPanel(){
 	mainPanel = new JPanel();
 	mainPanel.setLayout(new GridLayout(1, 2));
-
 	if(drawButton == null){
 	    initializeDrawButton();
 	}
@@ -68,7 +69,6 @@ public class DeckPanel implements Serializable {
 	if(drawPanel == null){
 	    initializeDrawPanel();
 	}
-
 	if(mainPanel == null){
 	    initializeMainPanel();
 	}
@@ -182,7 +182,6 @@ public class DeckPanel implements Serializable {
 	if(drawPanel == null){
 	    initializeDrawPanel();
 	}
-
 	if(mainPanel == null){
 	    initializeMainPanel();
 	}
@@ -197,7 +196,6 @@ public class DeckPanel implements Serializable {
 		
 	drawButton.setEnabled(false);
     }
-
 
     // Class for the panel displaying the most recently drawn card.
     private class CardPanel implements Serializable{
@@ -260,7 +258,6 @@ public class DeckPanel implements Serializable {
 	    panel = new JPanel();
 	}
     }
-
 
     private class DrawListener implements ActionListener, Serializable{
 	private static final long serialVersionUID = 1L;
@@ -359,7 +356,6 @@ public class DeckPanel implements Serializable {
 
 			// Diable the game timer //
 			timer.stopTimer();
-
 			// Congratulate the winning player //
 			JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
 						

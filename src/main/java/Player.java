@@ -47,4 +47,11 @@ public class Player implements Serializable {
       token = t;
       return true;
     }
+
+    public int getNumBoomerangs(){
+        return numBoomerangs;
+    }
+    public void useBoomerang(){
+        numBoomerangs--;
+    }
 }

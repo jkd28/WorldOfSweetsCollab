@@ -7,6 +7,7 @@ import static org.junit.Assert.*;
 public class PlayerPanelTest{
     PlayerPanel testPlayerPanel;
     Player[] testPlayers = new Player[4];
+    boolean isStrategicMode = true;
 
     @Before
     public void setup(){
@@ -14,7 +15,7 @@ public class PlayerPanelTest{
         testPlayers[1] = new Player("Brian");
         testPlayers[2] = new Player("John");
         testPlayers[3] = new Player("Kevin");
-        testPlayerPanel = new PlayerPanel(testPlayers);
+        testPlayerPanel = new PlayerPanel(testPlayers, isStrategicMode);
     }
 
     // The panel should initialize with the message "First turn!"
@@ -23,7 +24,7 @@ public class PlayerPanelTest{
     @Test
     public void testInitialPlayerPanelText(){
         String testCurrPlayerMessage = "First turn!";
-        String testNextPlayerMessage = "Next Player: \n" + testPlayers[0].getName();
+        String testNextPlayerMessage = "Next Player: \n" + testPlayers[0].getName() + " has " + testPlayers[0].getNumBoomerangs() + " boomerangs";
 
         assertEquals(testCurrPlayerMessage, testPlayerPanel.getCurrPlayerText());
         assertEquals(testNextPlayerMessage, testPlayerPanel.getNextPlayerText());
