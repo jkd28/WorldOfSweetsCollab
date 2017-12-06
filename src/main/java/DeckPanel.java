@@ -8,6 +8,7 @@ public class DeckPanel implements Serializable {
 	private static final Font DRAW_BUTTON_FONT = new Font("Calibri", Font.PLAIN, 24);
 	private static final String DRAW_BUTTON_TEXT = "<html>World of Sweets!<br /> Click to Draw!</html>";
 	public static final Color DEFAULT_COLOR = Color.WHITE;
+	private boolean boomerangError = false;
 
 	private Deck drawDeck;
 	private CardPanel cardPanel;
@@ -339,7 +340,7 @@ public class DeckPanel implements Serializable {
                     }
 
 					// Move to Player to their next BoardSpace
-					if (pressedBoomerang){
+					if (pressedBoomerang && currentPlayer.getNumBoomerangs() > 0){
 						Player boomerangedPlayer;
 						currentPlayer.useBoomerang();
 						Object[] options = new Object[gameFrame.getNumPlayers() - 1];
@@ -362,8 +363,16 @@ public class DeckPanel implements Serializable {
 							options[0]);
 						boomerangedPlayer = otherPlayers[dialogResult];
 						System.out.println("boomeranged player is " + boomerangedPlayer.getName());
+						boomerangError = false;
+					}else if (pressedBoomerang){
+						JOptionPane.showMessageDialog(null,
+    						"You don't have any boomerangs left!",
+    						"Error",
+    						JOptionPane.ERROR_MESSAGE);
+						boomerangError = true;
 					}else{
 						gameFrame.updatePlayerPosition(currentPlayer, currentCard);
+						boomerangError = false;
 					}
 					// -------------------------------------------- //
 					// Check if the current Player has won the game //
@@ -384,8 +393,7 @@ public class DeckPanel implements Serializable {
 						// End the game //
 						System.exit(0);
 					}
-
-					if (!pressedBoomerang){
+					if (!boomerangError){
 						// Rotate to the next Player
 						gameFrame.getNextPlayer();
 					}
