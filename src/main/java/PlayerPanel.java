@@ -58,14 +58,14 @@ public class PlayerPanel implements Serializable {
 
     private void updateCurrAndNextPlayerDisplayText(){
         if(currentPlayer != null){
-            currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName());
+            currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName() + " has " + currentPlayer.getNumBoomerangs() + " boomerangs");
         }
         else{
             currDisplayText.setText(START_TEXT);
         }
 
         if(nextPlayer != null){
-            nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName());
+            nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName() + " has " + nextPlayer.getNumBoomerangs() + " boomerangs");
         }
         else{
             nextDisplayText.setText(NEXT_PRE_TEXT);
@@ -123,7 +123,7 @@ public class PlayerPanel implements Serializable {
 	    constraints.anchor = GridBagConstraints.WEST; // Force JLabels to align left
 		constraints.gridy = 0; // Place the first JLabel in the first row
 		orderPanel.add(ordDisplayText, constraints);
-		
+
 		// Add each player's name to the turn order
 		for (int i = 0; i < players.length; i++){
 		    JLabel tempLabel = new JLabel((i+1) + ") " + players[i].getName());
