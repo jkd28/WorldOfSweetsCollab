@@ -24,13 +24,20 @@ public class PlayerPanel implements Serializable {
     private transient GridBagLayout gridBag;
     private transient GridBagConstraints constraints;
 
-    public PlayerPanel(Player[] newPlayers){
-    	players = newPlayers;
+    private boolean isStrategicMode;
+
+    public PlayerPanel(Player[] newPlayers, boolean isStrategicMode){
+        players = newPlayers;
         if(players.length > 0){
             nextPlayer = players[0];
         }
 
-    	initializeSwingComponents();
+        this.isStrategicMode = isStrategicMode;
+
+        initializeSwingComponents();
+    }
+    public PlayerPanel(Player[] newPlayers){
+    	this(newPlayers, false);
     }
     public PlayerPanel(){
     	this(new Player[0]);
@@ -58,14 +65,24 @@ public class PlayerPanel implements Serializable {
 
     private void updateCurrAndNextPlayerDisplayText(){
         if(currentPlayer != null){
-            currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName() + " has " + currentPlayer.getNumBoomerangs() + " boomerangs");
+            if(isStrategicMode){
+                currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName() + " has " + currentPlayer.getNumBoomerangs() + " boomerangs");
+            }
+            else{
+                currDisplayText.setText(CURR_PRE_TEXT + currentPlayer.getName());
+            }
         }
         else{
             currDisplayText.setText(START_TEXT);
         }
 
         if(nextPlayer != null){
-            nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName() + " has " + nextPlayer.getNumBoomerangs() + " boomerangs");
+            if(isStrategicMode){
+                nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName() + " has " + nextPlayer.getNumBoomerangs() + " boomerangs");
+            }
+            else{
+                nextDisplayText.setText(NEXT_PRE_TEXT + nextPlayer.getName());
+            }
         }
         else{
             nextDisplayText.setText(NEXT_PRE_TEXT);

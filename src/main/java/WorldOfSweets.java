@@ -13,8 +13,8 @@ public class WorldOfSweets {
     
     private static MainFrame mainGameFrame;
 
-    private static final int CLASSIC_GAME_MODE = 0;
-    private static final int STRATEGIC_GAME_MODE = 1;
+    public static final int CLASSIC_GAME_MODE = 0;
+    public static final int STRATEGIC_GAME_MODE = 1;
     private static final String[] GAME_MODE_DIALOG_OPTIONS = new String[] {"Classic", "Strategic"};
 
     public static MainFrame getMainGameFrame(){
@@ -275,6 +275,10 @@ public class WorldOfSweets {
     }
 
     private static MainFrame startNewGame(){
+        return startNewGame(false);
+    }
+
+    private static MainFrame startNewGame(boolean isStrategicMode){
         // ------------------------- //
         // Get the number of Players //
         // ------------------------- //
@@ -297,7 +301,7 @@ public class WorldOfSweets {
         // --------------------------------------------------- //
         // Create the "World of Sweets" GUI and start the game //
         // --------------------------------------------------- //
-        MainFrame newGameFrame = new MainFrame(numPlayers);
+        MainFrame newGameFrame = new MainFrame(numPlayers, isStrategicMode);
 
         return newGameFrame;
     }
@@ -342,7 +346,11 @@ public class WorldOfSweets {
                         "Something went wrong while trying to load the game saved in \""+saveFile.getName()+"\"."
                         + "\n\nStarting a new game instead!"
                     );
-                    mainGameFrame = startNewGame();
+                    int gameMode = getGameModeFromUser();
+                    mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+                    /////
+                    System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+                    /////
                 }
                 else{
                     mainGameFrame.getDeckPanel().enableDrawButton();
@@ -355,7 +363,11 @@ public class WorldOfSweets {
                     "I'm sorry, but the file you selected was not a valid WorldOfSweets save file name."
                     + "\n\nStarting a new game instead!"
                 );
-                mainGameFrame = startNewGame();
+                int gameMode = getGameModeFromUser();
+                mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+                /////
+                System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+                /////
             }
         }
 
@@ -364,18 +376,11 @@ public class WorldOfSweets {
     	// Else, Start a new game //
         // ====================== //
     	else{
-            mainGameFrame = startNewGame();
-
             int gameMode = getGameModeFromUser();
-            if(gameMode == STRATEGIC_GAME_MODE){
-                /////
-                JOptionPane.showMessageDialog(null, "STRATEGIC MODE ACTIVATED");
-                /////
-                // Enable and show the "Use Boomerang" button
-
-                // Enable the "boomerangs remaining" text
-                //  For this, probably gonna need to add a boolean into PlayerPanel
-            }
+            mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+            /////
+            System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+            /////
         }
 
         mainGameFrame.setVisible(true);

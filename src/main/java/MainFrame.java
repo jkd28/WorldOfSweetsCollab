@@ -37,6 +37,8 @@ public class MainFrame implements Externalizable {
     // Data for currentPlayer
     public int currentPlayerIndex;
 
+    protected boolean isStrategicMode;
+
 
     private transient JFrame mainFrame;
     private transient JPanel southPanel;    // Holds the "SaveButton" and "TimerPanel" pieces
@@ -242,6 +244,7 @@ public class MainFrame implements Externalizable {
         out.writeObject(players);
         out.writeInt(numPlayers);
         out.writeInt(currentPlayerIndex);
+        out.writeBoolean(isStrategicMode);
         
         // All of the data needed to reconstruct the Swing objects
         //  is already saved, by virtue of the data already saved above.
@@ -260,6 +263,7 @@ public class MainFrame implements Externalizable {
         players = (Player[]) in.readObject();
         numPlayers = (int) in.readInt();
         currentPlayerIndex = (int) in.readInt();
+        isStrategicMode = (boolean) in.readBoolean();
 
         // Regenerate the Swing objects
         initializeSwingComponents();
@@ -274,31 +278,36 @@ public class MainFrame implements Externalizable {
     }
 
     public MainFrame(int playerCount){
+        this(playerCount, false);
+    }
+
+    public MainFrame(int playerCount, boolean isStrategicMode){
         this.numPlayers = playerCount;
         currentPlayerIndex = 0; // The first player to go will always be player 0, regardless of the number of players
 
-    	// ------------------------ //
-		// Validate input arguments //
-		// ------------------------ //
-    	if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
-    		String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
-    		JOptionPane.showMessageDialog(null,
-				message,
-				"Invalid Number of Players",
-				JOptionPane.ERROR_MESSAGE);
-			System.exit(1);
-    	}
+        // ------------------------ //
+        // Validate input arguments //
+        // ------------------------ //
+        if(numPlayers < WorldOfSweets.MIN_PLAYERS || numPlayers > WorldOfSweets.MAX_PLAYERS){
+            String message = String.format("Number of players must be a positive integer between %d and %d!", WorldOfSweets.MIN_PLAYERS, WorldOfSweets.MAX_PLAYERS);
+            JOptionPane.showMessageDialog(null,
+                message,
+                "Invalid Number of Players",
+                JOptionPane.ERROR_MESSAGE);
+            System.exit(1);
+        }
 
+        this.isStrategicMode = isStrategicMode;
 
-		createPlayers();
+        createPlayers();
 
-		boardPanel = new BoardPanel(players);
-		for(Player player : players){                     //Set all players to starting boardspace (index 0)
-			player.setPosition(boardPanel.getSpace(0));   //
-		}                                                 //
+        boardPanel = new BoardPanel(players);
+        for(Player player : players){                     //Set all players to starting boardspace (index 0)
+            player.setPosition(boardPanel.getSpace(0));   //
+        }                                                 //
 
-		deckPanel = new DeckPanel();
-        playerPanel = new PlayerPanel(players);
+        deckPanel = new DeckPanel();
+        playerPanel = new PlayerPanel(players, this.isStrategicMode);
         timerPanel = new TimerPanel();
 
         saveGameButtonListener = (ActionListener) new SaveGameButtonListener(this, deckPanel);
