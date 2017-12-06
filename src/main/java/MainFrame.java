@@ -140,6 +140,10 @@ public class MainFrame implements Externalizable {
     	return players[currentPlayerIndex];
     }
 
+    public int getCurrentPlayerIndex(){
+	return currentPlayerIndex;
+    }
+
     public int getNumPlayers(){
     	return numPlayers;
     }

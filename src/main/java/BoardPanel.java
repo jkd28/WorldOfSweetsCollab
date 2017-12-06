@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.util.ArrayList;
+import java.util.ListIterator;
 import java.io.Serializable;
 
 public class BoardPanel implements Serializable {
@@ -159,6 +160,16 @@ public class BoardPanel implements Serializable {
     // Retrieve a specific board space
     public BoardSpace getSpace(int index){
 		return spaces.get(index);
+    }
+
+    // Retrieve the index of a specific space
+    public int getSpaceIndex(BoardSpace space){
+	return spaces.indexOf(space);
+    }
+
+    public ListIterator<BoardSpace> getListIterator(int index){
+	ListIterator<BoardSpace> iter = spaces.listIterator(index);
+	return iter;
     }
 
     // Retrieve the number of spaces
