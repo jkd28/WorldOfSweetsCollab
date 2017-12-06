@@ -58,10 +58,10 @@ public class Deck implements Serializable {
 		break;
 	    }
 	}
-	/*	System.out.println("-----");
+		System.out.println("-----");
 	for(int i = 0; i < nearSpaces.length; i++){
 	    System.out.println(nearSpaces[i]);
-	    }*/
+	    }
 	return nearSpaces;
     }
 
@@ -88,33 +88,27 @@ public class Deck implements Serializable {
 	Card desiredCard = null;
 	int lastIndex = 0;
 
+	Stack<Card> tmpStack = new Stack<Card>();
+	
 	// Keep popping cards from the deck until you find the card
-	// you want. Store every other card in an array. Once you find
-	// the desired card, save it and stop iterating. Then iterate
-	// through the array of cards in reverse order and push each
-	// back onto the stack to preserve order.
-	for(int i = 0; i < cards.length; i++ ){
-	    if(cardDeck.empty()){
-		break;
-	    }
+	// you want. Store every other card in a stack. Once you find
+	// the desired card, save it and stop iterating. Then pop the
+	// other cards from the tempStack and push them back onto the
+	// deck to preserve order.
+
+	while(!cardDeck.isEmpty()){
 	    currentCard = cardDeck.pop();
 	    if(card.getColor().equals(currentCard.getColor()) &&
 	       card.getValue() == currentCard.getValue()){
 		desiredCard = currentCard;
-		if(lastIndex != 0){
-		lastIndex = i-1;
-		}
 		break;
-	    } else {
-		cards[i] = currentCard;
 	    }
+	    tmpStack.push(currentCard);
 	}
-
-	if(lastIndex != 0){
-	    for(int i = lastIndex; i >= 0; i--){
-		cardDeck.push(cards[i]);
-	    }
+	while(!tmpStack.isEmpty()){
+	    cardDeck.push(tmpStack.pop());
 	}
+       
 	return desiredCard;
     }
 
@@ -136,7 +130,7 @@ public class Deck implements Serializable {
 		    // Skip cards will almost always be the worst card
 		    if(currentValue== 0){ 
 			worstCard = remaining[i];
-			smallestIndex = 0;
+			smallestIndex = -1;
 
 			// Check for single cards
 		    } else if(currentValue == 1 && currentColor.equals(nearSpaces[j]) && j < smallestIndex){
@@ -160,25 +154,25 @@ public class Deck implements Serializable {
 		    // will move the player backwards and will be one of the worst
 		    // cards. The statements are not if-else because 
 		    if(currentValue > 2){
-			if(position >= 60 && currentValue == 7 && smallestIndex >-1){
-			    worstCard = remaining[i];
-			    smallestIndex = -1;
-			}
-			if(position >= 48 && currentValue == 6 && smallestIndex >-2){
+			if(position >= 60 && currentValue == 7 && smallestIndex >-2){
 			    worstCard = remaining[i];
 			    smallestIndex = -2;
 			}
-			if(position >= 36 && currentValue == 5 && smallestIndex >-3){
+			if(position >= 48 && currentValue == 6 && smallestIndex >-3){
 			    worstCard = remaining[i];
 			    smallestIndex = -3;
 			}
-			if(position >= 24 && currentValue == 4 && smallestIndex >-4){
+			if(position >= 36 && currentValue == 5 && smallestIndex >-4){
 			    worstCard = remaining[i];
 			    smallestIndex = -4;
 			}
-			if(position >= 12 && currentValue == 3 && smallestIndex >-5){
+			if(position >= 24 && currentValue == 4 && smallestIndex >-5){
 			    worstCard = remaining[i];
 			    smallestIndex = -5;
+			}
+			if(position >= 12 && currentValue == 3 && smallestIndex >-5){
+			    worstCard = remaining[i];
+			    smallestIndex = -6;
 			}
 		    }
 		}
