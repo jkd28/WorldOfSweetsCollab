@@ -40,8 +40,7 @@ public class Player implements Serializable {
     public int getNumBoomerangs(){
         return numBoomerangs;
     }
-    public boolean useBoomerang(){
+    public void useBoomerang(){
         numBoomerangs--;
-        return true;
     }
 }

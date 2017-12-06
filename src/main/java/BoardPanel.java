@@ -182,18 +182,33 @@ public class BoardPanel implements Serializable {
 
     public BoardSpace sendPlayerToNextSpace(Player player, Card card, Boolean reverse){
 		
-    	// If the Card passed-in is a "Skip" card,
-    	//	do nothing.
-    	if(card.getValue() == Card.SKIP){
-    		return player.getPosition();
-    	}
-		BoardSpace currentPlayerSpace = player.getPosition();
+    	BoardSpace currentPlayerSpace = player.getPosition();
+
+		if (!reverse) {
+			// If the Card passed-in is a "Skip" card,
+			//	do nothing.
+			if (card.getValue() == Card.SKIP) {
+				return player.getPosition();
+			}
+			// If the Player is already at "Grandma's House",
+			//	do nothing.
+			if (currentPlayerSpace.isGrandmasHouse()) {
+				return currentPlayerSpace;
+			}
+		} else {
+			// If the Player is already at "start",
+			//	do nothing.
+			if (currentPlayerSpace.isStartSpace()) {
+				return currentPlayerSpace;
+			}
+		}
 
 		// Handle "special" cards
-		if(card.getValue() > 2){
+		//	Behavior is the same regardless of "reverse" value
+		if (card.getValue() > 2) {
 			int cardValue = card.getValue();
 			BoardSpace specialSpace = null;
-			if (cardValue == Card.GO_TO_FIRST_SPECIAL){
+			if (cardValue == Card.GO_TO_FIRST_SPECIAL) {
 				specialSpace = getSpace(FIRST_SPECIAL);
 			} else if (cardValue == Card.GO_TO_SECOND_SPECIAL) {
 				specialSpace = getSpace(SECOND_SPECIAL);
@@ -211,64 +226,85 @@ public class BoardPanel implements Serializable {
 			return specialSpace;
 		}
 
-    	// If the Player is already at "Grandma's House",
-    	//	do nothing.
-    	if(currentPlayerSpace.isGrandmasHouse()){
-    		return currentPlayerSpace;
-    	}
+		// Find the next space that the Player can go to,
+		//	based on the Color and value of the Card passed-in
+		//	(aka the one that they drew from the deck)
+		BoardSpace oldPlayerSpace = player.getPosition();
+		BoardSpace newSpace = null;
+		BoardSpace grandmasHouseSpace = this.getSpace(spaces.size() - 1);
+		Color cardColor = card.getColor();
+		boolean alreadyFoundFirstSpaceForCardColor = false; // Used for dealing with "DOUBLE" color cards
 
-    	// Find the next space that the Player can go to,
-    	//	based on the Color and value of the Card passed-in
-    	//	(aka the one that they drew from the deck)
-    	BoardSpace oldPlayerSpace = player.getPosition();
-    	BoardSpace newSpace = null;
-    	BoardSpace grandmasHouseSpace = this.getSpace(spaces.size() - 1);
-    	Color cardColor = card.getColor();
-    	boolean alreadyFoundFirstSpaceForCardColor = false;	// Used for dealing with "DOUBLE" color cards
+		//If "reverse" is true, look backwards for the color
+		if (reverse) {
+			for (int i = spaces.indexOf(player.getPosition()) - 1; i >= 0; i--) { // We check the spaces that are before the Player's current space
+				BoardSpace space = this.getSpace(i);
+				Color spaceColor = space.getSpaceColor();
 
-    	for(int i = spaces.indexOf(player.getPosition()) + 1; i < NUM_SPACES - 2; i++){ // We check the spaces that are after the Player's current space, but before Grandma's House
-    		BoardSpace space = this.getSpace(i);
-    		Color spaceColor = space.getSpaceColor();
+				// If the next space we're looking at is the start space,
+				//	the Player MUST take that space.
+				if (space.isStartSpace()) {
+					newSpace = this.getSpace(i);
+					break;
+				}
 
-    		// If the next space we're looking at is "Grandma's House",
-    		//	the Player MUST take that space.
-    		if(space.isGrandmasHouse()){
-    			newSpace = this.getSpace(i);
-    			break;
-    		}
+				if (spaceColor.equals(cardColor)) {
+					if (card.getValue() == Card.SINGLE) {
+						newSpace = this.getSpace(i);
+						break;
+					} else if (card.getValue() == Card.DOUBLE && alreadyFoundFirstSpaceForCardColor) {
+						newSpace = this.getSpace(i);
+						break;
+					} else {
+						alreadyFoundFirstSpaceForCardColor = true;
+					}
+				}
+			}
+		} else {
+			for (int i = spaces.indexOf(player.getPosition()) + 1; i < NUM_SPACES - 2; i++) { // We check the spaces that are after the Player's current space, but before Grandma's House
+				BoardSpace space = this.getSpace(i);
+				Color spaceColor = space.getSpaceColor();
 
-    		if(spaceColor.equals(cardColor)){
-    			if(card.getValue() == Card.SINGLE){
-    				newSpace = this.getSpace(i);
-    				break;
-    			}
-    			else if(card.getValue() == Card.DOUBLE && alreadyFoundFirstSpaceForCardColor){
-    				newSpace = this.getSpace(i);
-    				break;
-    			}
-    			else{
-    				alreadyFoundFirstSpaceForCardColor = true;
-    			}
-    		}
-    	}
+				// If the next space we're looking at is "Grandma's House",
+				//	the Player MUST take that space.
+				if (space.isGrandmasHouse()) {
+					newSpace = this.getSpace(i);
+					break;
+				}
 
-    	// If we've gotten this far without finding a new BoardSpace,
-    	//	it means the next available space for the Player MUST be the end ("Grandma's House").
-    	if(newSpace == null){
-    		newSpace = grandmasHouseSpace;
-    	}
+				if (spaceColor.equals(cardColor)) {
+					if (card.getValue() == Card.SINGLE) {
+						newSpace = this.getSpace(i);
+						break;
+					} else if (card.getValue() == Card.DOUBLE && alreadyFoundFirstSpaceForCardColor) {
+						newSpace = this.getSpace(i);
+						break;
+					} else {
+						alreadyFoundFirstSpaceForCardColor = true;
+					}
+				}
+			}
+		}
 
-    	// Set the Player's position to the new space's index
-    	player.setPosition(newSpace);
+		// If we've gotten this far without finding a new BoardSpace,
+		//	it means the next available space for the Player MUST be the end ("Grandma's House").
+		// NOTE: This can probably be removed since we are checking for grandma's house on every loop. 
+		//		Throw an exception if newSpace is null
+		if (newSpace == null) {
+			newSpace = grandmasHouseSpace;
+		}
 
-    	// Remove the Player from their old BoardSpace
-    	// BoardSpace previousSpace = oldPlayerIndex);
-    	oldPlayerSpace.removePlayer(player);
+		// Set the Player's position to the new space's index
+		player.setPosition(newSpace);
 
-    	// Add the Player to their new BoardSpace
-    	// BoardSpace newSpace = player.getPosition();
-    	newSpace.addPlayer(player);
+		// Remove the Player from their old BoardSpace
+		// BoardSpace previousSpace = oldPlayerIndex);
+		oldPlayerSpace.removePlayer(player);
 
-    	return newSpace;
+		// Add the Player to their new BoardSpace
+		// BoardSpace newSpace = player.getPosition();
+		newSpace.addPlayer(player);
+
+		return newSpace;
     }
 }

@@ -287,6 +287,7 @@ public class DeckPanel implements Serializable {
 				pressedBoomerang = true;
 			}else{
 				pressedBoomerang = false;
+			}
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 			int cardValue = drawnCard.getValue();
@@ -311,7 +312,6 @@ public class DeckPanel implements Serializable {
 			deckPanel.refreshPanels();
 			drawButton.requestFocus();
 			currentColor = cardColor;
-		}
 
 			// ============================================= //
 			// Update the current Player with the drawn card //
