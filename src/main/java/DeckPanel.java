@@ -3,6 +3,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
+
 
 public class DeckPanel implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -361,16 +363,17 @@ public class DeckPanel implements Serializable {
 		    //	so we should not do ANYTHING more.
 		    if(gameFrame != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
 				if(gameFrame.getNumPlayers() > 0){
-				    // ----------------------------------- //
-				    // Get the Player who just drew a Card //
-				    // ----------------------------------- //
-				    Player currentPlayer = gameFrame.getCurrentPlayer();
-							
-				    //get the timerPanel to check if game has started or ended
-				    TimerPanel timer = gameFrame.getTimerPanel();
-		            if(!timer.timerIsRunning()){
-		            	timer.startTimer();
-		            }
+
+          // ----------------------------------- //
+          // Get the Player who just drew a Card //
+          // ----------------------------------- //
+          Player currentPlayer = gameFrame.getCurrentPlayer();
+
+          //get the timerPanel to check if game has started or ended
+          TimerPanel timer = gameFrame.getTimerPanel();
+              if(!timer.timerIsRunning()){
+                timer.startTimer();
+              }
 
 				    /// Move to Player to their next BoardSpace
 					if (pressedBoomerang && currentPlayer.getNumBoomerangs() > 0){
@@ -416,6 +419,7 @@ public class DeckPanel implements Serializable {
 				    // Check if the current Player has won the game //
 				    // -------------------------------------------- //
 				    if(gameFrame.playerHasWon(currentPlayer)){
+
 						// Disable the "draw" button //
 						deckPanel.disableDrawButton();
 
@@ -427,16 +431,22 @@ public class DeckPanel implements Serializable {
 
 						// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
-									
+
+
 						// End the game //
 						System.exit(0);
-				    }
-							
-				    // Rotate to the next Player
-				    gameFrame.getNextPlayer();
+					}
 
-				} // closes "if"
-		    } // closes "if"
-		} // closes "actionPerformed"
-    } // closes "DrawListener"
+					// Rotate to the next Player
+					gameFrame.getNextPlayer();
+                    Player nextPlayer = gameFrame.getCurrentPlayer();
+
+                    // Check for AI player and operate if necessary
+                    if (nextPlayer.isAI()) {
+                        deckPanel.getDrawButton().doClick();
+                    }
+				}
+			}
+		}
+	}
 }

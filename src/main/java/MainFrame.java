@@ -6,6 +6,7 @@ import javax.sound.sampled.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 
+
 public class MainFrame implements Externalizable {
     // Data for the entire Frame, which will hold all of our Panels
     public static final int FRAME_HEIGHT = 800;
@@ -45,7 +46,7 @@ public class MainFrame implements Externalizable {
     private transient JButton saveButton;   // Data for the "SaveButton" Panel
     private transient JPanel savePanel;     //
 
-    
+
 
     public JFrame getFrame(){
         return mainFrame;
@@ -63,12 +64,12 @@ public class MainFrame implements Externalizable {
     public void resetTimerPanel(){
     	timerPanel.updateLabel();
     	timerPanel.startTimer();
-    	
+
     	if(!timerPanel.timerIsRunning()){
 			timerPanel.startTimer();
     	}
     }
-  
+
     public BoardPanel getBoardPanel(){
         return boardPanel;
     }
@@ -96,11 +97,11 @@ public class MainFrame implements Externalizable {
 				DataLine.Info info = new DataLine.Info(Clip.class, format);
 				clip = (Clip)AudioSystem.getLine(info);
 				clip.open(music);
-			} 
+			}
 			else {
 				throw new RuntimeException(String.format("Music file '%s' not found.", musicFile.getName()));
 			}
-		} 
+		}
 		catch(MalformedURLException e){
 			e.printStackTrace();
 			throw new RuntimeException("Malformed URL: " + e);
@@ -121,7 +122,7 @@ public class MainFrame implements Externalizable {
     }
 
 
-    
+
     // --------------------------------------- //
     // Calling this will return the player who //
     // is up next and advance currentPlayer    //
@@ -131,9 +132,8 @@ public class MainFrame implements Externalizable {
 
     	currentPlayerIndex = (currentPlayerIndex + 1) % getNumPlayers();
     	Player nextPlayer = getPlayer(currentPlayerIndex);
-    	playerPanel.changePlayer(currentPlayer, nextPlayer);
-
-    	return currentPlayer;
+        playerPanel.changePlayer(currentPlayer, nextPlayer);
+        return currentPlayer;
     }
 
 	public Player getCurrentPlayer(){
@@ -173,7 +173,7 @@ public class MainFrame implements Externalizable {
     	BoardSpace currentPlayerSpace = player.getPosition();
     	return currentPlayerSpace.isGrandmasHouse();
     }
-    
+
 
     private void initializeSwingComponents(){
         saveButton = new JButton(MainFrame.SAVE_GAME_BUTTON_TEXT);
@@ -212,11 +212,7 @@ public class MainFrame implements Externalizable {
             String playerName = defaultPlayerName;
             String token;
             while(true){
-                playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?", defaultPlayerName);
-                TokenPanel tp = new TokenPanel(usedTokens);
-                tp.setVisible(true);
-                token = tp.getSelectedToken();
-                usedTokens[i] = token;
+                playerName = JOptionPane.showInputDialog(null, "What is the name of player #"+i+"?\n(Enter 'AI' for a Computer Player)", defaultPlayerName);
 
                 if(playerName == null || playerName.equals("")){
                     JOptionPane.showMessageDialog(null,
@@ -226,6 +222,10 @@ public class MainFrame implements Externalizable {
                         );
                     continue;
                 }
+                TokenPanel tp = new TokenPanel(usedTokens);
+                tp.setVisible(true);
+                token = tp.getSelectedToken();
+                usedTokens[i] = token;
 
                 break;
             }
@@ -275,9 +275,9 @@ public class MainFrame implements Externalizable {
 
     public MainFrame(){
         /*
-        * FOR THE LOVE OF THE DIVINE TRINITY DO NOT DELETE ME; 
+        * FOR THE LOVE OF THE DIVINE TRINITY DO NOT DELETE ME;
             I - the B L A N K C O N S T R U C T O R - am required by the Holy Ghost of Externalizable to be present
-            (I'm pretty sure becasuse it uses me to instantiate any class variables, like all of my "static final" variables) 
+            (I'm pretty sure becasuse it uses me to instantiate any class variables, like all of my "static final" variables)
         */
     }
 

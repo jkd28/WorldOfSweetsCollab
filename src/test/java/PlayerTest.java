@@ -29,4 +29,17 @@ public class PlayerTest{
         p.setName("Kevin");
         assertEquals("Kevin", p.getName());
     }
+
+    // Test that the AI is properly set when the Player has name "AI";
+    @Test
+    public void testAISet() {
+        Player aiTest = new Player("AI");
+        assertTrue(aiTest.isAI());
+    }
+
+    // Test that the AI is not set when the name is not "AI"
+    @Test
+    public void testAINotSet() {
+        assertFalse(p.isAI());
+    }
 }
