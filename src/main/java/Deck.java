@@ -12,9 +12,6 @@ public class Deck implements Serializable {
     public static final int NUM_DOUBLE_CARDS_PER_COLOR = 2;
     public static final int NUM_SKIP_CARDS = 5;
     public static final int NUM_GO_TO_CARDS = 1; // Number of copies of each go to card
-    /*public int drawnRed, drawnYellow, drawnBlue, drawnGreen, drawnOrange, drawnSkip,
-    drawnRed2, drawnYellow2, drawnBlue2, drawnGreen2, drawnOrange2;
-    drawnRed = drawnYellow = drawnBlue = drawnGreen = drawnOrange = drawnSkip = drawnRed2 = drawnYellow2 = drawnBlue2 = drawnGreen2 = drawnOrange2 = 0; */
     
     public Deck() {
         cardDeck = initializeDeck();
@@ -28,13 +25,15 @@ public class Deck implements Serializable {
         return cardDeck.pop();
     }
 
-    // The fartherest a player can be moved by a single card (ignoring specials)
-    // is 10 spaces (drawing a double of the color the player is currently on).
-    // Create an array of size 11 (skip = 0) where each index contains the color
-    // whose index difference with the current space corresponds with the index (I'm
-    // tired but this makes sense in my head). Choose the available card with the
-    // lowest index. The special cards are edge cases that can be figured out by
-    // comparing the current location index with the indices of the special squares
+    // The furthest a player can be moved by a single card (ignoring specials)
+    // is 15 spaces (drawing a double of the color the player is currently on
+    // while what would be the next space of that color is replaced by a special,
+    // forcing a move to the next space of that color). Create an array of size 16
+    // (skip = 0) where each index contains the color whose index difference with
+    // the current space corresponds with the index (I'm tired but this makes sense
+    // in my head). Choose the available card with the lowest index. The special
+    // cards are edge cases that can be figured out by comparing the current location
+    // index with the indices of the special squares
     public Card dadDraw(Player player, BoardPanel boardPanel){
 	if (cardDeck.empty()){
 	    cardDeck = initializeDeck();
@@ -47,9 +46,9 @@ public class Deck implements Serializable {
 	int position = boardPanel.getSpaceIndex(space);
 	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position+1);
 	BoardSpace tempSpace;
-	Color[] nearSpaces = new Color[11];
+	Color[] nearSpaces = new Color[16];
 	nearSpaces[0] = Color.DARK_GRAY;
-	for(int i = 1; i < 12; i++){
+	for(int i = 1; i < 17; i++){
 	    tempSpace = iter.next();
 	    nearSpaces[i] = tempSpace.getSpaceColor();
 	    if(tempSpace.isGrandmasHouse()){
@@ -58,6 +57,67 @@ public class Deck implements Serializable {
 	}
 	return nearSpaces;
     }
+
+    public Card[] getRemainingCards(){
+	Stack<Card> tempDeck = (Stack<Card>)cardDeck.clone();
+	Card[] remaining = new Card[70];
+
+	for(int i = 0; i < remaining.length; i++){
+	    if(tempDeck.empty()){
+		break;
+	    }
+	    remaining[i] = tempDeck.pop();
+	}
+	return remaining;
+    }
+
+    public Card findWorstCard(int position, Card[] remaining, Color[] nearSpaces){
+	int smallestIndex = Integer.MAX_VALUE;
+	Card bestCard = null;
+
+	for(int i = 0; i < remaining.length; i++){
+	    for(int j = 0; j < nearSpaces.length; j++){
+		int currentValue = remaining[i].getValue();
+		Color currentColor = remaining[i].getColor();
+		if(!nearSpaces[j].equals(Color.WHITE)){
+		    if(currentValue== 0){
+			bestCard = remaining[i];
+			smallestIndex = 0;
+		    } else if(currentValue == 1 && currentColor.equals(nearSpaces[j]) && j < smallestIndex){
+			bestCard = remaining[i];
+			smallestIndex = j;
+		    } else if(currentValue == 2 && currentColor.equals(nearSpaces[j]) && j*2 < smallestIndex){
+			bestCard = remaining[i];
+			smallestIndex = j*2;
+		    }
+		    if(currentValue > 2){
+			if(position >= 60 && currentValue == 7 && smallestIndex >-1){
+			    bestCard = remaining[i];
+			    smallestIndex = -1;
+			}
+			if(position >= 48 && currentValue == 6 && smallestIndex >-2){
+			    bestCard = remaining[i];
+			    smallestIndex = -2;
+			}
+			if(position >= 36 && currentValue == 5 && smallestIndex >-3){
+			    bestCard = remaining[i];
+			    smallestIndex = -3;
+			}
+			if(position >= 24 && currentValue == 4 && smallestIndex >-4){
+			    bestCard = remaining[i];
+			    smallestIndex = -4;
+			}
+			if(position >= 12 && currentValue == 3 && smallestIndex >-5){
+			    bestCard = remaining[i];
+			    smallestIndex = -5;
+			}
+		    }
+		}
+	    }
+	}
+	return bestCard;
+    }
+
 	
 
     public int size(){
