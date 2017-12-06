@@ -180,7 +180,7 @@ public class BoardPanel implements Serializable {
     	return middleSpace;
     }
 
-    public BoardSpace sendPlayerToNextSpace(Player player, Card card){
+    public BoardSpace sendPlayerToNextSpace(Player player, Card card, Boolean reverse){
 		
     	// If the Card passed-in is a "Skip" card,
     	//	do nothing.
