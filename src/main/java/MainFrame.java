@@ -158,23 +158,9 @@ public class MainFrame implements Externalizable {
     	saveButton.setEnabled(true);
     }
 
-    public void updatePlayerPosition(Player player, Card card){
-    	// Get the BoardSpace that this Player currently inhabits
-	    BoardSpace currentSpace = player.getPosition();
+    public void updatePlayerPosition(Player player, Card card, Boolean reverse){
 
-	    // If this spot is "Grandma's House", we do not move anywhere
-	    if(currentSpace.isGrandmasHouse()){
-	    	return;
-	    }
-
-	    // If this card is a "Skip" card, we do nothing
-	    if(card.getValue() == Card.SKIP){
-	    	return;
-	    }
-
-	    // With a normal Single or Double colored card,
-	    //	send the Player to their next spot.
-	    boardPanel.sendPlayerToNextSpace(player, card);
+	    boardPanel.sendPlayerToNextSpace(player, card, reverse);
     }
 
     public boolean playerHasWon(Player player){
