@@ -21,14 +21,21 @@ public class DeckPanel implements Serializable {
 	private transient JButton drawButton;
 	private transient JButton boomerangButton;
 
-	public DeckPanel(){
+	private boolean isStrategicMode;
+
+	public DeckPanel(boolean isStrategicMode){
 		drawDeck = new Deck();
 		cardPanel = new CardPanel();
 		currentColor = DEFAULT_COLOR;
 		currentCard = null;
 		drawListener = (ActionListener) new DrawListener(this);
 
+		this.isStrategicMode = isStrategicMode;
+
 		initializeMainPanel();
+	}
+	public DeckPanel(){
+		this(false);
 	}
 
 	private void initializeDrawButton(){
@@ -39,7 +46,7 @@ public class DeckPanel implements Serializable {
 		boomerangButton = new JButton("Use Boomerang");
 		boomerangButton.setFont(DRAW_BUTTON_FONT);
 		boomerangButton.addActionListener(drawListener);
-		boomerangButton.setEnabled(true);
+		boomerangButton.setEnabled(isStrategicMode);
 	}
 
 	private void initializeDrawPanel(){
@@ -49,7 +56,9 @@ public class DeckPanel implements Serializable {
 
 		drawPanel = new JPanel(new BorderLayout());
 		drawPanel.add(drawButton, BorderLayout.CENTER);
-		drawPanel.add(boomerangButton, BorderLayout.EAST);
+		if(isStrategicMode){
+			drawPanel.add(boomerangButton, BorderLayout.EAST);
+		}
 	}
 
 	private void initializeMainPanel(){
