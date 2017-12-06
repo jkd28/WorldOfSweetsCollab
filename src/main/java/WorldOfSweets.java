@@ -13,6 +13,10 @@ public class WorldOfSweets {
     
     private static MainFrame mainGameFrame;
 
+    private static final int CLASSIC_GAME_MODE = 0;
+    private static final int STRATEGIC_GAME_MODE = 1;
+    private static final String[] GAME_MODE_DIALOG_OPTIONS = new String[] {"Classic", "Strategic"};
+
     public static MainFrame getMainGameFrame(){
         return mainGameFrame;
     }
@@ -45,6 +49,26 @@ public class WorldOfSweets {
 		int playerCount = dialogResult + 2; //first button of the JOptionPane returns 0, second 1, third 2;
 		return playerCount;
 	    	
+    }
+
+    private static int getGameModeFromUser(){
+        int result = JOptionPane.showOptionDialog(
+            null,
+            "Which game mode would you like to play?",
+            "Game Mode?",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            GAME_MODE_DIALOG_OPTIONS,
+            GAME_MODE_DIALOG_OPTIONS[0]
+        );
+ 
+        if(result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION){
+            JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        }
+
+        return result;
     }
 
     private static File getFileToLoadFromUser(){
@@ -341,6 +365,17 @@ public class WorldOfSweets {
         // ====================== //
     	else{
             mainGameFrame = startNewGame();
+
+            int gameMode = getGameModeFromUser();
+            if(gameMode == STRATEGIC_GAME_MODE){
+                /////
+                JOptionPane.showMessageDialog(null, "STRATEGIC MODE ACTIVATED");
+                /////
+                // Enable and show the "Use Boomerang" button
+
+                // Enable the "boomerangs remaining" text
+                //  For this, probably gonna need to add a boolean into PlayerPanel
+            }
         }
 
         mainGameFrame.setVisible(true);
