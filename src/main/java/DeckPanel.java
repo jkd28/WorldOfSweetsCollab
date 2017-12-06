@@ -286,8 +286,7 @@ public class DeckPanel implements Serializable {
 			// ============================= //
 			if ((JButton)e.getSource() == boomerangButton){
 				pressedBoomerang = true;
-			}else{
-				pressedBoomerang = false;
+			}
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 			int cardValue = drawnCard.getValue();
@@ -312,7 +311,6 @@ public class DeckPanel implements Serializable {
 			deckPanel.refreshPanels();
 			drawButton.requestFocus();
 			currentColor = cardColor;
-		}
 
 			// ============================================= //
 			// Update the current Player with the drawn card //
@@ -363,17 +361,21 @@ public class DeckPanel implements Serializable {
 							options[0]);
 						boomerangedPlayer = otherPlayers[dialogResult];
 						System.out.println("boomeranged player is " + boomerangedPlayer.getName());
+
+						gameFrame.updatePlayerPosition(boomerangedPlayer, currentCard, true);
 						boomerangError = false;
-						//afafafaa
+						pressedBoomerang = false;
 					}else if (pressedBoomerang){
-						JOptionPane.showMessageDialog(null,
-    						"You don't have any boomerangs left!",
-    						"Error",
-    						JOptionPane.ERROR_MESSAGE);
-						boomerangError = true;
+							JOptionPane.showMessageDialog(null,
+	    						"You don't have any boomerangs left!",
+	    						"Error",
+	    						JOptionPane.ERROR_MESSAGE);
+							boomerangError = true;
+							pressedBoomerang = false;
 					}else{
-						gameFrame.updatePlayerPosition(currentPlayer, currentCard);
+						gameFrame.updatePlayerPosition(currentPlayer, currentCard, false);
 						boomerangError = false;
+						pressedBoomerang = false;
 					}
 					// -------------------------------------------- //
 					// Check if the current Player has won the game //
