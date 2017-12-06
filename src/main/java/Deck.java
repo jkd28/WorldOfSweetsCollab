@@ -46,14 +46,12 @@ public class Deck implements Serializable {
     // Given a player's position and the board, returns the color of next 15 spaces.
     // This is the furthest a player can move ignoring special cards - occurs if
     // the player draws a double card of the color they are on and one of the next
-    // two spaces of that color is a special instead. The array has length 16
-    // because index 0 is set to Dark Gray, the color of skip cards. 
+    // two spaces of that color is a special instead.
     public Color[] getCloseSpaces(int position, BoardPanel boardPanel){
-	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position+1);
+	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position);
 	BoardSpace tempSpace;
-	Color[] nearSpaces = new Color[16];
-	nearSpaces[0] = Color.DARK_GRAY;
-	for(int i = 1; i < 16; i++){
+	Color[] nearSpaces = new Color[15];
+	for(int i = 0; i < nearSpaces.length; i++){
 	    tempSpace = iter.next();
 	    nearSpaces[i] = tempSpace.getSpaceColor();
 	    if(tempSpace.isGrandmasHouse()){
