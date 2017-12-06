@@ -13,6 +13,10 @@ public class WorldOfSweets {
     
     private static MainFrame mainGameFrame;
 
+    public static final int CLASSIC_GAME_MODE = 0;
+    public static final int STRATEGIC_GAME_MODE = 1;
+    private static final String[] GAME_MODE_DIALOG_OPTIONS = new String[] {"Classic", "Strategic"};
+
     public static MainFrame getMainGameFrame(){
         return mainGameFrame;
     }
@@ -45,6 +49,26 @@ public class WorldOfSweets {
 		int playerCount = dialogResult + 2; //first button of the JOptionPane returns 0, second 1, third 2;
 		return playerCount;
 	    	
+    }
+
+    private static int getGameModeFromUser(){
+        int result = JOptionPane.showOptionDialog(
+            null,
+            "Which game mode would you like to play?",
+            "Game Mode?",
+            JOptionPane.DEFAULT_OPTION,
+            JOptionPane.PLAIN_MESSAGE,
+            null,
+            GAME_MODE_DIALOG_OPTIONS,
+            GAME_MODE_DIALOG_OPTIONS[0]
+        );
+ 
+        if(result == JOptionPane.CANCEL_OPTION || result == JOptionPane.CLOSED_OPTION){
+            JOptionPane.showMessageDialog(null, "Goodbye!", "Goodbye!", JOptionPane.INFORMATION_MESSAGE);
+            System.exit(0);
+        }
+
+        return result;
     }
 
     private static File getFileToLoadFromUser(){
@@ -251,6 +275,10 @@ public class WorldOfSweets {
     }
 
     private static MainFrame startNewGame(){
+        return startNewGame(false);
+    }
+
+    private static MainFrame startNewGame(boolean isStrategicMode){
         // ------------------------- //
         // Get the number of Players //
         // ------------------------- //
@@ -273,7 +301,7 @@ public class WorldOfSweets {
         // --------------------------------------------------- //
         // Create the "World of Sweets" GUI and start the game //
         // --------------------------------------------------- //
-        MainFrame newGameFrame = new MainFrame(numPlayers);
+        MainFrame newGameFrame = new MainFrame(numPlayers, isStrategicMode);
 
         return newGameFrame;
     }
@@ -318,7 +346,11 @@ public class WorldOfSweets {
                         "Something went wrong while trying to load the game saved in \""+saveFile.getName()+"\"."
                         + "\n\nStarting a new game instead!"
                     );
-                    mainGameFrame = startNewGame();
+                    int gameMode = getGameModeFromUser();
+                    mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+                    /////
+                    System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+                    /////
                 }
                 else{
                     mainGameFrame.getDeckPanel().enableDrawButton();
@@ -331,7 +363,11 @@ public class WorldOfSweets {
                     "I'm sorry, but the file you selected was not a valid WorldOfSweets save file name."
                     + "\n\nStarting a new game instead!"
                 );
-                mainGameFrame = startNewGame();
+                int gameMode = getGameModeFromUser();
+                mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+                /////
+                System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+                /////
             }
         }
 
@@ -340,7 +376,11 @@ public class WorldOfSweets {
     	// Else, Start a new game //
         // ====================== //
     	else{
-            mainGameFrame = startNewGame();
+            int gameMode = getGameModeFromUser();
+            mainGameFrame = startNewGame(gameMode == STRATEGIC_GAME_MODE);
+            /////
+            System.out.println("isStrategicMode: " + (gameMode == STRATEGIC_GAME_MODE));
+            /////
         }
 
         mainGameFrame.setVisible(true);

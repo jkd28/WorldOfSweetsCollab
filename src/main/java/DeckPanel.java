@@ -1,3 +1,4 @@
+
 import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
@@ -10,6 +11,7 @@ public class DeckPanel implements Serializable {
 	private static final Font DRAW_BUTTON_FONT = new Font("Calibri", Font.PLAIN, 24);
 	private static final String DRAW_BUTTON_TEXT = "<html>World of Sweets!<br /> Click to Draw!</html>";
 	public static final Color DEFAULT_COLOR = Color.WHITE;
+	private boolean boomerangError = false;
 
 	private Deck drawDeck;
 	private CardPanel cardPanel;
@@ -20,15 +22,23 @@ public class DeckPanel implements Serializable {
 	private transient JPanel mainPanel;
 	private transient JPanel drawPanel;
 	private transient JButton drawButton;
+	private transient JButton boomerangButton;
 
-	public DeckPanel(){
+	private boolean isStrategicMode;
+
+	public DeckPanel(boolean isStrategicMode){
 		drawDeck = new Deck();
 		cardPanel = new CardPanel();
 		currentColor = DEFAULT_COLOR;
 		currentCard = null;
 		drawListener = (ActionListener) new DrawListener(this);
 
+		this.isStrategicMode = isStrategicMode;
+
 		initializeMainPanel();
+	}
+	public DeckPanel(){
+		this(false);
 	}
 
 	private void initializeDrawButton(){
@@ -36,6 +46,10 @@ public class DeckPanel implements Serializable {
 		drawButton.setFont(DRAW_BUTTON_FONT);
 		drawButton.addActionListener(drawListener);
 		drawButton.setEnabled(true);
+		boomerangButton = new JButton("Use Boomerang");
+		boomerangButton.setFont(DRAW_BUTTON_FONT);
+		boomerangButton.addActionListener(drawListener);
+		boomerangButton.setEnabled(isStrategicMode);
 	}
 
 	private void initializeDrawPanel(){
@@ -45,6 +59,9 @@ public class DeckPanel implements Serializable {
 
 		drawPanel = new JPanel(new BorderLayout());
 		drawPanel.add(drawButton, BorderLayout.CENTER);
+		if(isStrategicMode){
+			drawPanel.add(boomerangButton, BorderLayout.EAST);
+		}
 	}
 
 	private void initializeMainPanel(){
@@ -267,74 +284,142 @@ public class DeckPanel implements Serializable {
 	private class DrawListener implements ActionListener, Serializable{
 		private static final long serialVersionUID = 1L;
 		private DeckPanel deckPanel;
+		private boolean pressedBoomerang = false;
 
 		public DrawListener(DeckPanel deckPanel){
-			this.deckPanel = deckPanel;
+		    this.deckPanel = deckPanel;
 		}
 
 		// Every time we click the button, it will display the
 		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
-			// ============================= //
-			// Draw a card and pull its data //
-			// ============================= //
-			Card drawnCard = drawDeck.draw();
-				currentCard = drawnCard;
-			int cardValue = drawnCard.getValue();
-			Color cardColor = drawnCard.getColor();
+		    Player drawPlayer = null;
+		    Card drawnCard;
+		    int cardValue;
+		    Color cardColor;
+		    MainFrame gameFrame = WorldOfSweets.getMainGameFrame();
 
-			// ============================================ //
-			// Create and set the panel for this drawn card
-			// ============================================ //
-			JPanel newPanel = new JPanel();
-			switch(cardValue){
-				case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
-				case Card.DOUBLE: 		newPanel = createDoubleColorPanel(cardColor); break;
-				case Card.SKIP: 		newPanel = createSpecialPanel(Card.SKIP_TEXT); break;
-				case Card.GO_TO_FIRST_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT); break;
-			case Card.GO_TO_SECOND_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT); break;
-				case Card.GO_TO_THIRD_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT); break;
-				case Card.GO_TO_FOURTH_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT); break;
-				case Card.GO_TO_FIFTH_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT); break;
-
+		    if ((JButton)e.getSource() == boomerangButton){
+				pressedBoomerang = true;
 			}
-			cardPanel.setPanel(newPanel);
-			deckPanel.refreshPanels();
-			drawButton.requestFocus();
-			currentColor = cardColor;
-
-
-			// ============================================= //
-			// Update the current Player with the drawn card //
-			// ============================================= //
-			// Get the "parent" GUI window that is holding this DeckPanel
-			// Window parent = SwingUtilities.getWindowAncestor(deckPanel.getPanel());
-
-			// If this DeckPanel has a "parent", then we're playing a game of WorldOfSweets,
-			//	so we need to update the Player that just "drew" a card,
-			//	and then rotate to the next Player
-			// Else, this DeckPanel doesn't have a "parent" because we're running a Unit Test,
-			//	so we should not do ANYTHING more.
-			MainFrame gameFrame = WorldOfSweets.getMainGameFrame();
-			if(gameFrame != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
+			else{
+				pressedBoomerang = false;
+			}
+		    	    
+		    if(gameFrame != null){
 				if(gameFrame.getNumPlayers() > 0){
-					// ----------------------------------- //
-					// Get the Player who just drew a Card //
-					// ----------------------------------- //
-					Player currentPlayer = gameFrame.getCurrentPlayer();
+				    drawPlayer = gameFrame.getPlayer(gameFrame.getCurrentPlayerIndex());
+				}
+			}
 
-					//get the timerPanel to check if game has started or ended
-					TimerPanel timer = gameFrame.getTimerPanel();
-                    if(!timer.timerIsRunning()){
-                    	timer.startTimer();
-                    }
+		    if(drawPlayer != null && drawPlayer.isDad()){
+				drawnCard = drawDeck.dadDraw(drawPlayer, gameFrame.getBoardPanel());
+				currentCard = drawnCard;
+				cardValue = drawnCard.getValue();
+				cardColor = drawnCard.getColor();
+		    } 
+		    else {
+				    
+				// ============================= //
+				// Draw a card and pull its data //
+				// ============================= //
+				drawnCard = drawDeck.draw();
+			    currentCard = drawnCard;
+			    cardValue = drawnCard.getValue();
+			    cardColor = drawnCard.getColor();
+		    }
 
-					// Move to Player to their next BoardSpace
-					gameFrame.updatePlayerPosition(currentPlayer, currentCard);
-					// -------------------------------------------- //
-					// Check if the current Player has won the game //
-					// -------------------------------------------- //
-					if(gameFrame.playerHasWon(currentPlayer)){
+		    // ============================================ //
+		    // Create and set the panel for this drawn card
+		    // ============================================ //
+		    JPanel newPanel = new JPanel();
+			    switch(cardValue){
+			    case Card.SINGLE: 		newPanel = createSingleColorPanel(cardColor); break;
+			    case Card.DOUBLE: 		newPanel = createDoubleColorPanel(cardColor); break;
+			    case Card.SKIP: 		newPanel = createSpecialPanel(Card.SKIP_TEXT); break;
+			    case Card.GO_TO_FIRST_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT); break;
+			    case Card.GO_TO_SECOND_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT); break;
+			    case Card.GO_TO_THIRD_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT); break;
+			    case Card.GO_TO_FOURTH_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT); break;
+			    case Card.GO_TO_FIFTH_SPECIAL: newPanel = createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT); break;
+
+		    }
+		    cardPanel.setPanel(newPanel);
+		    deckPanel.refreshPanels();
+		    drawButton.requestFocus();
+		    currentColor = cardColor;
+
+
+		    // ============================================= //
+		    // Update the current Player with the drawn card //
+		    // ============================================= //
+		    // Get the "parent" GUI window that is holding this DeckPanel
+		    // Window parent = SwingUtilities.getWindowAncestor(deckPanel.getPanel());
+
+		    // If this DeckPanel has a "parent", then we're playing a game of WorldOfSweets,
+		    //	so we need to update the Player that just "drew" a card,
+		    //	and then rotate to the next Player
+		    // Else, this DeckPanel doesn't have a "parent" because we're running a Unit Test,
+		    //	so we should not do ANYTHING more.
+		    if(gameFrame != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
+				if(gameFrame.getNumPlayers() > 0){
+
+          // ----------------------------------- //
+          // Get the Player who just drew a Card //
+          // ----------------------------------- //
+          Player currentPlayer = gameFrame.getCurrentPlayer();
+
+          //get the timerPanel to check if game has started or ended
+          TimerPanel timer = gameFrame.getTimerPanel();
+              if(!timer.timerIsRunning()){
+                timer.startTimer();
+              }
+
+				    /// Move to Player to their next BoardSpace
+					if (pressedBoomerang && currentPlayer.getNumBoomerangs() > 0){
+						Player boomerangedPlayer;
+						currentPlayer.useBoomerang();
+						Object[] options = new Object[gameFrame.getNumPlayers() - 1];
+						Player[] otherPlayers = new Player[gameFrame.getNumPlayers() - 1];
+						int optionsSize = 0;
+						for (int i = 0; i < gameFrame.getNumPlayers(); i++){
+							if (!gameFrame.getPlayer(i).getName().equals(currentPlayer.getName())){
+								options[optionsSize] = gameFrame.getPlayer(i).getName();
+								otherPlayers[optionsSize] = gameFrame.getPlayer(i);
+								optionsSize++;
+							}
+						}
+						int dialogResult = JOptionPane.showOptionDialog(null,
+							"Choose a player to boomerang",
+							"Choose a player to boomerang!",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options,
+							options[0]);
+						boomerangedPlayer = otherPlayers[dialogResult];
+						// System.out.println("boomeranged player is " + boomerangedPlayer.getName());
+
+						gameFrame.updatePlayerPosition(boomerangedPlayer, currentCard, true);
+						boomerangError = false;
+						pressedBoomerang = false;
+					}else if (pressedBoomerang){
+							JOptionPane.showMessageDialog(null,
+	    						"You don't have any boomerangs left!",
+	    						"Error",
+	    						JOptionPane.ERROR_MESSAGE);
+							boomerangError = true;
+							pressedBoomerang = false;
+					}else{
+						gameFrame.updatePlayerPosition(currentPlayer, currentCard, false);
+						boomerangError = false;
+						pressedBoomerang = false;
+					}
+				    // -------------------------------------------- //
+				    // Check if the current Player has won the game //
+				    // -------------------------------------------- //
+				    if(gameFrame.playerHasWon(currentPlayer)){
+
 						// Disable the "draw" button //
 						deckPanel.disableDrawButton();
 
@@ -346,6 +431,7 @@ public class DeckPanel implements Serializable {
 
 						// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+
 
 						// End the game //
 						System.exit(0);

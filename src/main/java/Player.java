@@ -6,9 +6,14 @@ public class Player implements Serializable {
     private BoardSpace position = null; //all players start at "0th" position according to write up
     private String token;
     private boolean isAI;
-
+    private boolean dad = false;
+    private int numBoomerangs = 3;
+    
     public Player(String n){
         name = n;
+	      if(name.equals("Dad")){
+	        dad = true;
+	      }
         setAI(name);
     }
 
@@ -19,7 +24,6 @@ public class Player implements Serializable {
             this.isAI = false;
         }
     }
-
     //Use an instance of a boardspace object as position
     public BoardSpace getPosition(){
         return position;
@@ -34,9 +38,17 @@ public class Player implements Serializable {
     public String getName(){
         return name;
     }
+    
     public boolean setName(String n){
         name = n;
+        if(name.equals("Dad")){
+            dad = true;
+        }
         return true;
+    }
+
+    public boolean isDad(){
+	    return dad;
     }
 
     public String getToken(){
@@ -47,8 +59,16 @@ public class Player implements Serializable {
       token = t;
       return true;
     }
-
+  
     public boolean isAI() {
-        return this.isAI;
+      return this.isAI;
+    }
+  
+    public int getNumBoomerangs(){
+      return numBoomerangs;
+    }
+  
+    public void useBoomerang(){
+        numBoomerangs--;
     }
 }
