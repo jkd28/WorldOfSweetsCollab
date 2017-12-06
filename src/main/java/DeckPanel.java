@@ -18,6 +18,7 @@ public class DeckPanel implements Serializable {
 	private transient JPanel mainPanel;
 	private transient JPanel drawPanel;
 	private transient JButton drawButton;
+	private transient JButton boomerangButton;
 
 	public DeckPanel(){
 		drawDeck = new Deck();
@@ -34,6 +35,10 @@ public class DeckPanel implements Serializable {
 		drawButton.setFont(DRAW_BUTTON_FONT);
 		drawButton.addActionListener(drawListener);
 		drawButton.setEnabled(true);
+		boomerangButton = new JButton("Use Boomerang");
+		boomerangButton.setFont(DRAW_BUTTON_FONT);
+		boomerangButton.addActionListener(drawListener);
+		boomerangButton.setEnabled(true);
 	}
 
 	private void initializeDrawPanel(){
@@ -43,6 +48,7 @@ public class DeckPanel implements Serializable {
 
 		drawPanel = new JPanel(new BorderLayout());
 		drawPanel.add(drawButton, BorderLayout.CENTER);
+		drawPanel.add(boomerangButton, BorderLayout.EAST);
 	}
 
 	private void initializeMainPanel(){
@@ -72,7 +78,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		mainPanel.removeAll();
 		mainPanel.add(drawPanel);
 		mainPanel.add(cardPanel.getPanel());
@@ -186,7 +192,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		drawButton.setEnabled(true);
 	}
 
@@ -194,7 +200,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		drawButton.setEnabled(false);
 	}
 
@@ -202,7 +208,7 @@ public class DeckPanel implements Serializable {
 	// Class for the panel displaying the most recently drawn card.
 	private class CardPanel implements Serializable{
 		private static final long serialVersionUID = 1L;
-		
+
 		private transient JPanel panel;
 		private transient JPanel wrapperPanel;
 
@@ -212,7 +218,7 @@ public class DeckPanel implements Serializable {
 
 			initializePanel();
 			panel.setBackground(currentColor);
-			
+
 			initializeWrapperPanel();
 
 			wrapperPanel.add(panel);
@@ -320,7 +326,7 @@ public class DeckPanel implements Serializable {
 					// Get the Player who just drew a Card //
 					// ----------------------------------- //
 					Player currentPlayer = gameFrame.getCurrentPlayer();
-					
+
 					//get the timerPanel to check if game has started or ended
 					TimerPanel timer = gameFrame.getTimerPanel();
                     if(!timer.timerIsRunning()){
@@ -345,11 +351,11 @@ public class DeckPanel implements Serializable {
 
 						// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
-						
+
 						// End the game //
 						System.exit(0);
 					}
-					
+
 					// Rotate to the next Player
 					gameFrame.getNextPlayer();
 				}

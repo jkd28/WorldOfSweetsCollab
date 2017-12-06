@@ -23,7 +23,7 @@ public class PlayerPanelTest{
     @Test
     public void testInitialPlayerPanelText(){
         String testCurrPlayerMessage = "First turn!";
-        String testNextPlayerMessage = "Next Player: \n" + testPlayers[0].getName();
+        String testNextPlayerMessage = "Next Player: \n" + testPlayers[0].getName() + " has " + testPlayers[0].getNumBoomerangs() + " boomerangs";
 
         assertEquals(testCurrPlayerMessage, testPlayerPanel.getCurrPlayerText());
         assertEquals(testNextPlayerMessage, testPlayerPanel.getNextPlayerText());
