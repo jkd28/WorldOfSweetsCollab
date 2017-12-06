@@ -281,12 +281,14 @@ public class DeckPanel implements Serializable {
 		// Every time we click the button, it will display the
 		// 	color of the next card in the deck
 		public void actionPerformed(ActionEvent e){
+			MainFrame gameFrame = WorldOfSweets.getMainGameFrame();
 			// ============================= //
 			// Draw a card and pull its data //
 			// ============================= //
 			if ((JButton)e.getSource() == boomerangButton){
 				pressedBoomerang = true;
 			}
+			if ((JButton)e.getSource() != boomerangButton || (JButton)e.getSource() == boomerangButton && gameFrame.getCurrentPlayer().getNumBoomerangs() > 0){
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 			int cardValue = drawnCard.getValue();
@@ -311,7 +313,7 @@ public class DeckPanel implements Serializable {
 			deckPanel.refreshPanels();
 			drawButton.requestFocus();
 			currentColor = cardColor;
-
+		}
 			// ============================================= //
 			// Update the current Player with the drawn card //
 			// ============================================= //
@@ -323,7 +325,7 @@ public class DeckPanel implements Serializable {
 			//	and then rotate to the next Player
 			// Else, this DeckPanel doesn't have a "parent" because we're running a Unit Test,
 			//	so we should not do ANYTHING more.
-			MainFrame gameFrame = WorldOfSweets.getMainGameFrame();
+
 			if(gameFrame != null){ // When running the Unit Tests, the "parent" for a DeckPanel will be (NULL)
 				if(gameFrame.getNumPlayers() > 0){
 					// ----------------------------------- //
