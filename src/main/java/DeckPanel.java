@@ -364,6 +364,7 @@ public class DeckPanel implements Serializable {
 						boomerangedPlayer = otherPlayers[dialogResult];
 						System.out.println("boomeranged player is " + boomerangedPlayer.getName());
 						boomerangError = false;
+						//afafafaa
 					}else if (pressedBoomerang){
 						JOptionPane.showMessageDialog(null,
     						"You don't have any boomerangs left!",
