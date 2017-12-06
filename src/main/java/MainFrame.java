@@ -306,7 +306,7 @@ public class MainFrame implements Externalizable {
             player.setPosition(boardPanel.getSpace(0));   //
         }                                                 //
 
-        deckPanel = new DeckPanel();
+        deckPanel = new DeckPanel(this.isStrategicMode);
         playerPanel = new PlayerPanel(players, this.isStrategicMode);
         timerPanel = new TimerPanel();
 
