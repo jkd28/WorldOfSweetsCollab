@@ -48,7 +48,7 @@ public class Deck implements Serializable {
     // the player draws a double card of the color they are on and one of the next
     // two spaces of that color is a special instead.
     public Color[] getCloseSpaces(int position, BoardPanel boardPanel){
-	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position);
+	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position+1);
 	BoardSpace tempSpace;
 	Color[] nearSpaces = new Color[15];
 	for(int i = 0; i < nearSpaces.length; i++){
@@ -58,10 +58,6 @@ public class Deck implements Serializable {
 		break;
 	    }
 	}
-		System.out.println("-----");
-	for(int i = 0; i < nearSpaces.length; i++){
-	    System.out.println(nearSpaces[i]);
-	    }
 	return nearSpaces;
     }
 
@@ -178,8 +174,6 @@ public class Deck implements Serializable {
 		}
 	    }
 	}
-	System.out.println("Color: " +  worstCard.getColor());
-	System.out.println("Value: " +  worstCard.getValue());
 	return worstCard;
     }
 

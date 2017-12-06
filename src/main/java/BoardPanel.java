@@ -168,7 +168,7 @@ public class BoardPanel implements Serializable {
     }
 
     public ListIterator<BoardSpace> getListIterator(int index){
-	ListIterator<BoardSpace> iter = spaces.listIterator();
+	ListIterator<BoardSpace> iter = spaces.listIterator(index);
 	return iter;
     }
 
