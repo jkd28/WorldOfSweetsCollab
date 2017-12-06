@@ -11,7 +11,10 @@ public class Deck implements Serializable {
     public static final int NUM_DOUBLE_CARDS_PER_COLOR = 2;
     public static final int NUM_SKIP_CARDS = 5;
     public static final int NUM_GO_TO_CARDS = 1; // Number of copies of each go to card
-
+    /*public int drawnRed, drawnYellow, drawnBlue, drawnGreen, drawnOrange, drawnSkip,
+    drawnRed2, drawnYellow2, drawnBlue2, drawnGreen2, drawnOrange2;
+    drawnRed = drawnYellow = drawnBlue = drawnGreen = drawnOrange = drawnSkip = drawnRed2 = drawnYellow2 = drawnBlue2 = drawnGreen2 = drawnOrange2 = 0; */
+    
     public Deck() {
         cardDeck = initializeDeck();
     }
@@ -24,6 +27,13 @@ public class Deck implements Serializable {
         return cardDeck.pop();
     }
 
+    // The fartherest a player can be moved by a single card (ignoring specials)
+    // is 10 spaces (drawing a double of the color the player is currently on).
+    // Create an array of size 11 (skip = 0) where each index contains the color
+    // whose index difference with the current space corresponds with the index (I'm
+    // tired but this makes sense in my head). Choose the available card with the
+    // lowest index. The special cards are edge cases that can be figured out by
+    // comparing the current location index with the indices of the special squares
     public Card dadDraw(){
 	if (cardDeck.empty()){
 	    cardDeck = initializeDeck();
