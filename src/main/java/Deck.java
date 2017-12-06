@@ -2,6 +2,7 @@ import java.util.Stack;
 import java.util.Collections;
 import java.awt.Color;
 import java.io.Serializable;
+import java.util.ListIterator;
 
 public class Deck implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -34,12 +35,30 @@ public class Deck implements Serializable {
     // tired but this makes sense in my head). Choose the available card with the
     // lowest index. The special cards are edge cases that can be figured out by
     // comparing the current location index with the indices of the special squares
-    public Card dadDraw(){
+    public Card dadDraw(Player player, BoardPanel boardPanel){
 	if (cardDeck.empty()){
 	    cardDeck = initializeDeck();
 	}
 	return cardDeck.pop();
     }
+
+    public Color[] getCloseSpaces(Player player, BoardPanel boardPanel){
+	BoardSpace space = player.getPosition();
+	int position = boardPanel.getSpaceIndex(space);
+	ListIterator<BoardSpace> iter = boardPanel.getListIterator(position+1);
+	BoardSpace tempSpace;
+	Color[] nearSpaces = new Color[11];
+	nearSpaces[0] = Color.DARK_GRAY;
+	for(int i = 1; i < 12; i++){
+	    tempSpace = iter.next();
+	    nearSpaces[i] = tempSpace.getSpaceColor();
+	    if(tempSpace.isGrandmasHouse()){
+		break;
+	    }
+	}
+	return nearSpaces;
+    }
+	
 
     public int size(){
         return cardDeck.size();

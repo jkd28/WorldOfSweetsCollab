@@ -284,7 +284,7 @@ public class DeckPanel implements Serializable {
 	    		}
 	    	    }
 	    		    if(drawPlayer != null && drawPlayer.isDad()){
-	    			drawnCard = drawDeck.dadDraw();
+	    			drawnCard = drawDeck.dadDraw(drawPlayer, gameFrame.getBoardPanel());
 	    			currentCard = drawnCard;
 	   			cardValue = drawnCard.getValue();
 	    			cardColor = drawnCard.getColor();
