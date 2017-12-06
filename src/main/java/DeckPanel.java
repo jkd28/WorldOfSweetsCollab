@@ -271,6 +271,7 @@ public class DeckPanel implements Serializable {
 	private class DrawListener implements ActionListener, Serializable{
 		private static final long serialVersionUID = 1L;
 		private DeckPanel deckPanel;
+		private boolean pressedBoomerang = false;
 
 		public DrawListener(DeckPanel deckPanel){
 			this.deckPanel = deckPanel;
@@ -282,6 +283,9 @@ public class DeckPanel implements Serializable {
 			// ============================= //
 			// Draw a card and pull its data //
 			// ============================= //
+			if ((JButton)e.getSource() == boomerangButton){
+				pressedBoomerang = true;
+			}else{
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
 			int cardValue = drawnCard.getValue();
@@ -306,7 +310,7 @@ public class DeckPanel implements Serializable {
 			deckPanel.refreshPanels();
 			drawButton.requestFocus();
 			currentColor = cardColor;
-
+		}
 
 			// ============================================= //
 			// Update the current Player with the drawn card //
@@ -334,8 +338,32 @@ public class DeckPanel implements Serializable {
                     }
 
 					// Move to Player to their next BoardSpace
-					gameFrame.updatePlayerPosition(currentPlayer, currentCard);
-
+					if (pressedBoomerang){
+						Player boomerangedPlayer;
+						currentPlayer.useBoomerang();
+						Object[] options = new Object[gameFrame.getNumPlayers() - 1];
+						Player[] otherPlayers = new Player[gameFrame.getNumPlayers() - 1];
+						int optionsSize = 0;
+						for (int i = 0; i < gameFrame.getNumPlayers(); i++){
+							if (!gameFrame.getPlayer(i).getName().equals(currentPlayer.getName())){
+								options[optionsSize] = gameFrame.getPlayer(i).getName();
+								otherPlayers[optionsSize] = gameFrame.getPlayer(i);
+								optionsSize++;
+							}
+						}
+						int dialogResult = JOptionPane.showOptionDialog(null,
+							"Choose a player to boomerang",
+							"Choose a player to boomerang!",
+							JOptionPane.YES_NO_CANCEL_OPTION,
+							JOptionPane.QUESTION_MESSAGE,
+							null,
+							options,
+							options[0]);
+						boomerangedPlayer = otherPlayers[dialogResult];
+						System.out.println("boomeranged player is " + boomerangedPlayer.getName());
+					}else{
+						gameFrame.updatePlayerPosition(currentPlayer, currentCard);
+					}
 					// -------------------------------------------- //
 					// Check if the current Player has won the game //
 					// -------------------------------------------- //
@@ -356,8 +384,10 @@ public class DeckPanel implements Serializable {
 						System.exit(0);
 					}
 
-					// Rotate to the next Player
-					gameFrame.getNextPlayer();
+					if (!pressedBoomerang){
+						// Rotate to the next Player
+						gameFrame.getNextPlayer();
+					}
 				}
 			}
 		}
