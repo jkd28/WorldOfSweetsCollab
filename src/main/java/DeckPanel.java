@@ -285,8 +285,6 @@ public class DeckPanel implements Serializable {
 			// ============================= //
 			if ((JButton)e.getSource() == boomerangButton){
 				pressedBoomerang = true;
-			}else{
-				pressedBoomerang = false;
 			}
 			Card drawnCard = drawDeck.draw();
 				currentCard = drawnCard;
