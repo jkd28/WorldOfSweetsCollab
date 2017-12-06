@@ -331,7 +331,6 @@ public class DeckPanel implements Serializable {
 
 					// Move to Player to their next BoardSpace
 					gameFrame.updatePlayerPosition(currentPlayer, currentCard);
-
 					// -------------------------------------------- //
 					// Check if the current Player has won the game //
 					// -------------------------------------------- //
@@ -353,45 +352,60 @@ public class DeckPanel implements Serializable {
 					}
 
 					// Rotate to the next Player
-					Player nextPlayer = gameFrame.getNextPlayer();
-
+					gameFrame.getNextPlayer();
+                    Player nextPlayer = gameFrame.getCurrentPlayer();
                     // Check for AI player and operate if necessary
-                    if (nextPlayer.isAI()) {
-                        try {
-                            // Perform the draw action without clicking
-                            deckPanel.disableDrawButton();
-                            TimeUnit.SECONDS.sleep(3);
-
-                			drawnCard = drawDeck.draw();
-                			currentCard = drawnCard;
-                			cardValue = drawnCard.getValue();
-                			cardColor = drawnCard.getColor();
-
-                			JPanel aiCardPanel = new JPanel();
-                			switch(cardValue){
-                				case Card.SINGLE: 		aiCardPanel = createSingleColorPanel(cardColor); break;
-                				case Card.DOUBLE: 		aiCardPanel = createDoubleColorPanel(cardColor); break;
-                				case Card.SKIP: 		aiCardPanel = createSpecialPanel(Card.SKIP_TEXT); break;
-                				case Card.GO_TO_FIRST_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT); break;
-                			case Card.GO_TO_SECOND_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT); break;
-                				case Card.GO_TO_THIRD_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT); break;
-                				case Card.GO_TO_FOURTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT); break;
-                				case Card.GO_TO_FIFTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT); break;
-
-                			}
-                			cardPanel.setPanel(aiCardPanel);
-                			deckPanel.refreshPanels();
-                			drawButton.requestFocus();
-                			currentColor = cardColor;
-
-                            gameFrame.updatePlayerPosition(nextPlayer, currentCard);
-                            TimeUnit.SECONDS.sleep(3);
-                            gameFrame.getNextPlayer();
-                            deckPanel.enableDrawButton();
-                        } catch (InterruptedException except) {
-                            except.printStackTrace();
-                            throw new RuntimeException("Error sleeping for AI player.");
+                    while (nextPlayer.isAI()) {
+                        String wait = "";
+                        for (int i = 0; i< 9000; i ++) {
+                            wait += " ";
                         }
+
+                        // Perform the draw action without clicking
+                        deckPanel.disableDrawButton();
+
+            			drawnCard = drawDeck.draw();
+            			currentCard = drawnCard;
+            			cardValue = drawnCard.getValue();
+            			cardColor = drawnCard.getColor();
+
+            			JPanel aiCardPanel = new JPanel();
+            			switch(cardValue){
+            				case Card.SINGLE: 		aiCardPanel = createSingleColorPanel(cardColor); break;
+            				case Card.DOUBLE: 		aiCardPanel = createDoubleColorPanel(cardColor); break;
+            				case Card.SKIP: 		aiCardPanel = createSpecialPanel(Card.SKIP_TEXT); break;
+            				case Card.GO_TO_FIRST_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT); break;
+            			case Card.GO_TO_SECOND_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT); break;
+            				case Card.GO_TO_THIRD_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT); break;
+            				case Card.GO_TO_FOURTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT); break;
+            				case Card.GO_TO_FIFTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT); break;
+
+            			}
+            			cardPanel.setPanel(aiCardPanel);
+            			deckPanel.refreshPanels();
+            			drawButton.requestFocus();
+            			currentColor = cardColor;
+
+                        gameFrame.updatePlayerPosition(nextPlayer, currentCard);
+                        if(gameFrame.playerHasWon(nextPlayer)){
+    						// Disable the "draw" button //
+    						deckPanel.disableDrawButton();
+
+    						// Disable the "Save Game" button //
+    						gameFrame.disableSaveButton();
+
+    						// Diable the game timer //
+    						timer.stopTimer();
+
+    						// Congratulate the winning player //
+    						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
+
+    						// End the game //
+    						System.exit(0);
+    					}
+
+                        nextPlayer = gameFrame.getNextPlayer();
+                        deckPanel.enableDrawButton();
                     }
 				}
 			}

@@ -131,7 +131,7 @@ public class MainFrame implements Externalizable {
     	currentPlayerIndex = (currentPlayerIndex + 1) % getNumPlayers();
     	Player nextPlayer = getPlayer(currentPlayerIndex);
         playerPanel.changePlayer(currentPlayer, nextPlayer);
-        return nextPlayer;
+        return currentPlayer;
     }
 
 	public Player getCurrentPlayer(){
