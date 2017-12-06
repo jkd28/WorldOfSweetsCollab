@@ -2,6 +2,8 @@ import java.awt.*;
 import java.awt.event.*;
 import javax.swing.*;
 import java.io.Serializable;
+import java.util.concurrent.TimeUnit;
+
 
 public class DeckPanel implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -72,7 +74,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		mainPanel.removeAll();
 		mainPanel.add(drawPanel);
 		mainPanel.add(cardPanel.getPanel());
@@ -186,7 +188,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		drawButton.setEnabled(true);
 	}
 
@@ -194,7 +196,7 @@ public class DeckPanel implements Serializable {
 		if(mainPanel == null){
 			initializeMainPanel();
 		}
-		
+
 		drawButton.setEnabled(false);
 	}
 
@@ -202,7 +204,7 @@ public class DeckPanel implements Serializable {
 	// Class for the panel displaying the most recently drawn card.
 	private class CardPanel implements Serializable{
 		private static final long serialVersionUID = 1L;
-		
+
 		private transient JPanel panel;
 		private transient JPanel wrapperPanel;
 
@@ -212,7 +214,7 @@ public class DeckPanel implements Serializable {
 
 			initializePanel();
 			panel.setBackground(currentColor);
-			
+
 			initializeWrapperPanel();
 
 			wrapperPanel.add(panel);
@@ -320,7 +322,7 @@ public class DeckPanel implements Serializable {
 					// Get the Player who just drew a Card //
 					// ----------------------------------- //
 					Player currentPlayer = gameFrame.getCurrentPlayer();
-					
+
 					//get the timerPanel to check if game has started or ended
 					TimerPanel timer = gameFrame.getTimerPanel();
                     if(!timer.timerIsRunning()){
@@ -345,13 +347,51 @@ public class DeckPanel implements Serializable {
 
 						// Congratulate the winning player //
 						JOptionPane.showMessageDialog(null, "Congratulations to " + currentPlayer.getName() + " for winning this game of 'WorldOfSweets'!");
-						
+
 						// End the game //
 						System.exit(0);
 					}
-					
+
 					// Rotate to the next Player
-					gameFrame.getNextPlayer();
+					Player nextPlayer = gameFrame.getNextPlayer();
+
+                    // Check for AI player and operate if necessary
+                    if (nextPlayer.isAI()) {
+                        try {
+                            // Perform the draw action without clicking
+                            TimeUnit.SECONDS.sleep(1);
+                            deckPanel.disableDrawButton();
+
+                			drawnCard = drawDeck.draw();
+                			currentCard = drawnCard;
+                			cardValue = drawnCard.getValue();
+                			cardColor = drawnCard.getColor();
+
+                			JPanel aiCardPanel = new JPanel();
+                			switch(cardValue){
+                				case Card.SINGLE: 		aiCardPanel = createSingleColorPanel(cardColor); break;
+                				case Card.DOUBLE: 		aiCardPanel = createDoubleColorPanel(cardColor); break;
+                				case Card.SKIP: 		aiCardPanel = createSpecialPanel(Card.SKIP_TEXT); break;
+                				case Card.GO_TO_FIRST_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIRST_SPECIAL_TEXT); break;
+                			case Card.GO_TO_SECOND_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_SECOND_SPECIAL_TEXT); break;
+                				case Card.GO_TO_THIRD_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_THIRD_SPECIAL_TEXT); break;
+                				case Card.GO_TO_FOURTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FOURTH_SPECIAL_TEXT); break;
+                				case Card.GO_TO_FIFTH_SPECIAL: aiCardPanel = createSpecialPanel(Card.GO_TO_FIFTH_SPECIAL_TEXT); break;
+
+                			}
+                			cardPanel.setPanel(aiCardPanel);
+                			deckPanel.refreshPanels();
+                			drawButton.requestFocus();
+                			currentColor = cardColor;
+                            
+                            gameFrame.updatePlayerPosition(nextPlayer, currentCard);
+                            TimeUnit.SECONDS.sleep(2);
+                            deckPanel.enableDrawButton();
+                        } catch (InterruptedException except) {
+                            except.printStackTrace();
+                            throw new RuntimeException("Error sleeping for AI player.");
+                        }
+                    }
 				}
 			}
 		}

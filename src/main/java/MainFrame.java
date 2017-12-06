@@ -6,6 +6,7 @@ import javax.sound.sampled.*;
 import java.net.URL;
 import java.net.MalformedURLException;
 
+
 public class MainFrame implements Externalizable {
     // Data for the entire Frame, which will hold all of our Panels
     public static final int FRAME_HEIGHT = 800;
@@ -129,9 +130,8 @@ public class MainFrame implements Externalizable {
 
     	currentPlayerIndex = (currentPlayerIndex + 1) % getNumPlayers();
     	Player nextPlayer = getPlayer(currentPlayerIndex);
-    	playerPanel.changePlayer(currentPlayer, nextPlayer);
-
-    	return currentPlayer;
+        playerPanel.changePlayer(currentPlayer, nextPlayer);
+        return currentPlayer;
     }
 
 	public Player getCurrentPlayer(){
