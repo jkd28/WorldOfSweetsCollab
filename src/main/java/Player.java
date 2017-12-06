@@ -6,6 +6,8 @@ public class Player implements Serializable {
     private BoardSpace position = null; //all players start at "0th" position according to write up
     private String token;
     private boolean dad = false;
+    private int numBoomerangs = 3;
+    
     public Player(String n){
         name = n;
 	if(name.equals("Dad")){
@@ -46,5 +48,12 @@ public class Player implements Serializable {
     public boolean setToken(String t){
       token = t;
       return true;
+    }
+
+    public int getNumBoomerangs(){
+        return numBoomerangs;
+    }
+    public void useBoomerang(){
+        numBoomerangs--;
     }
 }

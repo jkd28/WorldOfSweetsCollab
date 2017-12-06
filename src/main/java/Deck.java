@@ -65,14 +65,16 @@ public class Deck implements Serializable {
     // deck stack into a temporary stack and popping each card into an
     // array.
     public Card[] getRemainingCards(){
-	Stack<Card> tempDeck = (Stack<Card>)cardDeck.clone();
+    	Stack<?> tempDeck = (Stack<?>)cardDeck.clone();
+    	
+	
 	Card[] remaining = new Card[tempDeck.size()];
 
 	for(int i = 0; i < remaining.length; i++){
 	    if(tempDeck.empty()){
 		break;
 	    }
-	    remaining[i] = tempDeck.pop();
+	    remaining[i] = (Card) tempDeck.pop();
 	}
 	return remaining;
     }
