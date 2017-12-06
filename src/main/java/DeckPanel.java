@@ -359,8 +359,8 @@ public class DeckPanel implements Serializable {
                     if (nextPlayer.isAI()) {
                         try {
                             // Perform the draw action without clicking
-                            TimeUnit.SECONDS.sleep(1);
                             deckPanel.disableDrawButton();
+                            TimeUnit.SECONDS.sleep(3);
 
                 			drawnCard = drawDeck.draw();
                 			currentCard = drawnCard;
@@ -383,9 +383,10 @@ public class DeckPanel implements Serializable {
                 			deckPanel.refreshPanels();
                 			drawButton.requestFocus();
                 			currentColor = cardColor;
-                            
+
                             gameFrame.updatePlayerPosition(nextPlayer, currentCard);
-                            TimeUnit.SECONDS.sleep(2);
+                            TimeUnit.SECONDS.sleep(3);
+                            gameFrame.getNextPlayer();
                             deckPanel.enableDrawButton();
                         } catch (InterruptedException except) {
                             except.printStackTrace();
