@@ -5,11 +5,11 @@ public class Player implements Serializable {
     private String name;
     private BoardSpace position = null; //all players start at "0th" position according to write up
     private String token;
-    private boolean isDad = false;
+    private boolean dad = false;
     public Player(String n){
         name = n;
 	if(name.equals("Dad")){
-	    isDad = true;
+	    dad = true;
 	}
     }
 
@@ -31,13 +31,13 @@ public class Player implements Serializable {
     public boolean setName(String n){
         name = n;
 	if(name.equals("Dad")){
-	    isDad = true;
+	    dad = true;
 	}
         return true;
     }
 
-    public boolean getDad(){
-	return isDad;
+    public boolean isDad(){
+	return dad;
     }
 
     public String getToken(){

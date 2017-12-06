@@ -24,6 +24,13 @@ public class Deck implements Serializable {
         return cardDeck.pop();
     }
 
+    public Card dadDraw(){
+	if (cardDeck.empty()){
+	    cardDeck = initializeDeck();
+	}
+	return cardDeck.pop();
+    }
+
     public int size(){
         return cardDeck.size();
     }
