@@ -58,10 +58,10 @@ public class Deck implements Serializable {
 		break;
 	    }
 	}
-	System.out.println("-----");
+	/*	System.out.println("-----");
 	for(int i = 0; i < nearSpaces.length; i++){
 	    System.out.println(nearSpaces[i]);
-	}
+	    }*/
 	return nearSpaces;
     }
 
@@ -184,6 +184,8 @@ public class Deck implements Serializable {
 		}
 	    }
 	}
+	System.out.println("Color: " +  worstCard.getColor());
+	System.out.println("Value: " +  worstCard.getValue());
 	return worstCard;
     }
 
@@ -213,7 +215,7 @@ public class Deck implements Serializable {
 
         // Add Skip-Turn cards
         for (int i = 0; i < NUM_SKIP_CARDS; i++){
-            newCard = new Card(Card.SKIP, Color.RED); // doesn't really matter what Color we push to it
+            newCard = new Card(Card.SKIP, Color.DARK_GRAY); // doesn't really matter what Color we push to it
             deckStack.push(newCard);
         }
 
