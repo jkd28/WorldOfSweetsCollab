@@ -184,12 +184,12 @@ public class BoardPanel implements Serializable {
 		
     	BoardSpace currentPlayerSpace = player.getPosition();
 
+		// If the Card passed-in is a "Skip" card,
+		//	do nothing.
+		if (card.getValue() == Card.SKIP) {
+			return player.getPosition();
+		}
 		if (!reverse) {
-			// If the Card passed-in is a "Skip" card,
-			//	do nothing.
-			if (card.getValue() == Card.SKIP) {
-				return player.getPosition();
-			}
 			// If the Player is already at "Grandma's House",
 			//	do nothing.
 			if (currentPlayerSpace.isGrandmasHouse()) {
