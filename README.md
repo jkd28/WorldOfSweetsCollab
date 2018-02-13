@@ -1,7 +1,14 @@
-# BitsPlease - World Of Sweets    
-To run the program, clone this repo and run these commands:  
-`gradle build`  
-`gradle run`
+# World Of Sweets Collaboration
+This was a project developed as part of a team in the University of Pittsburgh's Software Engineering course (COE 1530).  I worked with several teammates to create a project that complied with requirements set forth by the instructor of the class.  These requirements were relatively flexible, giving us a large amount of freedom in how we designed the project.  Using the `gradle` build system, we were able to maintain the scale of the project and the unit tests that accompanied it.  
+
+The project was titled "World of Sweets" and is played by drawing colored cards and moving according to the color drawn.  There are several additional features we added, such as music, the ability to throw Boomerangs to turn your opponents around, and even a "Dad Mode" which always chooses the worst card for players named "Dad" so that the kids can win. 
+
+ This is by far the largest project I have ever worked on as part of a class assignment.  All in all, this was a very educational project, and I am happy to have worked with the team.  
+
+## Usage    
+The gradle build tool is required to run this program.  
+Build: `gradle build`  
+Execute:  `gradle run`
 
 # Manual Test Descriptions  
 ## Player Movement  
